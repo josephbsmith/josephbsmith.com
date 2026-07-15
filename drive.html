@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Drive - Joseph B. Smith</title>
+<meta name="description" content="An 8-bit drive down the coast, with K-Billy's Super Sounds of the 70's on the radio.">
+<meta property="og:title" content="The Drive">
+<meta property="og:description" content="An 8-bit drive down the coast, with K-Billy's Super Sounds of the 70's on the radio.">
+<meta property="og:image" content="https://josephbsmith.com/og-drive.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://josephbsmith.com/og-drive.png">
+<link rel="canonical" href="https://josephbsmith.com/drive">
+<meta name="theme-color" content="#0a0a24">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230a0a24"/><rect x="5" y="4" width="6" height="1" fill="%23ffd27a"/><rect x="4" y="5" width="8" height="2" fill="%23ffd27a"/><rect x="4" y="7" width="8" height="1" fill="%23ff9a3c"/><rect x="5" y="9" width="6" height="1" fill="%23ff9a3c"/><rect x="4" y="11" width="8" height="1" fill="%23fb923c"/><rect x="2" y="13" width="12" height="1" fill="%23452158"/></svg>'>
+<style>
+  :root {
+    --accent: #fb923c; --fg: #f5f5f4; --muted: #d6d3d1;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: #070716; color-scheme: dark; }
+  html, body { height: 100%; }
+  body { margin: 0; }
+  /* 8-bit dusk drive down the coast, rendered low-res and upscaled with hard pixels */
+  #bg {
+    position: fixed; inset: 0; z-index: -3; width: 100%; height: 100%;
+    background: #0a0a24; image-rendering: pixelated;
+  }
+  /* faint top vignette so the back link reads */
+  #scrim {
+    position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background: linear-gradient(180deg, rgba(8,6,18,.4), transparent 22%);
+  }
+  .back {
+    position: fixed; top: 16px; left: 18px; z-index: 6;
+    font: 600 12px var(--mono); letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+  }
+  .back:hover { color: var(--accent); }
+
+  /* Radio = the dial on the dashboard. Invisible hotspot; the renderer draws it and keeps this aligned. */
+  #radioHot {
+    position: fixed; z-index: 5; background: none; border: none; padding: 0;
+    cursor: pointer; border-radius: 6px;
+  }
+  #radioHot:hover { box-shadow: 0 0 0 1px rgba(251,146,60,.55); }
+  #radioHot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* the "this is a feature" tag, floats above the drawn radio; clicking it clicks the radio */
+  #radioHot span {
+    position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%);
+    white-space: nowrap; font: 600 11px var(--mono);
+    letter-spacing: .04em; color: #ffd27a;
+    background: rgba(10,8,14,.72); border: 1px solid rgba(251,146,60,.45);
+    padding: 4px 10px; border-radius: 999px;
+  }
+  #radioHot[aria-pressed="false"] span { animation: beckon 2.6s ease-in-out infinite; }
+  @keyframes beckon { 0%,100% { opacity: .7 } 50% { opacity: 1 } }
+  @media (prefers-reduced-motion: reduce) { #radioHot span { animation: none !important; } }
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div id="scrim"></div>
+
+<a class="back" href="/">← josephbsmith.com</a>
+
+<button id="radioHot" aria-label="Car radio - K-Billy Super Sounds" aria-pressed="false" title="K-Billy Super Sounds of the 70's"><span id="radioTag">K-BILLY FM · tap to play</span></button>
+<!-- 2h15m master streams from R2 (Pages caps files at 25MB); preload=none so visitors only pull it on play -->
+<audio id="radioAudio" loop preload="none" src="https://pub-3d61e06d8f8b4de59383915bd0ee6aa5.r2.dev/kbilly.mp3"></audio>
+
+<script>
+  const audio = document.getElementById('radioAudio');
+  const hot   = document.getElementById('radioHot');
+  const tag   = document.getElementById('radioTag');
+  window.radioState = 'off';   // off | tuning | on | dead - the renderer draws the dial from this
+
+  audio.addEventListener('error', () => { window.radioState = 'dead'; tag.textContent = 'K-BILLY FM · off the air'; });
+
+  // preload=none: nothing downloads until first play, so restore position once metadata arrives.
+  const savedPos = parseFloat(localStorage.getItem('radioPos') || '0');
+  audio.addEventListener('loadedmetadata', () => { if (savedPos) audio.currentTime = savedPos; }, { once: true });
+
+  audio.addEventListener('waiting', () => { if (window.radioState !== 'off') { window.radioState = 'tuning'; tag.textContent = 'K-BILLY FM · tuning…'; } });
+  audio.addEventListener('playing', () => { window.radioState = 'on'; tag.textContent = 'K-BILLY FM · on air'; setNowPlaying(); });
+  audio.addEventListener('timeupdate', () => localStorage.setItem('radioPos', audio.currentTime));
+
+  // What the phone's lock screen / now-playing controls show while it plays.
+  function setNowPlaying() {
+    if (!('mediaSession' in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: "K Billy's Super Sounds of the 70's Weekend",
+      artist: "FM Radio",
+      artwork: [{ src: "/icon.png", sizes: "180x180", type: "image/png" }],
+    });
+    navigator.mediaSession.setActionHandler('play', () => { setOn(true); audio.play().catch(() => setOn(false)); });
+    navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+  }
+
+  function setOn(on) {
+    if (window.radioState !== 'dead') {
+      window.radioState = on ? 'tuning' : 'off';
+      tag.textContent = on ? 'K-BILLY FM · tuning…' : 'K-BILLY FM · tap to play';
+    }
+    hot.setAttribute('aria-pressed', String(on));
+  }
+  hot.addEventListener('click', () => {
+    if (audio.paused) { setOn(true); audio.play().catch(() => setOn(false)); }
+    else { audio.pause(); }
+  });
+  // The OS can pause us (lock screen, another app) - reflect it honestly.
+  // A radio never turns itself on: no autoplay, no auto-resume. Position is
+  // remembered (radioPos) so tapping play picks the mix up where it left off.
+  audio.addEventListener('pause', () => setOn(false));
+</script>
+
+<script>
+/* 8-bit dusk drive down the California coast - drawn at ~320×180, upscaled with hard pixels */
+(() => {
+  const cv = document.getElementById('bg'), g = cv.getContext('2d');
+  const hot = document.getElementById('radioHot');
+  let W, H, HOR, DASH;
+  function resize() {
+    const a = innerWidth / Math.max(1, innerHeight);
+    if (a >= 1) { H = 180; W = Math.round(H * a); }        // landscape
+    else        { W = 200; H = Math.round(W / a); }        // portrait
+    cv.width = W; cv.height = H; HOR = Math.round(H * .44);
+    DASH = (H - Math.min(H * .17, W * .15)) | 0;
+    placeHot();
+  }
+  const RW = 40, RH = 15;                                  // radio unit size, shared with the hotspot
+  // keep the invisible button glued to where the radio is drawn
+  function placeHot() {
+    const sx = innerWidth / W, sy = innerHeight / H;
+    hot.style.left   = (((W * .55) | 0) * sx - 10) + 'px';
+    hot.style.top    = ((DASH + 2) * sy - 10) + 'px';
+    hot.style.width  = (RW * sx + 20) + 'px';
+    hot.style.height = (RH * sy + 20) + 'px';
+  }
+  resize(); addEventListener('resize', resize);
+
+  // varied starfield: [x, y, alpha]; stars2 only shows once night falls
+  const stars = Array.from({ length: 54 }, () => [Math.random(), Math.random(), Math.random() < .3 ? .9 : .45]);
+  const stars2 = Array.from({ length: 40 }, () => [Math.random(), Math.random(), .3 + Math.random() * .5]);
+  const SKY  = ['#070716','#0a0a24','#100e30','#18123c','#241547','#331a51','#471f58','#602558','#7d2f54','#9c3d4d','#bd4f43'];
+  const SKYN = ['#010104','#02020a','#03030f','#040414','#050518','#06061c','#070720','#080824','#0a0a28','#0c0c2c','#0e0e30'];
+  const hex = c => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)];
+  const mix = (a, b, t) => {
+    const A = hex(a), B = hex(b);
+    return `rgb(${A[0] + (B[0] - A[0]) * t | 0},${A[1] + (B[1] - A[1]) * t | 0},${A[2] + (B[2] - A[2]) * t | 0})`;
+  };
+
+  let pos = 0, curve = 0, target = 0, nextBend = 500, heading = 0;
+  const palms = [140, 320, 480, 660];                      // world-z of roadside palms
+  const PDEPTH = 620;
+  const clouds = [{x:.08,y:.09,w:30},{x:.42,y:.05,w:38},{x:.68,y:.13,w:24},{x:.24,y:.17,w:18}];
+  const town = Array.from({ length: 8 }, (_, i) => ({ fx: .52 + i * .058, ph: i * 1.7 }));
+  let birds = null, nextBirds = 500;                       // a flock, now and then
+  let car = null, nextCar = 800;                           // oncoming headlights, every so often
+  let tail = null, nextTail = 2600;                        // taillights pulling away, rarer
+  let shoot = null, mirrorGlow = 0;                        // night shooting star; rearview afterglow
+  const phPin = parseFloat(new URLSearchParams(location.search).get('ph'));  // ?ph=0..1 pins the time of day
+
+  function draw(dt) {
+    pos += 90 * dt;
+    if (pos > nextBend) { target = (Math.random() * 2 - 1) * 1.1; nextBend = pos + 400 + Math.random() * 600; }
+    curve += (target - curve) * Math.min(1, dt * .6);
+    heading += curve * dt * .6;                            // scenery pans only while turning - never springs back
+
+    // the sun actually sets: ph 0 = golden hour → 1 = deep night → back to dawn, ~8 min round trip
+    const ph = isNaN(phPin) ? .5 - .5 * Math.cos(pos * 6.2832 / 43200) : Math.min(1, Math.max(0, phPin));
+    const P = {
+      hillA: mix('#231a0f', '#100b06', ph), hillB: mix('#2a2013', '#141008', ph),
+      o1a: mix('#3a4a80', '#0d1338', ph), o1b: mix('#41518c', '#101540', ph),
+      o2a: mix('#2b3468', '#0a0e30', ph), o2b: mix('#323c76', '#0c1036', ph),
+      o3a: mix('#161d40', '#04061a', ph), o3b: mix('#1b234c', '#060820', ph),
+      sandA: mix('#453521', '#20180e', ph), sandB: mix('#4e3c26', '#241b10', ph),
+      glitA: mix('#e8a15c', '#aebedd', ph), glitB: mix('#c97b3f', '#8fa0c0', ph),
+      ridgeFar: mix('#241543', '#0c0722', ph), ridgeNear: mix('#160e2e', '#080517', ph),
+      glow: mix('#e8894a', '#26305c', ph),
+      cl1: mix('#231345', '#0b081e', ph), cl2: mix('#2e1850', '#0e0a24', ph), cl3: mix('#68315a', '#12102a', ph),
+    };
+
+    // sky bands + stars (more of them, brighter, as night falls)
+    const bh = HOR / SKY.length;
+    SKY.forEach((c, i) => { g.fillStyle = mix(c, SKYN[i], ph); g.fillRect(0, Math.floor(i * bh), W, Math.ceil(bh) + 1); });
+    const sGain = .55 + .45 * ph;
+    for (const [sx, sy, al] of stars) {
+      g.fillStyle = `rgba(255,255,255,${(al * sGain).toFixed(2)})`;
+      g.fillRect((sx * W) | 0, (sy * HOR * .6) | 0, 1, 1);
+    }
+    if (ph > .35) for (const [sx, sy, al] of stars2) {
+      g.fillStyle = `rgba(255,255,255,${(al * (ph - .35) / .65).toFixed(2)})`;
+      g.fillRect((sx * W) | 0, (sy * HOR * .85) | 0, 1, 1);
+    }
+
+    // a shooting star, night only, blink and you miss it
+    if (!shoot && ph > .6 && Math.random() < dt * .05) shoot = { x: W * (.2 + Math.random() * .6), y: HOR * (.1 + Math.random() * .3), life: .6 };
+    if (shoot) {
+      shoot.life -= dt; shoot.x -= 130 * dt; shoot.y += 40 * dt;
+      if (shoot.life <= 0) shoot = null;
+      else {
+        for (let i = 0; i < 5; i++) {
+          g.fillStyle = `rgba(255,255,255,${(shoot.life * (1 - i / 5)).toFixed(2)})`;
+          g.fillRect((shoot.x + i * 2.2) | 0, (shoot.y - i * .7) | 0, 1, 1);
+        }
+      }
+    }
+
+    // the moon rises as the sun goes
+    if (ph > .5) {
+      const ma = (ph - .5) * 2;
+      const mx = (W * .74) | 0, my = (HOR - 8 - ma * 26) | 0, MR = 9;
+      for (let y = -MR; y <= MR; y++) {
+        const yy = my + y; if (yy < 0 || yy >= HOR - 2) continue;
+        if ((MR + y) % 4 === 3) continue;                  // slice gaps, same dialect as the sun
+        const hw = Math.sqrt(MR * MR - y * y) | 0;
+        g.fillStyle = `rgba(${y < 0 ? '232,236,244' : '200,208,224'},${(.85 * ma).toFixed(2)})`;
+        g.fillRect(mx - hw, yy, hw * 2, 1);
+      }
+    }
+
+    // banded sun over the ocean, left side - and it is going DOWN
+    const sunX = (W * .22) | 0, sunY = (HOR - 6 + ph * 46) | 0, R = 27;
+    for (let y = -R; y <= 0; y++) {
+      const yy = sunY + y; if (yy < 0 || yy >= HOR - 1) continue;   // slips behind the horizon
+      const row = R + y;
+      if (row > R * .45 && row % 5 < 2) continue;          // retro slice gaps
+      const hw = Math.sqrt(R * R - y * y) | 0;
+      g.fillStyle = row < R * .5 ? '#ffd27a' : '#ff9a3c';
+      g.fillRect(sunX - hw, yy, hw * 2, 1);
+    }
+    // glow along the horizon line: sunset amber → moonlit blue
+    g.fillStyle = P.glow; g.fillRect(0, HOR - 1, W, 1);
+
+    // dusk clouds, drifting slow, lit from below
+    for (let i = 0; i < clouds.length; i++) {
+      const c = clouds[i], span = W + 80;
+      const cx0 = ((c.x * W - pos * .012 * (1 + i * .3) - heading * 6) % span + span) % span - 40;
+      const cy = (c.y * HOR) | 0, w = c.w;
+      g.fillStyle = P.cl1; g.fillRect((cx0 - w * .32) | 0, cy - 2, (w * .64) | 0, 2);
+      g.fillStyle = P.cl2; g.fillRect((cx0 - w / 2) | 0, cy, w, 2);
+      g.fillStyle = P.cl3; g.fillRect((cx0 - w * .42) | 0, cy + 2, (w * .84) | 0, 1);
+    }
+
+    // a lighthouse on the far headland, keeping its own time
+    const lhx = (W * .07 - heading * 4) | 0;
+    if (lhx > -12 && lhx < W) {
+      g.fillStyle = P.ridgeNear;
+      g.fillRect(lhx - 9, HOR - 2, 22, 2);                 // the headland
+      g.fillRect(lhx - 5, HOR - 3, 13, 1);
+      g.fillRect(lhx, HOR - 10, 2, 8);                     // the tower
+      g.fillStyle = P.glow; g.fillRect(lhx - 1, HOR - 10, 4, 1);
+      if ((pos * .018) % 1 < .14) {                        // the lamp, on its period
+        g.fillStyle = `rgba(255,242,192,${(.6 + .4 * ph).toFixed(2)})`;
+        g.fillRect(lhx - 1, HOR - 12, 4, 2);
+      }
+    }
+
+    // a flock crossing, once in a while
+    if (!birds && pos > nextBirds) birds = { x: -14, y: HOR * (.12 + Math.random() * .28), v: 38 + Math.random() * 20 };
+    if (birds) {
+      birds.x += birds.v * dt;
+      if (birds.x > W + 20) { birds = null; nextBirds = pos + 1100 + Math.random() * 1600; }
+      else {
+        g.fillStyle = '#0d0a14';
+        for (let i = 0; i < 3; i++) {
+          const bx = (birds.x - i * 7) | 0, by = (birds.y + (i % 2) * 2) | 0;
+          const flap = ((pos * .4 + i) | 0) % 2;
+          g.fillRect(bx, by, 1, 1);
+          g.fillRect(bx - 1, by - flap, 1, 1);
+          g.fillRect(bx + 1, by - flap, 1, 1);
+        }
+      }
+    }
+
+    // coastal hills, two ridges for depth; ocean horizon stays flat on the left
+    const mo = heading * 30;
+    ridge(mo * .5, .032, 13, P.ridgeFar);                  // far ridge, lighter, pans slower
+    ridge(mo, .05, 9, P.ridgeNear);                        // near ridge
+    function ridge(off, freq, amp, color) {
+      g.fillStyle = color;
+      for (let x = 0; x < W; x++) {
+        const rise = Math.min(1, Math.max(0, (x / W - .38) * 2.6));
+        if (!rise) continue;
+        const t = (x + off) * freq;
+        const h = rise * Math.max(0, amp * .9 + amp * .8 * Math.sin(t) + amp * .45 * Math.sin(t * 2.63));
+        if (h >= 1) g.fillRect(x, (HOR - h) | 0, 1, (h + 1) | 0);
+      }
+    }
+    // a far town on the near ridge, lights twinkling
+    for (const t of town) {
+      const sxp = (t.fx * W - mo) | 0;                     // glued to the hillside, pans with it
+      if (sxp / W < .45 || sxp >= W) continue;
+      const tt = (sxp + mo) * .05;
+      const rise = Math.min(1, Math.max(0, (sxp / W - .38) * 2.6));
+      const h = rise * Math.max(0, 8.1 + 7.2 * Math.sin(tt) + 4.05 * Math.sin(tt * 2.63));
+      if (h < 3.5) continue;
+      const tw = .5 + .5 * Math.sin(pos * .04 + t.ph);
+      g.fillStyle = `rgba(255,196,120,${Math.min(1, (.25 + .5 * tw) * (.7 + .8 * ph)).toFixed(2)})`;
+      g.fillRect(sxp, (HOR - h * .45) | 0, 1, 1);
+    }
+
+    // road center per row: bends with curve, and shifts so the POV sits in the RIGHT lane
+    const roadX = q => W / 2 + curve * (1 - q) ** 2 * W * .55 - q * W * .23;
+
+    // coast highway, one scanline at a time: ocean | sand | road | golden hillside
+    for (let y = HOR; y < H; y++) {
+      const p = (y - HOR) / (H - HOR);                     // 0 horizon → 1 bottom
+      const band = ((pos * .035 + Math.min(24, 1.6 / (p + .04))) | 0) % 2;  // clamp calms far shimmer
+      const cX = roadX(p);
+      const half = p * W * .46 + 1;
+      const rum = Math.max(1, half * .14);
+      g.fillStyle = band ? P.hillA : P.hillB;              // dry-gold hillside
+      g.fillRect(0, y, W, 1);
+      const beach = 2 + p * 9;
+      const waterEdge = (cX - half - rum - beach) | 0;
+      if (waterEdge > 0) {
+        g.fillStyle = p < .1 ? (band ? P.o1a : P.o1b)      // ocean: sky-lit at the horizon,
+                    : p < .28 ? (band ? P.o2a : P.o2b)     // deepening toward the shore
+                              : (band ? P.o3a : P.o3b);
+        g.fillRect(0, y, waterEdge, 1);
+        // the sun's shimmer path - goes down with the sun
+        if (ph < .6) {
+          const gx = (sunX + Math.sin(y * .8 + pos * .12) * (1 + p * 2.5)) | 0;
+          if (gx < waterEdge - 1) {
+            g.fillStyle = band ? P.glitA : P.glitB;
+            g.fillRect(gx, y, 2, 1);
+          }
+        }
+        if ((y + ((pos * 2) | 0)) % 3 === 0) {             // surf line
+          g.fillStyle = '#b9c2cc'; g.fillRect(waterEdge - 1, y, 1, 1);
+        }
+        g.fillStyle = band ? P.sandA : P.sandB;            // sand shoulder
+        g.fillRect(waterEdge, y, (beach + 1) | 0, 1);
+      }
+      g.fillStyle = band ? '#b8b0a6' : '#8a2b2b';          // rumble strips
+      g.fillRect((cX - half - rum) | 0, y, (rum + 1) | 0, 1);
+      g.fillRect((cX + half) | 0, y, (rum + 1) | 0, 1);
+      g.fillStyle = band ? '#26262d' : '#2d2d35';          // asphalt
+      g.fillRect((cX - half) | 0, y, (half * 2) | 0, 1);
+      if (band && p > .02) {                               // center dash
+        const dw = Math.max(1, half * .045);
+        g.fillStyle = '#d8d2c0';
+        g.fillRect((cX - dw / 2) | 0, y, dw | 0, 1);
+      }
+    }
+
+    // a sail out on the water
+    const bRow = HOR + 4, bp = 4 / (H - HOR);
+    const bEdge = roadX(bp) - (bp * W * .46 + 1) * 1.14 - (2 + bp * 9);
+    const bx = (W * .34 + Math.sin(pos * .003) * 5) | 0;
+    if (bx < bEdge - 4) {
+      g.fillStyle = '#0d0a14'; g.fillRect(bx - 2, bRow, 5, 1);
+      g.fillStyle = '#cfc8b8'; g.fillRect(bx, bRow - 3, 1, 3); g.fillRect(bx + 1, bRow - 2, 1, 2);
+    }
+
+    // our own headlights, once it's dark enough to need them - centered on OUR lane
+    if (ph > .45) {
+      const hs = (ph - .45) / .55;
+      for (let i = 0; i < 10; i++) {
+        const y = H - 1 - i, p = (y - HOR) / (H - HOR);
+        const cXh = roadX(p) + (p * W * .46 + 1) * .5;
+        const hw2 = (p * W * .2 * (1 - i / 12)) | 0;
+        g.fillStyle = `rgba(255,228,160,${(.09 * hs * (1 - i / 11)).toFixed(3)})`;
+        g.fillRect((cXh - hw2) | 0, y, hw2 * 2, 1);
+      }
+    }
+
+    // taillights up ahead, pulling away
+    if (!tail && pos > nextTail) tail = { d: 70 };
+    if (tail) {
+      tail.d += 55 * dt;                                   // they're doing about 120
+      const tp = Math.pow(1 - tail.d / 620, 2.5);
+      if (tail.d > 600) { tail = null; nextTail = pos + 1800 + Math.random() * 2000; }
+      else if (tp > .02) {
+        const y = (HOR + tp * (H - HOR)) | 0;
+        const half2 = tp * W * .46 + 1;
+        const tx = (roadX(tp) + half2 * .5) | 0;           // our lane
+        const s = Math.max(1.2, tp * 14);
+        g.fillStyle = '#0b090e';
+        g.fillRect((tx - s) | 0, (y - s * .9) | 0, Math.max(2, s * 2) | 0, Math.max(1, s * .9) | 0);          // body
+        g.fillRect((tx - s * .6) | 0, (y - s * 1.5) | 0, Math.max(1, s * 1.2) | 0, Math.max(1, s * .65) | 0); // cabin
+        const dot2 = Math.max(1, s * .26) | 0, sep2 = Math.max(2, s * .62) | 0;
+        g.fillStyle = '#ff5548';
+        g.fillRect(tx - sep2, (y - s * .45) | 0, dot2, dot2);
+        g.fillRect(tx + sep2 - dot2, (y - s * .45) | 0, dot2, dot2);
+      }
+    }
+
+    // oncoming car in the left lane, every so often
+    if (!car && pos > nextCar) car = { d: 600 };
+    if (car) {
+      car.d -= 170 * dt;
+      const pp = Math.pow(1 - car.d / 600, 2.5);
+      if (car.d < 25) { car = null; nextCar = pos + 650 + Math.random() * 900; mirrorGlow = 1; }
+      else if (pp > .02) {
+        const y = (HOR + pp * (H - HOR)) | 0;
+        const half = pp * W * .46 + 1;
+        const lx = (roadX(pp) - half * .5) | 0;            // their lane, across the center line
+        const s = Math.max(1.5, pp * 16);
+        g.fillStyle = '#0d0b10';
+        g.fillRect((lx - s) | 0, (y - s * .9) | 0, Math.max(2, s * 2) | 0, Math.max(1, s * .9) | 0);          // body
+        g.fillRect((lx - s * .6) | 0, (y - s * 1.5) | 0, Math.max(1, s * 1.2) | 0, Math.max(1, s * .65) | 0); // cabin
+        const dot = Math.max(1, s * .28) | 0, sep = Math.max(2, s * .68) | 0;
+        g.fillStyle = '#fff3c4';
+        g.fillRect(lx - sep, (y - s * .5) | 0, dot, dot);
+        g.fillRect(lx + sep - dot, (y - s * .5) | 0, dot, dot);
+        g.fillStyle = 'rgba(255,238,180,.22)';
+        g.fillRect((lx - sep * 1.9) | 0, y - 1, (sep * 3.8) | 0, 2);
+      }
+    }
+
+    // palms sweeping past on the right shoulder - the speed cue
+    for (let i = 0; i < palms.length; i++) {
+      if (palms[i] - pos < 0) palms[i] += PDEPTH + 200 + (i * 53) % 160;
+      const d = palms[i] - pos;
+      if (d > PDEPTH) continue;
+      const pp = Math.pow(1 - d / PDEPTH, 2.5);
+      if (pp < .015) continue;
+      const y = HOR + pp * (H - HOR);
+      const half = pp * W * .46 + 1;
+      const x = (roadX(pp) + half + Math.max(1, half * .14) + 4 + pp * 34) | 0;
+      drawPalm(x, y | 0, Math.max(1.5, pp * 30));
+    }
+
+    interior(dt);
+  }
+
+  // 3×5 pixel digits for the dash clock
+  const DIG = { '0':[7,5,5,5,7],'1':[2,6,2,2,7],'2':[7,1,7,4,7],'3':[7,1,7,1,7],'4':[5,5,7,1,1],
+                '5':[7,4,7,1,7],'6':[7,4,7,5,7],'7':[7,1,2,2,2],'8':[7,5,7,5,7],'9':[7,5,7,1,7],':':[0,2,0,2,0] };
+
+  function drawPalm(x, yBase, s) {
+    const trunkH = s * 1.5, tw = Math.max(1, s * .1);
+    g.fillStyle = '#140f0c';
+    for (let i = 0; i < trunkH; i++) g.fillRect((x + i * .14) | 0, yBase - i, Math.ceil(tw), 1);
+    const tx = x + trunkH * .14, ty = yBase - trunkH;
+    g.strokeStyle = '#0d1a10'; g.lineWidth = Math.max(1, s * .1);
+    for (const a of [-2.7, -2.2, -1.7, -1.2, -.7, -.2]) {
+      g.beginPath(); g.moveTo(tx, ty);
+      g.quadraticCurveTo(tx + Math.cos(a) * s * .6, ty + Math.sin(a) * s * .6 - s * .25,
+                         tx + Math.cos(a) * s, ty + Math.sin(a) * s * .5 + s * .15);
+      g.stroke();
+    }
+  }
+
+  // fixed cockpit: roof, mirror, A-pillars, dash, wheel - you're in the car
+  function interior(dt) {
+    g.fillStyle = '#0c090b'; g.fillRect(0, 0, W, 5);
+    g.fillRect((W / 2 + 26) | 0, 4, 30, 10);               // mirror housing
+    g.fillStyle = '#1f2733'; g.fillRect((W / 2 + 28) | 0, 6, 26, 6);
+    // the car that just passed shows up in the mirror, then fades
+    if (mirrorGlow > 0) {
+      mirrorGlow = Math.max(0, mirrorGlow - dt * .5);
+      const mx0 = (W / 2 + 30) | 0, drift = ((1 - mirrorGlow) * 14) | 0;
+      g.fillStyle = `rgba(255,214,140,${(mirrorGlow * .85).toFixed(2)})`;
+      g.fillRect(mx0 + 4 + drift, 8, 2, 2);
+      g.fillRect(mx0 + 8 + drift, 8, 2, 2);
+    }
+    g.fillStyle = '#0c090b';
+    g.beginPath();
+    g.moveTo(0, 0); g.lineTo(14, 0); g.lineTo(0, DASH);
+    g.moveTo(W, 0); g.lineTo(W - 14, 0); g.lineTo(W, DASH);
+    g.fill();
+    g.fillStyle = '#15100e'; g.fillRect(0, DASH, W, H - DASH);
+    g.fillStyle = '#241a15'; g.fillRect(0, DASH, W, 2);
+    // instrument glow
+    g.fillStyle = '#2a1c10'; g.fillRect((W * .27) | 0, DASH + 3, 46, 6);
+    g.fillStyle = '#fb923c'; g.fillRect((W * .27 + 4) | 0, DASH + 5, 10, 2);
+    g.fillRect((W * .27 + 20) | 0, DASH + 5, 6, 2);
+    g.fillStyle = '#4ade80'; g.fillRect((W * .27 + 32) | 0, DASH + 5, 3, 2);
+    drawRadio();
+    // steering wheel - it turns with the road
+    const wx = W * .34, wy = H + 8, wr = Math.min(H * .3, W * .27), wa = curve * .12;
+    g.strokeStyle = '#332a30'; g.lineWidth = 8;
+    g.beginPath(); g.arc(wx, wy, wr, Math.PI * 1.05 + wa, Math.PI * 1.95 + wa); g.stroke();
+    g.strokeStyle = '#4d3f47'; g.lineWidth = 2;
+    g.beginPath(); g.arc(wx, wy, wr + 3, Math.PI * 1.15 + wa, Math.PI * 1.55 + wa); g.stroke();
+    // hands at ten-and-two, steering with the road
+    for (const ha of [Math.PI * 1.28, Math.PI * 1.72]) {
+      const hx2 = (wx + Math.cos(ha + wa) * wr) | 0, hy2 = (wy + Math.sin(ha + wa) * wr) | 0;
+      g.fillStyle = '#171114'; g.fillRect(hx2 - 2, hy2 + 3, 5, 6);   // sleeve
+      g.fillStyle = '#b8875f'; g.fillRect(hx2 - 2, hy2 - 2, 5, 5);   // hand
+      g.fillStyle = '#8f6647'; g.fillRect(hx2 - 2, hy2 + 2, 5, 1);   // knuckle shadow
+    }
+    // dash clock, the visitor's own time - right of the radio, clear of the wheel
+    const gap0 = ((W * .55) | 0) + RW + 8, gap1 = W - 16;
+    if (gap1 - gap0 >= 22) {
+      const now = new Date();
+      const tstr = (now.getHours() % 12 || 12) + ':' + String(now.getMinutes()).padStart(2, '0');
+      let cw = 0; for (const ch of tstr) cw += ch === ':' ? 3 : 4;
+      let cx2 = (gap0 + (gap1 - gap0 - cw) / 2) | 0;
+      const blink = ((pos * .5) | 0) % 2;
+      g.fillStyle = '#d98c4a';
+      for (const ch of tstr) {
+        if (ch === ':' && blink) { cx2 += 3; continue; }
+        const rows = DIG[ch];
+        for (let r = 0; r < 5; r++) for (let b = 0; b < 3; b++)
+          if (rows[r] >> (2 - b) & 1) g.fillRect(cx2 + b, DASH + 5 + r, 1, 1);
+        cx2 += ch === ':' ? 3 : 4;
+      }
+    }
+  }
+
+  // the radio unit - dial state comes from window.radioState (off | tuning | on | dead)
+  function drawRadio() {
+    const st = window.radioState || 'off';
+    const rx = (W * .55) | 0, ry = DASH + 2;
+    g.fillStyle = '#3d2c20'; g.fillRect(rx - 2, ry - 2, RW + 4, RH + 4);   // bright bezel
+    g.fillStyle = '#100c0e'; g.fillRect(rx, ry, RW, RH);                   // faceplate
+    g.fillStyle = '#241a15'; g.fillRect(rx, ry, RW, 1);                    // top edge light
+    // tuner strip: dark when off, blinks while tuning, lit when on
+    g.fillStyle = st === 'on' ? '#fb923c'
+      : st === 'tuning' ? ((((pos * .25) | 0) % 2) ? '#fb923c' : '#3a2a1c')
+      : st === 'dead' ? '#552222' : '#3a2a1c';
+    g.fillRect(rx + 3, ry + 3, RW - 18, 3);
+    // standby light so the unit reads as "a device" even when off
+    g.fillStyle = st === 'off' ? '#8a5524' : '#ffd27a';
+    g.fillRect(rx + RW - 15, ry + 3, 2, 2);
+    if (st === 'on') {
+      g.fillStyle = '#ffd27a'; g.fillRect(rx + 3 + ((RW - 18) * .55 | 0), ry + 2, 1, 5);  // needle
+      g.fillStyle = '#ffb45e';                                             // little EQ while playing
+      for (let i = 0; i < 4; i++) {
+        const hgt = (2 + (Math.sin(pos * .12 + i * 2.1) + 1) * 2) | 0;
+        g.fillRect(rx + 4 + i * 4, ry + RH - 2 - hgt, 2, hgt);
+      }
+    }
+    // power knob - pointer turns when switched on, wiggles while tuning
+    const kx = rx + RW - 8, ky = ry + RH / 2;
+    const ang = (st === 'on' || st === 'tuning' ? -.6 : 2.4) + (st === 'tuning' ? Math.sin(pos * .3) * .2 : 0);
+    g.fillStyle = '#4a4a54'; g.beginPath(); g.arc(kx, ky, 5, 0, 7); g.fill();
+    g.strokeStyle = '#100c0e'; g.lineWidth = 1; g.stroke();
+    g.strokeStyle = st === 'off' ? '#9a9aa2' : '#ffd27a';
+    g.beginPath(); g.moveTo(kx, ky); g.lineTo(kx + Math.cos(ang) * 5, ky + Math.sin(ang) * 5); g.stroke();
+  }
+
+  const rm = matchMedia('(prefers-reduced-motion: reduce)');
+  let last = 0, run = !rm.matches;
+  function loop(t) {
+    const dt = Math.min(.05, (t - last) / 1000 || .016); last = t;
+    draw(dt);
+    if (run) requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);                             // reduced-motion still gets one static frame
+  rm.addEventListener?.('change', () => { run = !rm.matches; if (run) requestAnimationFrame(loop); });
+  // reduced-motion: repaint one frame when the radio changes state, so the dial still responds
+  const au = document.getElementById('radioAudio');
+  const once = () => { if (!run) requestAnimationFrame(loop); };
+  hot.addEventListener('click', once);
+  ['playing', 'pause', 'error'].forEach(e => au.addEventListener(e, once));
+})();
+</script>
+</body>
+</html>

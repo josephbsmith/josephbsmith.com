@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joseph B. Smith</title>
+<meta name="description" content="Staff practice accountant in oncology revenue. Payor-data tools, history books, and a radio station.">
+<meta property="og:title" content="Joseph B. Smith">
+<meta property="og:description" content="Staff practice accountant in oncology revenue. Payor-data tools, history books, and a radio station.">
+<meta property="og:image" content="https://josephbsmith.com/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://josephbsmith.com/og-card.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="canonical" id="canon" href="https://josephbsmith.com/">
+<meta name="theme-color" content="#0f0e10">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230a0a24"/><rect x="5" y="4" width="6" height="1" fill="%23ffd27a"/><rect x="4" y="5" width="8" height="2" fill="%23ffd27a"/><rect x="4" y="7" width="8" height="1" fill="%23ff9a3c"/><rect x="5" y="9" width="6" height="1" fill="%23ff9a3c"/><rect x="4" y="11" width="8" height="1" fill="%23fb923c"/><rect x="2" y="13" width="12" height="1" fill="%23452158"/></svg>'>
+<style>
+  :root {
+    --bg: #0f0e10; --fg: #e9e7e4; --muted: #98938c; --rule: #2a272b;
+    --accent: #fb923c;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); color-scheme: dark; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 17px/1.65 Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 14vh 24px 10vh;
+  }
+  main { width: 100%; max-width: 600px; }
+  h1 { font-size: 2.4rem; margin: 0 0 .5rem; font-weight: 700; }
+  h2 { font-size: 1.5rem; margin: 0 0 1.4rem; }
+  .tag { color: var(--muted); font: 500 13px var(--mono); letter-spacing: .05em; margin: 0; }
+
+  /* the index: hairline rows, nothing rounded, nothing floating */
+  .index { margin-top: 3rem; border-top: 1px solid var(--rule); }
+  .index a {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 16px 2px; border-bottom: 1px solid var(--rule);
+    color: inherit; text-decoration: none;
+  }
+  .index .label { font: 600 13px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+  .index .arrow { color: var(--muted); font: 500 13px var(--mono); }
+  .index a:hover .label, .index a:hover .arrow { color: var(--accent); }
+
+  footer { color: var(--muted); font: 12px var(--mono); letter-spacing: .04em; margin-top: 3.2rem; }
+
+  /* rooms: plain text on the page, a hairline where the index was */
+  .room { margin-top: 2vh; border-top: 1px solid var(--rule); padding-top: 1.6rem; }
+  .room p { margin: 0 0 1.1rem; }
+  .room p:last-child { margin-bottom: 0; }
+  .room a { color: var(--accent); text-decoration: none; }
+  .room a:hover { text-decoration: underline; }
+  .room ul { margin: 0 0 1.1rem; padding-left: 1.1rem; }
+  .room li { margin-bottom: .8rem; }
+  .room li:last-child { margin-bottom: 0; }
+  .works { list-style: none; padding: 0; }
+  .works li { margin-bottom: .55rem; }
+  .worksub { color: var(--muted); font: 500 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; margin: -.7rem 0 1.3rem; }
+  .back {
+    display: inline-block; font: 600 12px var(--mono); letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem;
+    text-decoration: none;
+  }
+  .back:hover { color: var(--accent); text-decoration: none; }
+  .worktitle { font-style: italic; }
+</style>
+</head>
+<body>
+<main>
+  <!-- FRONT DOOR -->
+  <section data-room="home">
+    <h1>Joseph B. Smith</h1>
+    <p class="tag">Staff Practice Accountant, OneOncology · MAcc candidate, Belmont</p>
+    <nav class="index">
+      <a href="/work" data-nav>
+        <span class="label">Work</span>
+        <span class="arrow">→</span>
+      </a>
+      <a href="/code" data-nav>
+        <span class="label">Code</span>
+        <span class="arrow">→</span>
+      </a>
+      <a href="/writing" data-nav>
+        <span class="label">Writing</span>
+        <span class="arrow">→</span>
+      </a>
+      <a href="/contact" data-nav>
+        <span class="label">Contact</span>
+        <span class="arrow">→</span>
+      </a>
+    </nav>
+    <footer>© <span id="y"></span> Joseph B. Smith</footer>
+  </section>
+
+  <!-- WORK -->
+  <section data-room="work" class="room" hidden>
+    <a class="back" href="/" data-nav>← home</a>
+    <h2>Work</h2>
+    <p>
+      I'm a Staff Practice Accountant at <a href="https://www.oneoncology.com" target="_blank" rel="noopener">OneOncology</a>,
+      working in practice revenue with previous experience at HCA Healthcare and MPower
+      Physical Therapy. I'm finishing a Master of Accountancy at Belmont University. I am
+      currently testing for the CPA.
+    </p>
+    <p>
+      On evenings and weekends, I work on <a href="https://branmoor.com" target="_blank" rel="noopener">Branmoor</a>,
+      converting messy healthcare data into useful intelligence. Currently mapping national
+      hospital price transparency files and studying payor relationships across the industry.
+      This project is currently private.
+    </p>
+    <p>
+      Check out my coding projects <a href="/code" data-nav>here</a> and read my writing
+      <a href="/writing" data-nav>here</a>.
+    </p>
+  </section>
+
+  <!-- CODE -->
+  <section data-room="code" class="room" hidden>
+    <a class="back" href="/" data-nav>← home</a>
+    <h2>Code</h2>
+    <ul>
+      <li>
+        <strong>ClearRate</strong> - crawls hospital price-transparency files at scale and
+        turns them into one queryable dataset. Runs under Branmoor; private for now.
+      </li>
+      <li>
+        <strong><a href="/erp">A personal ERP</a></strong> - a Workday-inspired system for
+        one household: strict double-entry core, dimensional reporting, statement ingestion
+        and reconciliation, fixed assets, debt, budgets, forecasts, KPIs. Local-first and
+        private. I use it for my own books; it's free to <a href="/erp">download and try</a>.
+      </li>
+      <li>
+        <strong>This site</strong> - hand-written HTML, one file per page. Receipts in the
+        <a href="/colophon" data-nav>colophon</a>.
+      </li>
+      <li><strong><a href="/drive">Go for a drive</a></strong></li>
+    </ul>
+    <p>Everything public is at <a href="https://github.com/josephbsmith" target="_blank" rel="noopener">github.com/josephbsmith</a>.</p>
+  </section>
+
+  <!-- WRITING -->
+  <section data-room="writing" class="room" hidden>
+    <a class="back" href="/" data-nav>← home</a>
+    <h2>Writing</h2>
+    <p>
+      I write essays on current events and history from primary sources.
+    </p>
+    <p>
+      <a class="worktitle" href="/writing/the-economist-and-the-artist" data-nav>The Economist and the Artist: A 200-Year History</a>
+    </p>
+    <p>Shorter histories:</p>
+    <ul class="works">
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/the-new-york-clearing-house.pdf">The New York Clearing House, 1853–1913</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/the-exchequer-of-england.pdf">The Exchequer of England, 1110–1327</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/the-arsenal-of-venice.pdf">The Arsenal of Venice, 1300–1600</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/the-civil-service-examinations-of-imperial-china.pdf">The Civil-Service Examinations of Imperial China, 605–1905</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/the-janissary-corps.pdf">The Janissary Corps, From Its Foundation to 1826</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/the-victualling-board.pdf">The Victualling Board and the Provisioning of the Royal Navy, 1793–1815</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/the-tower-press-room.pdf">The Tower Press-Room, 1695–1727</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/the-commissioners-of-longitude.pdf">The Commissioners of Longitude, 1714–1828</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/a-history-of-lloyds.pdf">A History of Lloyd's, From the Coffee House to the Act of 1871</a></li>
+      <li><a class="worktitle" target="_blank" rel="noopener" href="/writing/counting-machines.pdf">Counting Machines: The Census, Punched Cards, and IBM, 1880–1945</a></li>
+    </ul>
+  </section>
+
+  <!-- THE ECONOMIST AND THE ARTIST -->
+  <section data-room="writing/the-economist-and-the-artist" class="room" hidden>
+    <a class="back" href="/writing" data-nav>← writing</a>
+    <h2>The Economist and the Artist</h2>
+    <p class="worksub">A 200-Year History</p>
+    <p>200 years of monetary history from Napoleon to the first trillionaire.</p>
+    <p>
+      <a href="/writing/the-economist-and-the-artist.pdf" target="_blank" rel="noopener">Read it &middot; PDF, 352 pages</a>
+    </p>
+  </section>
+
+  <!-- CONTACT -->
+  <section data-room="contact" class="room" hidden>
+    <a class="back" href="/" data-nav>← home</a>
+    <h2>Contact</h2>
+    <p><a href="mailto:josephsmith286@gmail.com">josephsmith286@gmail.com</a></p>
+    <p><a href="https://www.linkedin.com/in/josephbenjaminsmith" target="_blank" rel="noopener">linkedin.com/in/josephbenjaminsmith</a></p>
+  </section>
+
+  <!-- COLOPHON -->
+  <section data-room="colophon" class="room" hidden>
+    <a class="back" href="/" data-nav>← home</a>
+    <h2>Colophon</h2>
+    <p>
+      Hand-written HTML - no framework, no build step, no analytics, no cookies. View source
+      and you've seen the whole thing. Text is set in Charter with monospace labels; both
+      ship with your operating system, so nothing downloads.
+    </p>
+    <p>
+      The <a href="/drive">drive</a> is its own page: a pseudo-3D coastline drawn on a
+      ~320×180 canvas at 60 frames a second, upscaled with hard pixels. The road bends on a
+      random walk, the sun sets in real time, and the dash clock keeps your time. The radio
+      streams two and a quarter hours of K-Billy's Super Sounds of the 70's in range
+      requests - you download only what you listen to. It respects reduced-motion settings.
+    </p>
+    <p>
+      Built at a terminal with Claude Code riding shotgun. Hosted on Cloudflare Pages.
+    </p>
+  </section>
+</main>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  /* rooms in one document. Direct URLs work via _redirects (all → /). */
+  const rooms = document.querySelectorAll('[data-room]');
+  function show(path, push) {
+    const name = (path.replace(/^\/|\/$/g, '') || 'home');
+    const known = [...rooms].some(s => s.dataset.room === name);
+    const target = known ? name : 'home';
+    rooms.forEach(s => { s.hidden = s.dataset.room !== target; });
+    const label = target.split('/').pop().replace(/-/g, ' ');
+    document.title = target === 'home' ? 'Joseph B. Smith' : 'Joseph B. Smith - ' + label;
+    document.getElementById('canon').href = 'https://josephbsmith.com' + (target === 'home' ? '/' : '/' + target);
+    if (push) history.pushState(null, '', target === 'home' ? '/' : '/' + target);
+    scrollTo(0, 0);
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[data-nav]');
+    if (!a) return;
+    e.preventDefault();
+    show(new URL(a.href).pathname, true);
+  });
+  addEventListener('popstate', () => show(location.pathname, false));
+  show(location.pathname, false);
+</script>
+</body>
+</html>

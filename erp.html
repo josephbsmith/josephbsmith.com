@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal ERP - Joseph B. Smith</title>
+<meta name="description" content="A local-first, Workday-inspired accounting system for one household. Double-entry core, financial statements, reconciliation, budgets, forecasts. Free to download.">
+<meta property="og:title" content="Personal ERP">
+<meta property="og:description" content="A local-first accounting system for one household - double-entry books, financial statements, reconciliation, budgets, forecasts. Free to download.">
+<meta property="og:image" content="https://josephbsmith.com/img/erp-dashboard.png">
+<link rel="canonical" href="https://josephbsmith.com/erp">
+<meta name="theme-color" content="#0f0e10">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230a0a24"/><rect x="5" y="4" width="6" height="1" fill="%23ffd27a"/><rect x="4" y="5" width="8" height="2" fill="%23ffd27a"/><rect x="4" y="7" width="8" height="1" fill="%23ff9a3c"/><rect x="5" y="9" width="6" height="1" fill="%23ff9a3c"/><rect x="4" y="11" width="8" height="1" fill="%23fb923c"/><rect x="2" y="13" width="12" height="1" fill="%23452158"/></svg>'>
+<style>
+  :root {
+    --bg: #0f0e10; --fg: #e9e7e4; --muted: #98938c; --rule: #2a272b;
+    --accent: #fb923c;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); color-scheme: dark; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 17px/1.65 Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 6vh 24px 12vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  main { width: 100%; max-width: 760px; }
+  .back {
+    display: inline-block; font: 600 12px var(--mono); letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 3rem;
+  }
+  .back:hover { color: var(--accent); }
+  h1 { font-size: 2.6rem; margin: 0 0 .5rem; font-weight: 700; }
+  .tag { color: var(--muted); font: 500 13px var(--mono); letter-spacing: .05em; margin: 0 0 2rem; }
+  .lede { font-size: 1.15rem; margin: 0 0 1.1rem; max-width: 62ch; }
+  .lede.small { font-size: 1.02rem; color: var(--muted); }
+  a.link { color: var(--accent); text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+
+  .cta {
+    display: inline-flex; align-items: baseline; gap: 10px;
+    margin: 1.6rem 0 .6rem;
+    font: 600 13px var(--mono); letter-spacing: .12em; text-transform: uppercase;
+    color: var(--bg); background: var(--accent); text-decoration: none;
+    padding: 13px 22px; border-radius: 8px;
+  }
+  .cta:hover { filter: brightness(1.08); }
+  .cta .sz { font-weight: 400; opacity: .8; letter-spacing: .04em; text-transform: none; }
+  .cta-note { font: 12px var(--mono); color: var(--muted); letter-spacing: .03em; margin: .2rem 0 0; }
+
+  h2 { font-size: 1.05rem; font-family: var(--mono); font-weight: 600; letter-spacing: .12em;
+       text-transform: uppercase; color: var(--muted); margin: 4rem 0 1.4rem;
+       padding-top: 1.4rem; border-top: 1px solid var(--rule); }
+
+  figure { margin: 0 0 2.4rem; }
+  figure img {
+    width: 100%; height: auto; display: block; border-radius: 8px;
+    border: 1px solid var(--rule); box-shadow: 0 12px 40px rgba(0,0,0,.5);
+    background: #fff;
+  }
+  figcaption { font: 12px var(--mono); color: var(--muted); letter-spacing: .03em; margin-top: .7rem; }
+  figcaption b { color: var(--fg); font-weight: 600; }
+
+  .feat { columns: 2; column-gap: 40px; margin: 0; padding: 0; list-style: none; }
+  .feat li { break-inside: avoid; margin-bottom: .7rem; padding-left: 1.1rem; position: relative; }
+  .feat li::before { content: " - "; position: absolute; left: 0; color: var(--accent); }
+  @media (max-width: 620px) { .feat { columns: 1; } }
+
+  pre {
+    background: #17161a; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 18px 20px; overflow-x: auto;
+    font: 13px/1.7 var(--mono); color: #cfcbc5;
+  }
+  pre .c { color: var(--muted); }
+  p.fine { color: var(--muted); font-size: .95rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">← josephbsmith.com</a>
+
+  <h1>Personal ERP</h1>
+  <p class="tag">Local-first accounting for one household</p>
+
+  <p class="lede">
+    A Workday-inspired accounting system for a single household - a real double-entry
+    ledger with financial statements, statement reconciliation, fixed assets, debt,
+    budgets, forecasts, and KPIs. It runs entirely on your own machine, in your browser,
+    against one SQLite file. Nothing leaves your computer.
+  </p>
+  <p class="lede small">
+    I built it, and I run my own household's books on it. It's free to download and use.
+  </p>
+
+  <a class="cta" href="/downloads/personal-erp.zip" download>
+    Download <span class="sz">· zip, ~75&nbsp;KB</span>
+  </a>
+  <p class="cta-note">Requires Python 3.11+. Setup is three commands - see below.</p>
+
+  <h2>A look inside</h2>
+
+  <figure>
+    <img src="/img/erp-dashboard.png" alt="Personal ERP dashboard: net worth, KPIs, cash flow, and reconciliation status" loading="lazy">
+    <figcaption><b>Dashboard.</b> Net worth, income and expense, a full KPI panel (savings rate, emergency-fund months, debt-service ratio), direct-method cash flow, and live reconciliation status.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="/img/erp-reports.png" alt="Financial statements: trial balance, income statement, balance sheet, cash flow" loading="lazy">
+    <figcaption><b>Financial statements.</b> Trial balance, income statement, and balance sheet - each proving out to the penny - plus cash flow and managerial spending by service line and cost center.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="/img/erp-journal.png" alt="Journal entries with source, status, and amounts" loading="lazy">
+    <figcaption><b>The journal.</b> Every transaction is a balanced entry - imports, accruals, depreciation, debt payments - posted to the ledger and traceable back to source.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="/img/erp-budget.png" alt="Budget versus actual by account" loading="lazy">
+    <figcaption><b>Budget vs. actual.</b> Set a budget version, compare it against posted activity, and read the variance by account.</figcaption>
+  </figure>
+
+  <h2>What it does</h2>
+  <ul class="feat">
+    <li>Double-entry accounting core</li>
+    <li>Trial balance, income statement, balance sheet</li>
+    <li>Direct-method cash flow &amp; net-worth bridge</li>
+    <li>Bank &amp; credit-card statement import</li>
+    <li>Reconciliation to the penny</li>
+    <li>Fixed assets &amp; depreciation</li>
+    <li>Debt, amortization &amp; interest accrual</li>
+    <li>Budgets and budget-to-actual</li>
+    <li>Forecast scenarios &amp; projected statements</li>
+    <li>Dimensional reporting (cost center, service line, person)</li>
+    <li>KPI dashboard with targets</li>
+    <li>Month-end close workflow</li>
+  </ul>
+
+  <h2>How it works</h2>
+  <p>Unzip it, then from inside the folder:</p>
+  <pre><span class="c"># one-time setup</span>
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+
+<span class="c"># build a demo household and launch</span>
+python -m backend.manage reset
+python -m backend.manage run</pre>
+  <p>Then open <b>http://127.0.0.1:8001</b>. The download seeds a synthetic demo household
+  (the numbers in the screenshots above) so every screen works out of the box; the README
+  explains how to clear it and start on your own books.</p>
+
+  <a class="cta" href="/downloads/personal-erp.zip" download>
+    Download <span class="sz">· zip, ~75&nbsp;KB</span>
+  </a>
+
+  <h2>The fine print</h2>
+  <p class="fine">
+    Local-first and private - the database is a single file on your machine and nothing
+    phones home. Python 3.11+, no other dependencies to install, no accounts, no server.
+    Free under the MIT license. Built by Joseph B. Smith.
+  </p>
+</main>
+</body>
+</html>
