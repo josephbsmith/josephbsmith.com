@@ -13,8 +13,8 @@ main{max-width:700px}
 section h2{display:none}
 .toolbar{display:flex;align-items:center;gap:.7rem;padding:0 0 10px;margin-bottom:12px;border-bottom:1px solid #1a3049;box-shadow:0 1px 0 #2e4e75 inset;flex-wrap:wrap}
 .toolbar .timer{margin-left:auto}
-input,select,textarea{background:#f4eedd;color:#1c3049;border:1px solid;border-color:#7d92aa #c2cfdc #c2cfdc #7d92aa;border-radius:2px;font:13px var(--ui);padding:.45rem .55rem;margin:.15rem 0 .7rem}
-label{font:12px var(--ui);color:#c2cfdc;letter-spacing:0;text-transform:none}
+input,select,textarea{background:#f4eedd;color:#1c3049;border:1px solid;border-color:#7d92aa #c2cfdc #c2cfdc #7d92aa;border-radius:3px;font:14px var(--ui);padding:.5rem .6rem;margin:.15rem 0 .75rem}
+label{font:13px var(--ui);color:#cfdae6;letter-spacing:0;text-transform:none}
 ::placeholder{color:#8b9aa9}
 button{background:linear-gradient(#faf5e8,#e4dabf);border:1px solid #a3966f;border-radius:3px;color:#1b3350;font:600 13px var(--ui);padding:6px 14px}
 button:hover{background:linear-gradient(#fffbef,#ece2c8)}
@@ -47,7 +47,31 @@ details.run .scroll{padding:0 .4rem}
 #guide p{margin:.3rem 0 .6rem;font-size:13.5px;line-height:1.6;color:var(--fg)}
 #printout{display:none}
 [hidden]{display:none!important}
-@media(max-width:600px){.clientarea{padding:12px 10px 14px}.settings-grid{grid-template-columns:1.2fr 1fr 1fr}.actionrow{flex-wrap:wrap}.actionrow button{width:100%}}
+@media(max-width:600px){
+body{padding:0}
+main{max-width:none}
+.window{border:none;box-shadow:none;min-height:100dvh;display:flex;flex-direction:column}
+.titlebar{padding:calc(9px + env(safe-area-inset-top)) 14px 9px}
+.apptitle{font-size:16px}
+.tabs{position:sticky;top:0;z-index:3;padding:8px 8px 0}
+.tabs button{flex:1;padding:11px 0;font-size:14.5px;text-align:center}
+.clientarea{flex:1;padding:16px 14px 8px}
+input,select,textarea{font-size:16px;padding:.65rem .7rem}
+button{min-height:44px;font-size:14.5px}
+.exercise h3{font-size:19px}
+.exercise{padding:14px 12px 6px}
+.plate{font-size:13.5px}
+.timer{font-size:19px}
+.status{font-size:13px}
+.actionrow{position:sticky;bottom:0;z-index:2;flex-wrap:wrap;margin:14px -14px 0;padding:12px 14px calc(12px + env(safe-area-inset-bottom)/2);background:linear-gradient(rgba(34,64,95,0),var(--client) 35%)}
+.actionrow button{width:100%;min-height:50px;font-size:16px}
+#settings .actionrow,#history .toolbar{position:static;margin:14px 0 0;padding:0;background:none}
+#settings .actionrow button,#history .toolbar button{width:auto;min-height:44px}
+.settings-grid{grid-template-columns:1.2fr 1fr 1fr}
+.statusbar{padding-bottom:env(safe-area-inset-bottom)}
+.statusbar span{padding:7px 10px}
+.boundary{margin:14px 14px 20px}
+}
 @media print{body>main>*{display:none!important}#printout{display:block!important}body{background:#fff;color:#000;padding:0;font:12px Georgia,serif}#printout h1{font:700 20px Georgia,serif;margin:0 0 2px}#printout .sub{color:#444;margin:0 0 14px;font-size:11px}#printout h2{font:700 14px Georgia,serif;margin:16px 0 6px;display:block}#printout table{width:100%;border-collapse:collapse;font-size:11px}#printout th,#printout td{border:1px solid #999;padding:4px 6px;text-align:left;color:#000;background:#fff}}
 </style></head><body><main>
 <div class="window">
@@ -96,7 +120,7 @@ function drawSaved(){$('#saved').textContent=state.savedAt?'Saved '+new Date(sta
 function saveState(){try{const prev=localStorage.getItem(KEY);if(prev){const b1=localStorage.getItem(KEY+'-backup1');if(b1)localStorage.setItem(KEY+'-backup2',b1);localStorage.setItem(KEY+'-backup1',prev)}state.savedAt=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));drawSaved()}catch(e){$('#feedback').textContent='Saving failed: '+e.message}}
 function nextLifts(){const press=state.session%2?'bench':'press';let pull='deadlift';if(state.phase===2)pull=state.session%2?'power_clean':'deadlift';if(state.phase===3)pull=['deadlift','chinups','power_clean','chinups'][state.session%4];return['squat',press,pull]}
 function platesFor(total){let remaining=Math.max(0,(total-state.bar)/2),out=[];for(const p of state.plates.split(',').map(Number).filter(x=>x>0).sort((a,b)=>b-a)){while(remaining+.0001>=p){out.push(p);remaining-=p}}return{out,remainder:remaining}}
-function renderWorkout(){$('#session').textContent=`Phase ${state.phase} · session ${state.session+1}`;drawSaved();const root=$('#exercises');root.innerHTML='';for(const lift of nextLifts()){const [name,reps]=LIFTS[lift],s=state.lifts[lift],loaded=platesFor(s.weight),d=document.createElement('fieldset');d.className='panel exercise';d.dataset.lift=lift;const prescription=reps.length?`${reps.length}×${reps[0]}`:'3 sets to fatigue';d.innerHTML=`<span class=label>${esc(lift.replace('_',' '))}</span><h3>${esc(name)} · ${prescription} @ ${s.weight} lb</h3><p class=plate>Each side: ${loaded.out.length?loaded.out.map(x=>x+' lb').join(' + '):'bar only'}${loaded.remainder>.001?' · '+loaded.remainder.toFixed(2)+' lb cannot be loaded':''}</p><label>Warm-ups<input class=warmups placeholder="45×5, 95×5"></label><label>Work reps, comma separated<input class=reps value="${reps.join(',')}" placeholder="${reps.length?reps.join(','):'8,6,5'}"></label><label>Weight used<input class=weight type=number step=.5 value="${s.weight}"></label>`;root.append(d)}$('#feedback').textContent=''}
+function renderWorkout(){$('#session').textContent=`Phase ${state.phase} · session ${state.session+1}`;drawSaved();const root=$('#exercises');root.innerHTML='';for(const lift of nextLifts()){const [name,reps]=LIFTS[lift],s=state.lifts[lift],loaded=platesFor(s.weight),d=document.createElement('fieldset');d.className='panel exercise';d.dataset.lift=lift;const prescription=reps.length?`${reps.length}×${reps[0]}`:'3 sets to fatigue';d.innerHTML=`<span class=label>${esc(lift.replace('_',' '))}</span><h3>${esc(name)} · ${prescription} @ ${s.weight} lb</h3><p class=plate>Each side: ${loaded.out.length?loaded.out.map(x=>x+' lb').join(' + '):'bar only'}${loaded.remainder>.001?' · '+loaded.remainder.toFixed(2)+' lb cannot be loaded':''}</p><label>Warm-ups<input class=warmups placeholder="45×5, 95×5"></label><label>Reps completed each set<input class=reps value="${reps.join(',')}" placeholder="${reps.length?reps.join(','):'8,6,5'}"></label><label>Weight used<input class=weight type=number step=.5 value="${s.weight}"></label>`;root.append(d)}$('#feedback').textContent=''}
 function runRows(history){return history.slice().reverse().map(w=>`<tr><td>${esc(new Date(w.date).toLocaleDateString())}</td><td>${w.phase}</td><td>${w.session+1}</td><td>${w.entries.map(e=>`${esc(LIFTS[e.lift][0])} ${e.weight}×${esc(e.reps.join('/'))}`).join('<br>')}</td></tr>`).join('')}
 function renderHistory(){$('#historyRows').innerHTML=runRows(state.history)||'<tr><td colspan=4>No workouts recorded in this run yet.</td></tr>';$('#archiveList').innerHTML=state.archives.slice().reverse().map((a,i)=>{const n=state.archives.length-i;return `<details class=run><summary>Previous run ${n} · ended ${esc(new Date(a.archived_at).toLocaleDateString())} · ${a.history.length} workout${a.history.length===1?'':'s'}</summary><div class=scroll><table><thead><tr><th>Date</th><th>Phase</th><th>Session</th><th>Work</th></tr></thead><tbody>${runRows(a.history)||'<tr><td colspan=4>No workouts.</td></tr>'}</tbody></table></div></details>`}).join('')}
 function renderSettings(){$('#phase').value=state.phase;$('#bar').value=state.bar;$('#plates').value=state.plates;$('#settingsStatus').textContent='';$('#liftSettings').innerHTML=Object.entries(LIFTS).map(([k,v])=>`<span>${esc(v[0])}</span><input data-weight=${k} type=number step=.5 value="${state.lifts[k].weight}"><input data-increment=${k} type=number step=.5 value="${state.lifts[k].increment}">`).join('')}
