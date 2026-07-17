@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tools - Joseph B. Smith</title>
+<meta name="description" content="Twenty-two small tools: accounting and revenue-cycle checks, evidence ledgers, diff engines, simulators. Each one Python file with a test. MIT.">
+<meta property="og:title" content="Tools">
+<meta property="og:description" content="Twenty-two small tools: accounting and revenue-cycle checks, evidence ledgers, diff engines, simulators. Each one Python file with a test. MIT.">
+<meta property="og:image" content="https://josephbsmith.com/og-card.png">
+<link rel="canonical" href="https://josephbsmith.com/tools">
+<meta name="theme-color" content="#0f0e10">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230a0a24"/><rect x="5" y="4" width="6" height="1" fill="%23ffd27a"/><rect x="4" y="5" width="8" height="2" fill="%23ffd27a"/><rect x="4" y="7" width="8" height="1" fill="%23ff9a3c"/><rect x="5" y="9" width="6" height="1" fill="%23ff9a3c"/><rect x="4" y="11" width="8" height="1" fill="%23fb923c"/><rect x="2" y="13" width="12" height="1" fill="%23452158"/></svg>'>
+<style>
+  :root {
+    --bg: #0f0e10; --fg: #e9e7e4; --muted: #98938c; --rule: #2a272b;
+    --accent: #fb923c;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); color-scheme: dark; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 17px/1.65 Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 6vh 24px 12vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  main { width: 100%; max-width: 760px; }
+  .back {
+    display: inline-block; font: 600 12px var(--mono); letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 3rem;
+  }
+  .back:hover { color: var(--accent); }
+  h1 { font-size: 2.6rem; margin: 0 0 .5rem; font-weight: 700; }
+  .tag { color: var(--muted); font: 500 13px var(--mono); letter-spacing: .05em; margin: 0 0 2rem; }
+  .lede { font-size: 1.15rem; margin: 0 0 1.1rem; max-width: 62ch; }
+  a.link { color: var(--accent); text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+
+  h2 { font-size: 1.05rem; font-family: var(--mono); font-weight: 600; letter-spacing: .12em;
+       text-transform: uppercase; color: var(--muted); margin: 3.4rem 0 .2rem;
+       padding-top: 1.4rem; border-top: 1px solid var(--rule); }
+
+  .row { border-top: 1px solid var(--rule); padding: 16px 0; }
+  .row:first-of-type { border-top: none; }
+  .row .name { font: 600 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+  .row .name a { color: var(--fg); text-decoration: none; }
+  .row .name a:hover { color: var(--accent); }
+  .row p { margin: .35rem 0 .45rem; max-width: 68ch; }
+  .row .links { font: 500 12px var(--mono); letter-spacing: .06em; }
+  .row .links a { color: var(--accent); text-decoration: none; margin-right: 18px; }
+  .row .links a:hover { text-decoration: underline; }
+  p.fine { color: var(--muted); font-size: .95rem; margin-top: 3.4rem; padding-top: 1.4rem; border-top: 1px solid var(--rule); }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">← josephbsmith.com</a>
+
+  <h1>Tools</h1>
+  <p class="tag">22 small tools · Python, standard library · MIT</p>
+
+  <p class="lede">
+    Each tool does one narrow job and is one Python file with a focused test.
+    No frameworks, no dependencies (one optional exception, noted), nothing phones home.
+    The larger ones have their own pages; source is on
+    <a class="link" href="https://github.com/josephbsmith" target="_blank" rel="noopener">GitHub</a>
+    as each is released.
+  </p>
+
+  <h2>Accounting &amp; revenue</h2>
+
+  <div class="row">
+    <div class="name"><a href="/workpaperdiff">WorkpaperDiff</a></div>
+    <p>Diffs two Excel workpapers for accounting logic, not cell noise: formula-to-hardcode,
+    sign flips, stale dates, broken prior-period links. Reads xlsx with the standard library.</p>
+    <div class="links"><a href="/workpaperdiff">page →</a><a href="https://github.com/josephbsmith/workpaperdiff" target="_blank" rel="noopener">github ↗</a></div>
+  </div>
+  <div class="row">
+    <div class="name"><a href="/claimbench">ClaimBench</a></div>
+    <p>Synthetic claim-to-cash scenarios with authoritative expected journal entries and
+    subledger states. Test revenue-cycle accounting without touching patient data.</p>
+    <div class="links"><a href="/claimbench">page →</a><a href="https://github.com/josephbsmith/claimbench" target="_blank" rel="noopener">github ↗</a></div>
+  </div>
+  <div class="row">
+    <div class="name"><a href="/ratetest">RateTest</a></div>
+    <p>Executable tests for payer-contract math: rate methods from case rate to stop-loss,
+    every expected amount shown step by step. All synthetic.</p>
+    <div class="links"><a href="/ratetest">page →</a><a href="https://github.com/josephbsmith/ratetest" target="_blank" rel="noopener">github ↗</a></div>
+  </div>
+  <div class="row">
+    <div class="name">TieOut</div>
+    <p>Reconciliations and rollforwards as executable JSON specs. Decimal arithmetic, CSV
+    selectors, nonzero exit on a failed check.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/tieout" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">HCRIS Kit</div>
+    <p>Loads CMS hospital cost-report extracts into SQLite without losing worksheet
+    coordinates. Ask for a worksheet, line, and column; get the value and its source row.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/hcris-kit" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">MRF Lint</div>
+    <p>Economic-coherence checks for hospital price-transparency files that already pass the
+    CMS validator. Row-level findings, each tied to a named rule.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/mrf-lint" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+
+  <h2>Evidence &amp; data</h2>
+
+  <div class="row">
+    <div class="name">PageLedger</div>
+    <p>Snapshots webpages and documents into a local evidence ledger - immutable bytes,
+    hashed passages, diffs between any two captures.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/pageledger" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">Factpack</div>
+    <p>Portable evidence bundles: sources, passages, locators, rights, and hashes in one
+    verifiable zip.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/factpack" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">DataBOM</div>
+    <p>A bill of materials for a dataset: every file hashed, sized, typed, and verifiable
+    later with one command.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/databom" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">WorldDiff</div>
+    <p>Diffs two GeoJSON files by feature ID - added, removed, moved, reshaped - into a
+    summary and a map-ready change layer.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/worlddiff" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">Activity Commons</div>
+    <p>Turns platform takeout files into one private activity timeline in SQLite. Chrome,
+    YouTube, or any CSV. Nothing leaves your machine.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/activity-commons" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+
+  <h2>Economics</h2>
+
+  <div class="row">
+    <div class="name">Vintage</div>
+    <p>A local release ledger for public statistics: what was the number as known on a given
+    date, and how later revisions changed it.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/vintage" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">MetricDiff</div>
+    <p>Tracks the methodology contract of a public statistic - definitions, denominators,
+    seasonal adjustment - and diffs it across releases.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/metricdiff" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+
+  <h2>Writing &amp; argument</h2>
+
+  <div class="row">
+    <div class="name">CitationDiff</div>
+    <p>When a claim's wording changes, its citation goes stale. A verification ledger and CI
+    check that catch it.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/citationdiff" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">TermsCheck</div>
+    <p>A concordance for defined terms: where a document's usage drifts from its own
+    glossary. A review queue, not a verdict.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/termscheck" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+  <div class="row">
+    <div class="name">ArgumentDiff</div>
+    <p>Arguments as plain versionable text - premises, conclusions, objections, replies -
+    with structural diffs between drafts.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/argumentdiff" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+
+  <h2>Film</h2>
+
+  <div class="row">
+    <div class="name"><a href="/cutgraph">CutGraph</a></div>
+    <p>Reads an edit decision list and subtitles; charts a film's cutting rhythm, shot
+    lengths, and dialogue density in one HTML report.</p>
+    <div class="links"><a href="/cutgraph">page →</a><a href="https://github.com/josephbsmith/cutgraph" target="_blank" rel="noopener">github ↗</a></div>
+  </div>
+  <div class="row">
+    <div class="name">ScriptImpact</div>
+    <p>Compares two screenplay drafts and reports which scheduled scenes, takes, and
+    subtitles the revision touches.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/scriptimpact" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+
+  <h2>Sport &amp; training</h2>
+
+  <div class="row">
+    <div class="name"><a href="/plusfive">PlusFive</a></div>
+    <p>An offline logbook for the Starting Strength novice progression. Phone-first web app
+    you can install at the gym; your data stays on your device. Unofficial.</p>
+    <div class="links"><a href="/plusfive">page →</a><a href="https://github.com/josephbsmith/plusfive" target="_blank" rel="noopener">github ↗</a></div>
+  </div>
+  <div class="row">
+    <div class="name"><a href="/pit-wall">F1 Pit Wall</a></div>
+    <p>A local second screen for a Formula 1 session: gaps, tyre age, pace, stint history,
+    and a transparent pit-rejoin estimate. OpenF1 data.</p>
+    <div class="links"><a href="/pit-wall">page →</a><a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">github ↗</a></div>
+  </div>
+
+  <h2>Physiology</h2>
+
+  <div class="row">
+    <div class="name"><a href="/autonomic">Autonomic Trace</a></div>
+    <p>An educational simulator of one mechanism: the arterial baroreflex answering a
+    pressure disturbance. A teaching model, not medical software.</p>
+    <div class="links"><a href="/autonomic">page →</a><a href="https://github.com/josephbsmith/autonomic-trace" target="_blank" rel="noopener">github ↗</a></div>
+  </div>
+  <div class="row">
+    <div class="name">ProtocolLint</div>
+    <p>Lints an N-of-1 experiment protocol for missing design decisions before data
+    collection starts. Prints a preregistration. Not medical advice.</p>
+    <div class="links"><a href="https://github.com/josephbsmith/protocollint" target="_blank" rel="noopener">github ↗</a></div>
+    </div>
+
+  <p class="fine">
+    Every tool ships with its test and an honest README. MIT license.
+    Built by Joseph B. Smith.
+  </p>
+</main>
+</body>
+</html>

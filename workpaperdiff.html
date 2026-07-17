@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WorkpaperDiff - Joseph B. Smith</title><meta name="description" content="Compare two Excel workpapers for accounting logic, not cell noise."><link rel="canonical" href="https://josephbsmith.com/workpaperdiff"><link rel="stylesheet" href="/tool.css"><meta name="theme-color" content="#0f0e10"></head><body><main>
+<a class="back" href="/tools">← tools</a><h1>WorkpaperDiff</h1><p class="tag">What changed in the accounting logic?</p>
+<p class="lede">Ordinary spreadsheet diffs drown reviewers in changed values and formatting. WorkpaperDiff reads the XLSX package directly and elevates changes that matter to a close: formulas replaced by hardcodes, formula edits, stale dates, broken prior-period links, changed controls, and unexplained new rows.</p>
+<h2>A sample review</h2><div class="grid"><div class="panel"><span class="metric">7</span><span class="label">review findings</span></div><div class="panel"><span class="metric">2</span><span class="label">high-risk logic changes</span></div><div class="panel"><span class="metric">1</span><span class="label">presentation-only edit</span></div></div>
+<div class="panel scroll"><table><thead><tr><th>Sheet</th><th>Cell</th><th>Finding</th><th>Before</th><th>After</th></tr></thead><tbody>
+<tr><td>Revenue</td><td>F18</td><td><b>formula replaced by hardcode</b></td><td><code>=SUM(F8:F17)</code></td><td><code>184920.14</code></td></tr>
+<tr><td>Revenue</td><td>G24</td><td><b>external workbook link</b></td><td><code>=F24</code></td><td><code>='[June Close.xlsx]Rev'!G24</code></td></tr>
+<tr><td>Controls</td><td>B7</td><td>named control changed</td><td><code>0.00</code></td><td><code>-125.36</code></td></tr>
+<tr><td>Detail</td><td>row 418</td><td>new populated row</td><td>—</td><td>payer adjustment</td></tr>
+<tr><td>Cover</td><td>D4</td><td>presentation only</td><td>style 3</td><td>style 8</td></tr>
+</tbody></table></div><p class="fine">The sample is synthetic. WorkpaperDiff never recalculates formulas; Excel remains authoritative for evaluated results.</p>
+<h2>Run it</h2><pre>python3 workpaperdiff.py prior.xlsx current.xlsx --out review.html</pre><p>One Python file, standard library only. The workbooks stay on your machine.</p>
+<h2>The fine print</h2><p class="fine">A review aid, not an audit opinion. MIT licensed. <a href="https://github.com/josephbsmith/workpaperdiff" rel="noopener">Source on GitHub</a>.</p>
+</main></body></html>

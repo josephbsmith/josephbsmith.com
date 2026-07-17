@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClaimBench - Joseph B. Smith</title><meta name="description" content="Synthetic claim-to-cash accounting fixtures with authoritative expected states."><link rel="canonical" href="https://josephbsmith.com/claimbench"><link rel="stylesheet" href="/tool.css"><meta name="theme-color" content="#0f0e10"></head><body><main>
+<a class="back" href="/tools">← tools</a><h1>ClaimBench</h1><p class="tag">Test claim accounting without touching patient data</p>
+<p class="lede">Ten synthetic claim-to-cash fixtures define each event, the balanced journal entry, and the expected subledger state afterward. Revenue-cycle software, classroom exercises, and internal tools can be tested against one public answer key.</p>
+<h2>Clean payment, event by event</h2><div id="claimSteps" class="grid"></div><div class="panel"><span class="label">Expected subledger after selected event</span><pre id="claimState"></pre></div>
+<h2>The suite</h2><p>Clean payment · partial payment · denial · zero-pay remittance · takeback · refund · credit balance · coordination of benefits · late charge · wrong-account correction.</p>
+<h2>Run it</h2><pre>python3 claimbench.py check-fixtures
+python3 claimbench.py validate takeback system-output.json</pre>
+<h2>The fine print</h2><p class="fine">Invented identifiers, amounts, and account names; no PHI, proprietary code sets, or real payer terms. The entries demonstrate mechanics, not a required recognition policy. MIT licensed. <a href="https://github.com/josephbsmith/claimbench" rel="noopener">Source on GitHub</a>.</p>
+</main><script>
+const events=[
+{type:'Charge',journal:[['Accounts Receivable','1,000.00','—'],['Patient Service Revenue','—','1,000.00']],state:{claim_balance:'1000.00',cash:'0.00',adjustments:'0.00'}},
+{type:'Contractual adjustment',journal:[['Contractual Adjustments','300.00','—'],['Accounts Receivable','—','300.00']],state:{claim_balance:'700.00',cash:'0.00',adjustments:'300.00'}},
+{type:'Payer payment',journal:[['Cash','700.00','—'],['Accounts Receivable','—','700.00']],state:{claim_balance:'0.00',cash:'700.00',adjustments:'300.00'}}];
+const root=document.querySelector('#claimSteps'),out=document.querySelector('#claimState');
+function draw(i){out.textContent=JSON.stringify(events[i].state,null,2);document.querySelectorAll('[data-step]').forEach((b,j)=>b.classList.toggle('secondary',j!==i))}
+events.forEach((e,i)=>{const d=document.createElement('div');d.className='panel';d.innerHTML=`<span class=label>Event ${i+1}</span><h3>${e.type}</h3><table><tr><th>Account</th><th>Debit</th><th>Credit</th></tr>${e.journal.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td></tr>`).join('')}</table><button data-step=${i}>Show state</button>`;d.querySelector('button').onclick=()=>draw(i);root.append(d)});draw(0);
+</script></body></html>

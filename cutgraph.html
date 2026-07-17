@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CutGraph - Joseph B. Smith</title>
+<meta name="description" content="Read an edit decision list and subtitles; chart a film's cutting rhythm, shot lengths, and dialogue density in one HTML report. Standard library only.">
+<meta property="og:title" content="CutGraph">
+<meta property="og:description" content="Chart a film's cutting rhythm from its EDL and subtitles. One Python file, standard library only.">
+<meta property="og:image" content="https://josephbsmith.com/og-card.png">
+<link rel="canonical" href="https://josephbsmith.com/cutgraph">
+<meta name="theme-color" content="#0f0e10">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230a0a24"/><rect x="5" y="4" width="6" height="1" fill="%23ffd27a"/><rect x="4" y="5" width="8" height="2" fill="%23ffd27a"/><rect x="4" y="7" width="8" height="1" fill="%23ff9a3c"/><rect x="5" y="9" width="6" height="1" fill="%23ff9a3c"/><rect x="4" y="11" width="8" height="1" fill="%23fb923c"/><rect x="2" y="13" width="12" height="1" fill="%23452158"/></svg>'>
+<style>
+  :root {
+    --bg: #0f0e10; --fg: #e9e7e4; --muted: #98938c; --rule: #2a272b;
+    --accent: #fb923c;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); color-scheme: dark; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 17px/1.65 Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 6vh 24px 12vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  main { width: 100%; max-width: 760px; }
+  .back {
+    display: inline-block; font: 600 12px var(--mono); letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 3rem;
+  }
+  .back:hover { color: var(--accent); }
+  h1 { font-size: 2.6rem; margin: 0 0 .5rem; font-weight: 700; }
+  .tag { color: var(--muted); font: 500 13px var(--mono); letter-spacing: .05em; margin: 0 0 2rem; }
+  .lede { font-size: 1.15rem; margin: 0 0 1.1rem; max-width: 62ch; }
+  a.link { color: var(--accent); text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+  h2 { font-size: 1.05rem; font-family: var(--mono); font-weight: 600; letter-spacing: .12em;
+       text-transform: uppercase; color: var(--muted); margin: 4rem 0 1.4rem;
+       padding-top: 1.4rem; border-top: 1px solid var(--rule); }
+  .frame {
+    width: 100%; height: 640px; border: 1px solid var(--rule); border-radius: 8px;
+    background: #fff; display: block;
+  }
+  .framecap { font: 12px var(--mono); color: var(--muted); letter-spacing: .03em; margin-top: .7rem; }
+  .framecap b { color: var(--fg); font-weight: 600; }
+  pre {
+    background: #17161a; border: 1px solid var(--rule); border-radius: 8px;
+    padding: 18px 20px; overflow-x: auto;
+    font: 13px/1.7 var(--mono); color: #cfcbc5;
+  }
+  pre .c { color: var(--muted); }
+  p.fine { color: var(--muted); font-size: .95rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="/tools">← tools</a>
+
+  <h1>CutGraph</h1>
+  <p class="tag">A film's cutting rhythm, read from its EDL</p>
+
+  <p class="lede">
+    Editors feel pacing; CutGraph draws it. Point it at an edit decision list and a
+    subtitle file and it charts every shot's length in order - the long establishing
+    shots, the accelerating middle, the rapid climax - with per-act averages, median
+    shot length, cuts per minute, and dialogue density per shot.
+  </p>
+
+  <h2>The report</h2>
+  <iframe class="frame" src="/demo/cutgraph/report.html" title="CutGraph report for a synthetic 120-cut feature" loading="lazy"></iframe>
+  <p class="framecap"><b>A synthetic three-act short, 120 cuts.</b> This is the tool's actual
+  output, unedited - the bar chart is the film's rhythm: median shot 2.75s, 16.3 cuts
+  per minute at the climax. Act boundaries fall at 25% and 75% of runtime.</p>
+
+  <h2>How it works</h2>
+  <pre><span class="c"># one file, standard library only</span>
+python3 cutgraph.py edit.edl --subtitles film.srt --fps 24 --out cutgraph.html</pre>
+  <p>CMX 3600 cut events in, one self-contained HTML report out. No dependencies,
+  no upload - your cut never leaves your machine.</p>
+
+  <h2>The fine print</h2>
+  <p class="fine">
+    Supports ordinary cut events (<b>C</b>) and non-drop-frame timecode. It does not
+    interpret dissolves, speed effects, nested timelines, or proprietary NLE project
+    files. MIT license.
+    <a class="link" href="https://github.com/josephbsmith/cutgraph" target="_blank" rel="noopener">Source on GitHub</a>.
+  </p>
+</main>
+</body>
+</html>
