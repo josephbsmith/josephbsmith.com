@@ -52,6 +52,15 @@ details.run .scroll{padding:0 .4rem}
 #guide h3:first-of-type{margin-top:.2rem}
 #guide p{margin:.3rem 0 .6rem;font-size:13.5px;line-height:1.6;color:var(--fg)}
 #printout{display:none}
+#gate{background:var(--client);color:var(--fg);border:1px solid #1f3a55;box-shadow:0 18px 60px rgba(0,0,0,.55);padding:0;max-width:min(92vw,360px)}
+#gate::backdrop{background:rgba(10,20,32,.72)}
+.gatetitle{padding:8px 14px;background:linear-gradient(#4a739f,#2f5273);border-bottom:1px solid #1f3a55;font:600 15px Charter,'Iowan Old Style',Georgia,serif;color:#f1ebdd}
+.gatebody{padding:16px 16px 18px}
+.gatebody p{margin:0 0 14px;font-size:14.5px;line-height:1.55}
+.gatebtns{display:flex;gap:10px}
+.gatebtns button{flex:1;min-height:46px;font-size:15px}
+#gateYes{border:1px solid var(--accent);box-shadow:0 0 0 1px var(--accent)}
+#gateMsg{font:600 15px Charter,'Iowan Old Style',Georgia,serif;color:var(--accent);margin:0 0 14px}
 [hidden]{display:none!important}
 @media(max-width:600px){
 body{padding:0}
@@ -116,6 +125,7 @@ button{min-height:44px;font-size:14.5px}
 </div>
 <div class="statusbar"><span id="session"></span><span id="saved"></span><span>Stored on this device; nothing is uploaded</span></div>
 </div>
+<dialog id="gate"><div class="gatetitle">Before you lift</div><div class="gatebody"><p id="gateQ">In the last 48 hours, have you eaten enough and have you gotten enough sleep?</p><p id="gateMsg" hidden>Go home, eat some eggs and take a nap.</p><div class="gatebtns"><button id="gateYes">Yes</button><button id="gateNo">No</button><button id="gateOk" hidden>Understood</button></div></div></dialog>
 <p class="fine boundary">PlusFive is unofficial and unaffiliated. It records a published program; it does not teach the lifts, decide phase transitions, diagnose missed reps, or provide medical or nutrition advice. <a href="https://github.com/josephbsmith/plusfive" rel="noopener">Source on GitHub</a>.</p>
 <div id="printout"></div>
 </main><script>
@@ -146,7 +156,7 @@ evenPts(state.bar,work,3).forEach((w,i)=>rows.push({w,r:reps[Math.min(i,2)],sets
 }
 return rows}
 function warmupText(lift,work){return schemeFor(lift,work).map(r=>`${r.w}×${r.r}${r.sets>1?'×'+r.sets:''}`).join(', ')}
-function schemeTable(lift,work){const [name,reps]=LIFTS[lift];if(lift==='chinups')return '';const rows=schemeFor(lift,work);const body=rows.map(r=>`<tr><td>${r.r} reps${r.sets>1?' × '+r.sets+' sets':''}</td><td>${r.w} lb</td><td>${esc(sideText(r.w))}</td></tr>`).join('');const work_r=`<tr class=work><td>${reps.length} set${reps.length>1?'s':''} of ${reps[0]}</td><td>${work} lb</td><td>${esc(sideText(+work))}</td></tr>`;return `<table class=scheme><thead><tr><th>Sets</th><th>Weight</th><th>Plates each side</th></tr></thead><tbody>${body}${work_r}</tbody></table>`}
+function schemeTable(lift,work){const [name,reps]=LIFTS[lift];if(lift==='chinups')return '';const rows=schemeFor(lift,work);const body=rows.map(r=>`<tr><td>Warm-up · ${r.r} reps${r.sets>1?' × '+r.sets+' sets':''}</td><td>${r.w} lb</td><td>${esc(sideText(r.w))}</td></tr>`).join('');const work_r=`<tr class=work><td>Work · ${reps.length} set${reps.length>1?'s':''} of ${reps[0]}</td><td>${work} lb</td><td>${esc(sideText(+work))}</td></tr>`;return `<table class=scheme><thead><tr><th>Sets</th><th>Weight</th><th>Plates each side</th></tr></thead><tbody>${body}${work_r}</tbody></table>`}
 function renderWorkout(){$('#session').textContent=`Phase ${state.phase} · session ${state.session+1}`;drawSaved();const root=$('#exercises');root.innerHTML='';for(const lift of nextLifts()){const [name,reps]=LIFTS[lift],s=state.lifts[lift],d=document.createElement('fieldset');d.className='panel exercise';d.dataset.lift=lift;const prescription=reps.length?`${reps.length} sets of ${reps[0]}`:'3 sets to fatigue';d.innerHTML=`<span class=label>${esc(lift.replace('_',' '))}</span><h3>${esc(name)} · ${prescription}</h3>${lift==='chinups'?'<p class=plate>Bodyweight. No bar, no warm-up sets.</p>':`<label>Work weight (lb)<input class=weight type=number step=.5 inputmode=decimal value="${s.weight}"></label><div class=schemebox>${schemeTable(lift,s.weight)}</div>`}<label class=donerow><input type=checkbox class=done>All prescribed reps completed</label>`;root.append(d)}$('#feedback').textContent=''}
 $('#exercises').addEventListener('input',e=>{if(!e.target.classList.contains('weight'))return;const card=e.target.closest('.exercise');card.querySelector('.schemebox').innerHTML=schemeTable(card.dataset.lift,e.target.value||0)});
 function runRows(history){return history.slice().reverse().map(w=>`<tr><td>${esc(new Date(w.date).toLocaleDateString())}</td><td>${w.phase}</td><td>${w.session+1}</td><td>${w.entries.map(e=>`${esc(LIFTS[e.lift][0])} ${e.weight?e.weight+' lb ':''}${e.reps.length?'×'+esc(e.reps.join('/')):e.done?'done':'missed'}`).join('<br>')}</td></tr>`).join('')}
@@ -165,4 +175,5 @@ $('#export').onclick=()=>{const rows=[['date','phase','session','lift','weight',
 $('#exportPdf').onclick=()=>{const range=$('#range').value,label={all:'All time',month:new Date().toLocaleDateString([],{month:'long',year:'numeric'}),year:String(new Date().getFullYear())}[range];const block=(title,hist)=>{const rows=hist.filter(w=>inRange(w.date,range));if(!rows.length)return '';return `<h2>${esc(title)}</h2><table><thead><tr><th>Date</th><th>Phase</th><th>Session</th><th>Lift</th><th>Weight</th><th>Reps</th><th>Completed</th></tr></thead><tbody>${rows.map(w=>w.entries.map(e=>`<tr><td>${esc(new Date(w.date).toLocaleDateString())}</td><td>${w.phase}</td><td>${w.session+1}</td><td>${esc(LIFTS[e.lift][0])}</td><td>${e.weight}</td><td>${esc(e.reps.join('/'))}</td><td>${e.done?'yes':'no'}</td></tr>`).join('')).join('')}</tbody></table>`};$('#printout').innerHTML=`<h1>PlusFive training log</h1><p class=sub>${esc(label)} · exported ${esc(new Date().toLocaleDateString())} · novice linear progression</p>`+state.archives.map((a,i)=>block('Run '+(i+1)+' (ended '+new Date(a.archived_at).toLocaleDateString()+')',a.history)).join('')+block('Current run',state.history);print()};
 let clock;$('#startTimer').onclick=()=>{clearInterval(clock);let seconds=180;const timer=$('#timer'),draw=()=>timer.textContent=`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;draw();clock=setInterval(()=>{seconds--;draw();if(seconds<=0){clearInterval(clock);navigator.vibrate?.([200,100,200])}},1000)};
 let installEvent;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvent=e;$('#install').hidden=false});$('#install').onclick=async()=>{await installEvent?.prompt();$('#install').hidden=true};if('serviceWorker'in navigator)navigator.serviceWorker.register('/plusfive-sw.js');renderWorkout();
+const gate=$('#gate');if(gate&&gate.showModal){gate.addEventListener('cancel',e=>e.preventDefault());gate.showModal();$('#gateYes').onclick=()=>gate.close();$('#gateNo').onclick=()=>{$('#gateQ').hidden=true;$('#gateYes').hidden=true;$('#gateNo').hidden=true;$('#gateMsg').hidden=false;$('#gateOk').hidden=false};$('#gateOk').onclick=()=>gate.close()}
 </script></body></html>
