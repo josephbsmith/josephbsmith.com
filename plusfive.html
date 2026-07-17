@@ -1,34 +1,34 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PlusFive - Joseph B. Smith</title><meta name="description" content="A private, offline logbook for the Starting Strength novice progression. Everything is stored on your device; nothing is uploaded."><link rel="canonical" href="https://josephbsmith.com/plusfive"><link rel="stylesheet" href="/tool.css"><link rel="manifest" href="/plusfive.webmanifest"><link rel="apple-touch-icon" href="/plusfive-icon.png"><meta name="theme-color" content="#1b3350"><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PlusFive - Joseph B. Smith</title><meta name="description" content="A private, offline logbook for the Starting Strength novice progression. Everything is stored on your device; nothing is uploaded."><link rel="canonical" href="https://josephbsmith.com/plusfive"><link rel="stylesheet" href="/tool.css"><link rel="manifest" href="/plusfive.webmanifest"><link rel="apple-touch-icon" href="/plusfive-icon.png"><meta name="theme-color" content="#33587e"><style>
 /* Classic edition, application layout: book-cover navy, ivory, gilt; window chrome, tab control, group boxes, status bar. */
-:root{--bg:#16293f;--fg:#e9e2d0;--muted:#a7b8ca;--rule:#35557a;--panel:#22405f;--client:#22405f;--accent:#c8a45f;--ui:13.5px "Segoe UI",system-ui,-apple-system,sans-serif}
+:root{--bg:#2b4b6c;--fg:#f3edda;--muted:#bccbdb;--rule:#4a6f99;--panel:#33587e;--client:#33587e;--accent:#d3ad61;--ui:13.5px "Segoe UI",system-ui,-apple-system,sans-serif}
 body{font:var(--ui);padding:4vh 16px 8vh}
 main{max-width:700px}
-.window{border:1px solid #0d1c30;box-shadow:0 10px 34px rgba(0,0,0,.45);background:var(--client)}
-.titlebar{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:7px 12px;background:linear-gradient(#2e5078,#1b3350);border-bottom:1px solid #0d1c30}
+.window{border:1px solid #1f3a55;box-shadow:0 10px 34px rgba(0,0,0,.45);background:var(--client)}
+.titlebar{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:7px 12px;background:linear-gradient(#4a739f,#2f5273);border-bottom:1px solid #1f3a55}
 .apptitle{font:600 15px Charter,'Iowan Old Style',Georgia,serif;letter-spacing:.03em;color:#f1ebdd}
-.tabs{display:flex;gap:2px;padding:7px 8px 0;background:#132539;border-bottom:1px solid var(--rule)}
+.tabs{display:flex;gap:2px;padding:7px 8px 0;background:#294867;border-bottom:1px solid var(--rule)}
 .tabs button{border-radius:2px 2px 0 0;border:1px solid var(--rule);border-bottom:none;background:#f1ebdd;color:#1b3350;font:700 13px var(--ui);padding:6px 14px;position:relative;top:1px}
-.tabs button.secondary{background:#1a3049;color:var(--muted);font-weight:600;top:2px;padding-bottom:5px}
+.tabs button.secondary{background:#2e5174;color:var(--muted);font-weight:600;top:2px;padding-bottom:5px}
 .clientarea{padding:14px 14px 16px}
 section h2{display:none}
-.toolbar{display:flex;align-items:center;gap:.7rem;padding:0 0 10px;margin-bottom:12px;border-bottom:1px solid #1a3049;box-shadow:0 1px 0 #2e4e75 inset;flex-wrap:wrap}
+.toolbar{display:flex;align-items:center;gap:.7rem;padding:0 0 10px;margin-bottom:12px;border-bottom:1px solid #294867;box-shadow:0 1px 0 #46709b inset;flex-wrap:wrap}
 .toolbar .timer{margin-left:auto}
-input,select,textarea{background:#f4eedd;color:#1c3049;border:1px solid;border-color:#7d92aa #c2cfdc #c2cfdc #7d92aa;border-radius:3px;font:14px var(--ui);padding:.5rem .6rem;margin:.15rem 0 .75rem}
-label{font:13px var(--ui);color:#cfdae6;letter-spacing:0;text-transform:none}
+input,select,textarea{background:#f4eedd;color:#1c3049;border:1px solid;border-color:#6d84a0 #d0dae5 #d0dae5 #6d84a0;border-radius:3px;font:14px var(--ui);padding:.5rem .6rem;margin:.15rem 0 .75rem}
+label{font:13px var(--ui);color:#dde7f0;letter-spacing:0;text-transform:none}
 ::placeholder{color:#8b9aa9}
 button{background:linear-gradient(#faf5e8,#e4dabf);border:1px solid #a3966f;border-radius:3px;color:#1b3350;font:600 13px var(--ui);padding:6px 14px}
 button:hover{background:linear-gradient(#fffbef,#ece2c8)}
 button#complete,button#save{border:1px solid var(--accent);box-shadow:0 0 0 1px var(--accent)}
 button.danger{background:linear-gradient(#f3e3da,#e2c4b4);border-color:#a3766f}
-.panel{border-radius:0;background:transparent;border:1px solid #4a6b93;margin:20px 0 14px;padding:12px 14px 6px;position:relative}
-.groupbox{border:1px solid #4a6b93;margin:20px 0 14px;padding:14px 14px 8px;position:relative}
+.panel{border-radius:0;background:transparent;border:1px solid #5d81a8;margin:20px 0 14px;padding:12px 14px 6px;position:relative}
+.groupbox{border:1px solid #5d81a8;margin:20px 0 14px;padding:14px 14px 8px;position:relative}
 .groupbox>.label,.exercise>.label{position:absolute;top:-9px;left:10px;background:var(--client);padding:0 7px;font:700 11px var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
 .exercise h3{margin:.1rem 0 .2rem;font:700 17px Charter,'Iowan Old Style',Georgia,serif;color:#f1ebdd}
 .plate{color:var(--muted);font-size:12.5px;margin:.15rem 0 .8rem}
-.scheme{width:100%;font-size:12.5px;margin:.1rem 0 .5rem;border:1px solid #315274}
-.scheme th{background:#1c3552;font-size:10.5px}
-.scheme td,.scheme th{padding:.4rem .55rem;border-bottom:1px solid #2b4a6c}
-.scheme .work td{color:var(--accent);font-weight:700;border-top:1px solid #4a6b93;background:#1e3a58}
+.scheme{width:100%;font-size:12.5px;margin:.1rem 0 .5rem;border:1px solid #4a6f99}
+.scheme th{background:#294867;font-size:10.5px}
+.scheme td,.scheme th{padding:.4rem .55rem;border-bottom:1px solid #40628a}
+.scheme .work td{color:var(--accent);font-weight:700;border-top:1px solid #5d81a8;background:#2c4d70}
 .donerow{display:flex;gap:.6rem;align-items:center;font:600 13.5px var(--ui);color:var(--fg);margin:.5rem 0 .7rem;cursor:pointer}
 .donerow input{width:22px;height:22px;margin:0;accent-color:var(--accent);flex:none}
 .actionrow{display:flex;align-items:center;gap:1rem;margin-top:14px}
@@ -36,16 +36,16 @@ button.danger{background:linear-gradient(#f3e3da,#e2c4b4);border-color:#a3766f}
 .status{font:600 12px var(--ui);color:var(--accent)}
 .timer{font:700 14px ui-monospace,Menlo,monospace;color:var(--accent)}
 table{font-size:13px;width:100%}
-th{background:#1c3552;color:#c2cfdc;font:600 11px var(--ui);letter-spacing:.05em;text-transform:uppercase}
-th,td{border-bottom:1px solid #315274;padding:.5rem .6rem;text-align:left;vertical-align:top}
-details.run{border:1px solid #315274;margin:.8rem 0}
-details.run summary{cursor:pointer;padding:.5rem .7rem;background:#1c3552;font:600 12.5px var(--ui);color:#c2cfdc}
+th{background:#294867;color:#d5e0ea;font:600 11px var(--ui);letter-spacing:.05em;text-transform:uppercase}
+th,td{border-bottom:1px solid #40628a;padding:.5rem .6rem;text-align:left;vertical-align:top}
+details.run{border:1px solid #40628a;margin:.8rem 0}
+details.run summary{cursor:pointer;padding:.5rem .7rem;background:#294867;font:600 12.5px var(--ui);color:#d5e0ea}
 details.run .scroll{padding:0 .4rem}
 .settings-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:8px;align-items:end}.settings-grid input{margin-bottom:.4rem}.settings-grid .label{padding-bottom:.65rem;font:600 11px var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
-.statusbar{display:flex;gap:0;border-top:1px solid #0d1c30;background:#132539;font:11.5px var(--ui);color:var(--muted);flex-wrap:wrap}
-.statusbar span{padding:5px 10px;border-right:1px solid #0d1c30;box-shadow:1px 0 0 #2e4e75}
+.statusbar{display:flex;gap:0;border-top:1px solid #1f3a55;background:#294867;font:11.5px var(--ui);color:var(--muted);flex-wrap:wrap}
+.statusbar span{padding:5px 10px;border-right:1px solid #1f3a55;box-shadow:1px 0 0 #46709b}
 .statusbar #session{color:var(--accent);font-weight:600}
-.fine{font-size:11.5px;color:#8fa3b8;line-height:1.55}
+.fine{font-size:11.5px;color:#a9bccf;line-height:1.55}
 .boundary{margin:14px 2px 0;max-width:none}
 .grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
 #guide h3{font:700 12px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:1.4rem 0 .3rem}
@@ -69,7 +69,7 @@ button{min-height:44px;font-size:14.5px}
 .plate{font-size:13.5px}
 .timer{font-size:19px}
 .status{font-size:13px}
-.actionrow{position:sticky;bottom:0;z-index:2;flex-wrap:wrap;margin:14px -14px 0;padding:12px 14px calc(12px + env(safe-area-inset-bottom)/2);background:linear-gradient(rgba(34,64,95,0),var(--client) 35%)}
+.actionrow{position:sticky;bottom:0;z-index:2;flex-wrap:wrap;margin:14px -14px 0;padding:12px 14px calc(12px + env(safe-area-inset-bottom)/2);background:linear-gradient(rgba(51,88,126,0),var(--client) 35%)}
 .actionrow button{width:100%;min-height:50px;font-size:16px}
 #settings .actionrow,#history .toolbar{position:static;margin:14px 0 0;padding:0;background:none}
 #settings .actionrow button,#history .toolbar button{width:auto;min-height:44px}
@@ -97,7 +97,7 @@ button{min-height:44px;font-size:14.5px}
 <h3>The program</h3>
 <p>PlusFive records the Starting Strength novice linear progression. Train three non-consecutive days a week. Every session starts with the squat. The press and bench press alternate by session. The pull alternates by phase: phase 1 is deadlift every session, phase 2 alternates deadlift and power clean, phase 3 rotates deadlift, chin-ups, power clean, chin-ups. You choose the phase in Settings; the app does not decide when you move.</p>
 <h3>Logging a workout</h3>
-<p>The Workout tab shows today's three lifts. Each lift has one number: the work weight, already filled in with what the progression calls for. Under it the app lays out the whole session, warm-up sets included, with the plates to put on each side of the bar for every set. Do the sets, leave the box ticked if you completed every prescribed rep, untick it if you missed, and press Complete workout. The rest timer runs three minutes and vibrates where the device allows it.</p>
+<p>The Workout tab shows today's three lifts. Each lift has one number: the work weight, already filled in with what the progression calls for. Under it the app lays out the whole session, warm-up sets included, with the plates to put on each side of the bar for every set. Do the sets, tick the box for each lift when you have completed every prescribed rep; leave it unticked if you missed, and press Complete workout. The rest timer runs three minutes and vibrates where the device allows it.</p>
 <h3>Warm-ups</h3>
 <p>Warm-ups follow the book and are not editable. Squat, press, bench press, and power clean start with two sets of five with the empty bar, then even jumps up to the work weight with reps tapering five, three, two. The deadlift never starts from the empty bar: it warms up loaded, starting at 65 lb under a 135 pull, 95 lb under 225, and 135 lb above that, with the same taper. Jumps are rounded to five-pound plates. Change the work weight and the warm-ups recalculate.</p>
 <h3>How loads progress</h3>
@@ -128,7 +128,7 @@ function drawSaved(){$('#saved').textContent=state.savedAt?'Saved '+new Date(sta
 function saveState(){try{const prev=localStorage.getItem(KEY);if(prev){const b1=localStorage.getItem(KEY+'-backup1');if(b1)localStorage.setItem(KEY+'-backup2',b1);localStorage.setItem(KEY+'-backup1',prev)}state.savedAt=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));drawSaved()}catch(e){$('#feedback').textContent='Saving failed: '+e.message}}
 function nextLifts(){const press=state.session%2?'bench':'press';let pull='deadlift';if(state.phase===2)pull=state.session%2?'power_clean':'deadlift';if(state.phase===3)pull=['deadlift','chinups','power_clean','chinups'][state.session%4];return['squat',press,pull]}
 function platesFor(total){let remaining=Math.max(0,(total-state.bar)/2),out=[];for(const p of state.plates.split(',').map(Number).filter(x=>x>0).sort((a,b)=>b-a)){while(remaining+.0001>=p){out.push(p);remaining-=p}}return{out,remainder:remaining}}
-function sideText(w){const loaded=platesFor(w);return loaded.out.length?loaded.out.map(x=>x+'').join(' + '):'bar only'}
+function sideText(w){const loaded=platesFor(w);if(!loaded.out.length)return 'empty bar';const counts=new Map();for(const p of loaded.out)counts.set(p,(counts.get(p)||0)+1);const words=['','one','two','three','four','five','six','seven','eight','nine'];const parts=[...counts.entries()].map(([p,n])=>`${words[n]||n} ${p} lb plate${n>1?'s':''}`);let t=parts.join(' + ');if(loaded.remainder>.001)t+=` (${loaded.remainder.toFixed(2)} lb short)`;return t}
 function evenPts(lo,hi,n){const step=(hi-lo)/(n+1),out=[];for(let k=1;k<=n;k++){const w=Math.round((lo+step*k)/5)*5;if(w>lo+2.4&&w<hi-2.4&&!out.includes(w))out.push(w)}return out}
 function schemeFor(lift,work){
 // The book's warm-up: 2x5 with the empty bar, then even jumps to the work set with reps tapering 5, 3, 2.
@@ -147,7 +147,7 @@ evenPts(state.bar,work,3).forEach((w,i)=>rows.push({w,r:reps[Math.min(i,2)],sets
 return rows}
 function warmupText(lift,work){return schemeFor(lift,work).map(r=>`${r.w}×${r.r}${r.sets>1?'×'+r.sets:''}`).join(', ')}
 function schemeTable(lift,work){const [name,reps]=LIFTS[lift];if(lift==='chinups')return '';const rows=schemeFor(lift,work);const body=rows.map(r=>`<tr><td>${r.r} reps${r.sets>1?' × '+r.sets+' sets':''}</td><td>${r.w} lb</td><td>${esc(sideText(r.w))}</td></tr>`).join('');const work_r=`<tr class=work><td>${reps.length} set${reps.length>1?'s':''} of ${reps[0]}</td><td>${work} lb</td><td>${esc(sideText(+work))}</td></tr>`;return `<table class=scheme><thead><tr><th>Sets</th><th>Weight</th><th>Plates each side</th></tr></thead><tbody>${body}${work_r}</tbody></table>`}
-function renderWorkout(){$('#session').textContent=`Phase ${state.phase} · session ${state.session+1}`;drawSaved();const root=$('#exercises');root.innerHTML='';for(const lift of nextLifts()){const [name,reps]=LIFTS[lift],s=state.lifts[lift],d=document.createElement('fieldset');d.className='panel exercise';d.dataset.lift=lift;const prescription=reps.length?`${reps.length} sets of ${reps[0]}`:'3 sets to fatigue';d.innerHTML=`<span class=label>${esc(lift.replace('_',' '))}</span><h3>${esc(name)} · ${prescription}</h3>${lift==='chinups'?'<p class=plate>Bodyweight. No bar, no warm-up sets.</p>':`<label>Work weight (lb)<input class=weight type=number step=.5 inputmode=decimal value="${s.weight}"></label><div class=schemebox>${schemeTable(lift,s.weight)}</div>`}<label class=donerow><input type=checkbox class=done checked>All prescribed reps completed</label>`;root.append(d)}$('#feedback').textContent=''}
+function renderWorkout(){$('#session').textContent=`Phase ${state.phase} · session ${state.session+1}`;drawSaved();const root=$('#exercises');root.innerHTML='';for(const lift of nextLifts()){const [name,reps]=LIFTS[lift],s=state.lifts[lift],d=document.createElement('fieldset');d.className='panel exercise';d.dataset.lift=lift;const prescription=reps.length?`${reps.length} sets of ${reps[0]}`:'3 sets to fatigue';d.innerHTML=`<span class=label>${esc(lift.replace('_',' '))}</span><h3>${esc(name)} · ${prescription}</h3>${lift==='chinups'?'<p class=plate>Bodyweight. No bar, no warm-up sets.</p>':`<label>Work weight (lb)<input class=weight type=number step=.5 inputmode=decimal value="${s.weight}"></label><div class=schemebox>${schemeTable(lift,s.weight)}</div>`}<label class=donerow><input type=checkbox class=done>All prescribed reps completed</label>`;root.append(d)}$('#feedback').textContent=''}
 $('#exercises').addEventListener('input',e=>{if(!e.target.classList.contains('weight'))return;const card=e.target.closest('.exercise');card.querySelector('.schemebox').innerHTML=schemeTable(card.dataset.lift,e.target.value||0)});
 function runRows(history){return history.slice().reverse().map(w=>`<tr><td>${esc(new Date(w.date).toLocaleDateString())}</td><td>${w.phase}</td><td>${w.session+1}</td><td>${w.entries.map(e=>`${esc(LIFTS[e.lift][0])} ${e.weight?e.weight+' lb ':''}${e.reps.length?'×'+esc(e.reps.join('/')):e.done?'done':'missed'}`).join('<br>')}</td></tr>`).join('')}
 function renderHistory(){$('#historyRows').innerHTML=runRows(state.history)||'<tr><td colspan=4>No workouts recorded in this run yet.</td></tr>';$('#archiveList').innerHTML=state.archives.slice().reverse().map((a,i)=>{const n=state.archives.length-i;return `<details class=run><summary>Previous run ${n} · ended ${esc(new Date(a.archived_at).toLocaleDateString())} · ${a.history.length} workout${a.history.length===1?'':'s'}</summary><div class=scroll><table><thead><tr><th>Date</th><th>Phase</th><th>Session</th><th>Work</th></tr></thead><tbody>${runRows(a.history)||'<tr><td colspan=4>No workouts.</td></tr>'}</tbody></table></div></details>`}).join('')}
