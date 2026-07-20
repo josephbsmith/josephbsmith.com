@@ -1,31 +1,37 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PlusFive - Joseph B. Smith</title><meta name="description" content="A private, offline logbook for the Starting Strength novice progression. Everything is stored on your device; nothing is uploaded."><link rel="canonical" href="https://josephbsmith.com/plusfive"><link rel="stylesheet" href="/tool.css"><link rel="manifest" href="/plusfive.webmanifest"><link rel="apple-touch-icon" href="/plusfive-icon.png"><meta name="theme-color" content="#33587e"><style>
-/* Classic edition, modern flat rendering: book-cover blue, ivory, gilt. Serif for names, sans for controls. */
-:root{--bg:#2b4b6c;--fg:#f3edda;--muted:#b7c7d8;--rule:#446b95;--panel:#2e5175;--client:#33587e;--accent:#d3ad61;--ui:14px "Segoe UI",system-ui,-apple-system,sans-serif}
-body{font:var(--ui);padding:4vh 16px 8vh}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PlusFive - Joseph B. Smith</title><meta name="description" content="A private, offline logbook for the Starting Strength novice progression. Everything is stored on your device; nothing is uploaded."><link rel="canonical" href="https://josephbsmith.com/plusfive"><link rel="stylesheet" href="/tool.css"><link rel="manifest" href="/plusfive.webmanifest"><link rel="apple-touch-icon" href="/plusfive-icon.png"><meta name="theme-color" content="#0796c2"><style>
+/* Light blue-book palette with system typography and restrained app chrome. */
+:root{--bg:#b9e4f1;--fg:#142e3e;--muted:#567889;--rule:#8ccddd;--panel:#cfeef6;--client:#eaf7fb;--accent:#0796c2;--accent-dark:#066f91;--ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{font:14px/1.45 var(--ui);padding:4vh 16px 8vh}
 main{max-width:700px}
-.window{background:var(--client);border-radius:14px;box-shadow:0 16px 48px rgba(9,20,33,.45);overflow:hidden}
-.titlebar{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:16px 18px 10px}
-.apptitle{font:600 17px Charter,'Iowan Old Style',Georgia,serif;letter-spacing:.02em;color:#f1ebdd}
-.tabs{display:flex;gap:2px;padding:0 10px;border-bottom:1px solid rgba(31,58,85,.6)}
-.tabs button{background:none;border:none;border-radius:0;color:#f3edda;font:600 14px var(--ui);padding:10px 14px 12px;border-bottom:2px solid var(--accent);margin-bottom:-1px;cursor:pointer}
+.window{background:var(--client);border:1px solid rgba(7,111,145,.18);border-radius:14px;box-shadow:0 16px 48px rgba(20,67,87,.22);overflow:hidden}
+.titlebar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:20px 18px 14px}
+.apptitle{grid-column:2;font:800 26px/1 var(--ui);letter-spacing:-.055em;color:var(--fg)}
+.apptitle .five{color:var(--accent)}
+#install{grid-column:3;justify-self:end}
+.tabs{display:flex;gap:2px;padding:0 10px;border-bottom:1px solid var(--rule)}
+.tabs button{background:none;border:none;border-radius:0;color:var(--fg);font:650 14px var(--ui);padding:10px 14px 12px;border-bottom:3px solid var(--accent);margin-bottom:-1px;cursor:pointer}
 .tabs button.secondary{color:var(--muted);border-bottom-color:transparent;font-weight:600}
 .tabs button.secondary:hover{color:var(--fg)}
 .clientarea{padding:18px 18px 20px}
 section h2{display:none}
 .toolbar{display:flex;align-items:center;gap:.7rem;margin-bottom:14px;flex-wrap:wrap}
-.toolbar .timer{margin-left:auto}
-input,select,textarea{background:#f4eedd;color:#1c3049;border:1px solid #22415f;border-radius:8px;font:15px var(--ui);padding:.6rem .7rem;margin:.2rem 0 .8rem}
+.toolbar.timerbar{display:grid;grid-template-columns:96px 72px 96px;justify-content:center;gap:10px;margin-bottom:16px}
+.timerbar button{width:96px}
+.timerbar .timer{margin:0;text-align:center;font-variant-numeric:tabular-nums}
+#resetTimer:disabled{visibility:hidden}
+input,select,textarea{background:#fff;color:var(--fg);border:1px solid var(--rule);border-radius:8px;font:15px var(--ui);padding:.6rem .7rem;margin:.2rem 0 .8rem}
 input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
-label{font:13px var(--ui);color:#d5e0ec;letter-spacing:0;text-transform:none}
-::placeholder{color:#8b9aa9}
-button{background:#f1ebdd;border:none;border-radius:8px;color:#1b3350;font:600 14px var(--ui);padding:10px 16px;cursor:pointer}
-button:hover{background:#fff8e7}
-button#complete,#gateYes{box-shadow:inset 0 0 0 2px var(--accent)}
-button.danger{background:transparent;color:#ecc2b0;box-shadow:inset 0 0 0 1px #a3766f}
-button.danger:hover{background:rgba(163,118,111,.15)}
+label{font:13px var(--ui);color:var(--muted);letter-spacing:0;text-transform:none}
+::placeholder{color:#7794a2}
+button{background:var(--accent);border:none;border-radius:8px;color:#fff;font:650 14px var(--ui);padding:10px 16px;cursor:pointer}
+button:hover{background:var(--accent-dark)}
+button:disabled{cursor:default;opacity:.45}
+button#complete,#gateYes{box-shadow:inset 0 0 0 1px var(--accent-dark)}
+button.danger{background:transparent;color:#8a3f42;box-shadow:inset 0 0 0 1px #c98f91}
+button.danger:hover{background:rgba(138,63,66,.08)}
 .panel,.groupbox{background:var(--panel);border:none;border-radius:12px;margin:14px 0;padding:16px 16px 10px;position:relative}
 .groupbox>.label{position:static;display:block;background:none;padding:0;font:700 11px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin:0 0 .15rem}
-.exercise h3{margin:.05rem 0 .5rem;font:700 19px Charter,'Iowan Old Style',Georgia,serif;color:#f6f0de}
+.exercise h3{margin:.05rem 0 .5rem;font:750 19px var(--ui);color:var(--fg)}
 .exercise-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
 .prescription{font:700 12px var(--ui);color:var(--accent)}
 .plate{color:var(--muted);font-size:13px;margin:.15rem 0 .7rem}
@@ -35,41 +41,41 @@ button.danger:hover{background:rgba(163,118,111,.15)}
 .choice{display:flex;gap:8px;margin:.45rem 0 1rem}
 .choice button{flex:1}
 .choice button.secondary{background:transparent;color:var(--fg);box-shadow:inset 0 0 0 1px var(--rule)}
-.scheme{width:100%;font-size:13px;margin:.2rem 0 .6rem;border-collapse:collapse;background:rgba(23,42,63,.28);border-radius:8px;overflow:hidden}
-.scheme th{background:none;color:#9fb6cc;font:600 10.5px var(--ui);letter-spacing:.07em;text-transform:uppercase;padding:.55rem .65rem;border-bottom:1px solid rgba(68,107,149,.55);text-align:left}
-.scheme td{padding:.5rem .65rem;border-bottom:1px solid rgba(68,107,149,.3);text-align:left}
+.scheme{width:100%;font-size:13px;margin:.2rem 0 .6rem;border-collapse:collapse;background:rgba(255,255,255,.48);border-radius:8px;overflow:hidden}
+.scheme th{background:none;color:var(--muted);font:650 10.5px var(--ui);letter-spacing:.07em;text-transform:uppercase;padding:.55rem .65rem;border-bottom:1px solid var(--rule);text-align:left}
+.scheme td{padding:.5rem .65rem;border-bottom:1px solid rgba(140,205,221,.7);text-align:left}
 .scheme tr:last-child td{border-bottom:none}
-.scheme .work td{color:var(--accent);font-weight:700;background:rgba(211,173,97,.09)}
+.scheme .work td{color:var(--accent-dark);font-weight:750;background:rgba(7,150,194,.09)}
 .donerow{display:flex;gap:.65rem;align-items:center;font:600 14px var(--ui);color:var(--fg);margin:.55rem 0 .6rem;cursor:pointer}
 .donerow input{width:22px;height:22px;margin:0;accent-color:var(--accent);flex:none;border-radius:6px}
 .actionrow{display:flex;align-items:center;gap:1rem;margin-top:14px}
 .actionrow .status{flex:1}
 .status{font:600 12.5px var(--ui);color:var(--accent)}
-.timer{font:700 15px ui-monospace,Menlo,monospace;color:var(--accent)}
+.timer{font:750 17px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent-dark)}
 table{font-size:13px;width:100%;border-collapse:collapse}
-th{background:none;color:#9fb6cc;font:600 11px var(--ui);letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid rgba(68,107,149,.55);padding:.5rem .6rem;text-align:left}
-td{border-bottom:1px solid rgba(68,107,149,.3);padding:.5rem .6rem;text-align:left;vertical-align:top}
-details.run{border:1px solid rgba(68,107,149,.5);border-radius:10px;margin:.8rem 0;overflow:hidden}
-details.run summary{cursor:pointer;padding:.6rem .8rem;background:rgba(23,42,63,.28);font:600 13px var(--ui);color:#d5e0ea;list-style-position:inside}
+th{background:none;color:var(--muted);font:650 11px var(--ui);letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--rule);padding:.5rem .6rem;text-align:left}
+td{border-bottom:1px solid rgba(140,205,221,.7);padding:.5rem .6rem;text-align:left;vertical-align:top}
+details.run{border:1px solid var(--rule);border-radius:10px;margin:.8rem 0;overflow:hidden}
+details.run summary{cursor:pointer;padding:.6rem .8rem;background:rgba(255,255,255,.45);font:650 13px var(--ui);color:var(--fg);list-style-position:inside}
 details.run .scroll{padding:0 .5rem}
 .settings-grid{display:grid;grid-template-columns:1.4fr 2fr;gap:8px;align-items:center}
 .settings-grid .stepper{margin:.2rem 0}
 .settings-grid .label{padding-bottom:.6rem;font:700 11px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
-.statusbar{display:flex;gap:1.1rem;padding:10px 18px;background:rgba(23,42,63,.35);font:12px var(--ui);color:var(--muted);flex-wrap:wrap}
+.statusbar{display:flex;gap:1.1rem;padding:10px 18px;background:rgba(7,150,194,.08);font:12px var(--ui);color:var(--muted);flex-wrap:wrap}
 .statusbar span{padding:0;border:none;box-shadow:none}
 .statusbar #session{color:var(--accent);font-weight:600}
-.fine{font-size:11.5px;color:#a9bccf;line-height:1.55}
+.fine{font-size:11.5px;color:#527285;line-height:1.55}
 .boundary{margin:14px 4px 0;max-width:none}
 .grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
-#gate{background:var(--client);color:var(--fg);border:none;border-radius:14px;box-shadow:0 20px 70px rgba(5,12,21,.6);padding:0;max-width:min(92vw,360px)}
-#gate::backdrop{background:rgba(10,20,32,.72)}
-.gatetitle{padding:20px 20px 0;background:none;border:none;font:700 20px Charter,'Iowan Old Style',Georgia,serif;color:#f1ebdd}
+#gate{background:var(--client);color:var(--fg);border:1px solid var(--rule);border-radius:14px;box-shadow:0 20px 70px rgba(20,67,87,.35);padding:0;max-width:min(92vw,360px)}
+#gate::backdrop{background:rgba(20,57,74,.55)}
+.gatetitle{padding:20px 20px 0;background:none;border:none;font:750 20px var(--ui);color:var(--fg)}
 .gatebody{padding:10px 20px 20px}
 .gatebody p{margin:0 0 16px;font-size:14.5px;line-height:1.55}
 .gatebtns{display:flex;gap:10px}
 .gatebtns button{flex:1;min-height:46px;font-size:15px}
-#gateMsg{font:600 16px Charter,'Iowan Old Style',Georgia,serif;color:var(--accent);margin:0 0 16px}
-.video{aspect-ratio:16/9;width:100%;border:none;border-radius:10px;overflow:hidden;margin:.2rem 0 1rem;background:#294867}
+#gateMsg{font:700 16px var(--ui);color:var(--accent-dark);margin:0 0 16px}
+.video{aspect-ratio:16/9;width:100%;border:none;border-radius:10px;overflow:hidden;margin:.2rem 0 1rem;background:#91d3e6}
 .video iframe{width:100%;height:100%;border:0;display:block}
 .vlabel{font:700 11px var(--ui);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:.9rem 0 .3rem}
 #guide h3{font:700 12px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:1.5rem 0 .3rem}
@@ -84,7 +90,7 @@ body{padding:0}
 main{max-width:none}
 .window{border:none;border-radius:0;box-shadow:none;min-height:100dvh;display:flex;flex-direction:column}
 .titlebar{padding:calc(12px + env(safe-area-inset-top)) 16px 8px}
-.apptitle{font-size:17px}
+.apptitle{font-size:24px}
 .tabs{position:sticky;top:0;z-index:3;background:var(--client);padding:0 6px}
 .tabs button{flex:1;padding:12px 0 13px;font-size:14.5px;text-align:center}
 .clientarea{flex:1;padding:16px 14px 8px}
@@ -95,7 +101,7 @@ button{min-height:44px;font-size:15px}
 .plate{font-size:14px}
 .timer{font-size:19px}
 .status{font-size:13px}
-.actionrow{position:sticky;bottom:0;z-index:2;flex-wrap:wrap;margin:14px -14px 0;padding:12px 14px calc(12px + env(safe-area-inset-bottom)/2);background:linear-gradient(rgba(51,88,126,0),var(--client) 35%)}
+.actionrow{position:sticky;bottom:0;z-index:2;flex-wrap:wrap;margin:14px -14px 0;padding:12px 14px calc(12px + env(safe-area-inset-bottom)/2);background:linear-gradient(rgba(234,247,251,0),var(--client) 35%)}
 .actionrow button{width:100%;min-height:50px;font-size:16px}
 #settings .actionrow,#history .toolbar{position:static;margin:14px 0 0;padding:0;background:none}
 #settings .actionrow button,#history .toolbar button{width:auto;min-height:44px}
@@ -106,10 +112,10 @@ button{min-height:44px;font-size:15px}
 @media print{body>main>*{display:none!important}#printout{display:block!important}body{background:#fff;color:#000;padding:0;font:12px Georgia,serif}#printout h1{font:700 20px Georgia,serif;margin:0 0 2px}#printout .sub{color:#444;margin:0 0 14px;font-size:11px}#printout h2{font:700 14px Georgia,serif;margin:16px 0 6px;display:block}#printout table{width:100%;border-collapse:collapse;font-size:11px}#printout th,#printout td{border:1px solid #999;padding:4px 6px;text-align:left;color:#000;background:#fff}}
 </style></head><body><main>
 <div class="window">
-<div class="titlebar"><span class="apptitle">PlusFive - Novice Progression Logbook</span><button id="install" hidden>Install</button></div>
+<div class="titlebar"><span class="apptitle"><span>Plus</span><span class="five">Five</span></span><button id="install" hidden>Install</button></div>
 <nav class="tabs" aria-label="PlusFive sections"><button data-tab="workout">Workout</button><button class="secondary" data-tab="history">History</button><button class="secondary" data-tab="settings">Settings</button><button class="secondary" data-tab="guide">Guide</button></nav>
 <div class="clientarea">
-<section id="workout"><div class="toolbar"><button id="startTimer">Rest timer · 3:00</button><button id="resetTimer" hidden>Reset</button><span id="timer" class="timer" aria-live="polite"></span></div><div id="exercises"></div><div class="actionrow"><p id="feedback" class="status" aria-live="polite"></p><button id="complete">Complete workout</button></div></section>
+<section id="workout"><div class="toolbar timerbar" aria-label="Rest timer"><button id="startTimer">Start</button><span id="timer" class="timer" aria-live="polite">3:00</span><button id="resetTimer" disabled>Reset</button></div><div id="exercises"></div><div class="actionrow"><p id="feedback" class="status" aria-live="polite"></p><button id="complete">Complete workout</button></div></section>
 <section id="history" hidden><h2>Workout history</h2><div class="toolbar"><label style="margin:0">Range <select id="range" style="margin:0;width:auto"><option value="all">All time</option><option value="month">This month</option><option value="year">This year</option></select></label><button id="export">Export CSV</button><button id="exportPdf">Export PDF</button></div><div class="scroll"><table><thead><tr><th>Date</th><th>Phase</th><th>Session</th><th>Work</th></tr></thead><tbody id="historyRows"></tbody></table></div><div id="archiveList"></div></section>
 <section id="settings" hidden><h2>Program settings</h2>
 <div class="groupbox"><span class="label">Program</span><label>Phase<select id="phase"><option value="1">Phase 1</option><option value="2">Phase 2</option><option value="3">Phase 3</option></select></label><span class="label">Weight change</span><div class="choice"><button data-step="5">5 lb</button><button data-step="2.5">2.5 lb</button></div><div class="settings-grid"><span>Bar</span><div id="barSetting"></div><div id="liftSettings" style="display:contents"></div></div><p id="settingsStatus" class="status"></p><p class="fine">The selected weight change applies to every +/− control and to the next workout after completed reps.</p></div>
@@ -130,6 +136,8 @@ button{min-height:44px;font-size:15px}
 <p>The PlusFive barbell icon appears on your home screen; open it from there from now on. On Android and desktop browsers, use the Install button in the title bar when it appears.</p>
 <h3>The program</h3>
 <p>PlusFive records the Starting Strength novice linear progression. Train three non-consecutive days a week. Every session starts with the squat. The press and bench press alternate by session. The pull alternates by phase: phase 1 is deadlift every session, phase 2 alternates deadlift and power clean, phase 3 rotates deadlift, chin-ups, power clean, chin-ups. You choose the phase in Settings; the app does not decide when you move.</p>
+<h3>Official Starting Strength resources</h3>
+<p>Learn the method from its makers in <a href="https://aasgaardco.com/store/books-posters-dvd/books/starting-strength-basic-barbell-training/" rel="noopener">Starting Strength: Basic Barbell Training, 3rd edition</a>, the “Blue Book,” and listen to <a href="https://startingstrength.com/radio" rel="noopener">Starting Strength Radio</a>. These links go directly to The Aasgaard Company and Starting Strength. They are not affiliate links, and I receive no payment or commission from visits or purchases.</p>
 <h3>Learning the lifts</h3>
 <p>The book teaches the lifts; these are the official Starting Strength instruction videos for each one. They stream from YouTube and need a connection.</p>
 <p class="vlabel">Squat</p><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/nhoikoUEI8U" title="Learning to Squat, The Starting Strength Method" loading="lazy" allowfullscreen></iframe></div>
@@ -144,7 +152,7 @@ button{min-height:44px;font-size:15px}
 <h3>How loads progress</h3>
 <p>Complete every prescribed rep and the lift goes up by the selected 5 lb or 2.5 lb step next time it appears. Miss reps and the load repeats. Chin-ups carry no load and no increment.</p>
 <h3>How your data is saved</h3>
-<p>Everything saves to this device the moment you press Complete workout or change a setting; the status bar shows the time of the last save. The two saves before it are kept automatically as fallback copies, and if the current save is ever unreadable the app restores the newest good copy on its own. Nothing is uploaded anywhere.</p>
+<p>Everything saves to this device the moment you press Complete workout or change a setting; the status bar shows the time of the last save. The two saves before it are kept automatically as fallback copies, and if the current save is ever unreadable the app restores the newest good copy on its own. PlusFive does not upload workout records anywhere.</p>
 <h3>Backups</h3>
 <p>Download backup, in Settings, writes a single file containing every run, setting, and workout. Restore backup reads that file back and replaces what is on the device. Site data on a phone or browser can be cleared by the system; a downloaded backup is the copy you control.</p>
 <h3>Missed a week or more</h3>
@@ -154,10 +162,10 @@ button{min-height:44px;font-size:15px}
 
 </section>
 </div>
-<div class="statusbar"><span id="session"></span><span id="saved"></span><span>Stored on this device; nothing is uploaded</span></div>
+<div class="statusbar"><span id="session"></span><span id="saved"></span><span>Workout records stay on this device</span></div>
 </div>
 <dialog id="gate"><div class="gatetitle">Before you lift</div><div class="gatebody"><p id="gateQ">In the last 48 hours, have you eaten enough and have you gotten enough sleep?</p><p id="gateMsg" hidden>Go home, eat some eggs and take a nap.</p><div class="gatebtns"><button id="gateYes">Yes</button><button id="gateNo">No</button><button id="gateDone" hidden>Done</button></div></div></dialog>
-<p class="fine boundary">PlusFive is unofficial and unaffiliated. It records a published program; it does not teach the lifts, decide phase transitions, diagnose missed reps, or provide medical or nutrition advice. <a href="https://github.com/josephbsmith/josephbsmith.com/blob/main/plusfive.html" rel="noopener">Source on GitHub</a>.</p>
+<p class="fine boundary"><strong>Independent, noncommercial notice.</strong> PlusFive is an unofficial, unaffiliated logbook. I receive no payment, profit, commission, affiliate revenue, personal data, workout data, or analytics from its use. The app has no accounts, advertising, analytics, or server-side workout storage; workout records remain in this browser unless you export them. Third-party links and videos are provided for attribution and instruction and are governed by their own services. PlusFive does not teach lifting technique, decide phase transitions, diagnose missed reps, or provide medical or nutrition advice. <a href="https://github.com/josephbsmith/josephbsmith.com/blob/main/plusfive.html" rel="noopener">Source on GitHub</a>.</p>
 <div id="printout"></div>
 </main><script>
 const KEY='plusfive-v1',LIFTS={squat:['Squat',[5,5,5],45],press:['Press',[5,5,5],45],bench:['Bench Press',[5,5,5],45],deadlift:['Deadlift',[5],95],power_clean:['Power Clean',[3,3,3,3,3],45],chinups:['Chin-ups',[],0]};
@@ -207,8 +215,8 @@ $('#export').onclick=()=>{const rows=[['date','phase','session','lift','weight',
 $('#exportPdf').onclick=()=>{const range=$('#range').value,label={all:'All time',month:new Date().toLocaleDateString([],{month:'long',year:'numeric'}),year:String(new Date().getFullYear())}[range];const block=(title,hist)=>{const rows=hist.filter(w=>inRange(w.date,range));if(!rows.length)return '';return `<h2>${esc(title)}</h2><table><thead><tr><th>Date</th><th>Phase</th><th>Session</th><th>Lift</th><th>Weight</th><th>Reps</th><th>Completed</th></tr></thead><tbody>${rows.map(w=>w.entries.map(e=>`<tr><td>${esc(new Date(w.date).toLocaleDateString())}</td><td>${w.phase}</td><td>${w.session+1}</td><td>${esc(LIFTS[e.lift][0])}</td><td>${e.weight}</td><td>${esc(e.reps.join('/'))}</td><td>${e.done?'yes':'no'}</td></tr>`).join('')).join('')}</tbody></table>`};$('#printout').innerHTML=`<h1>PlusFive training log</h1><p class=sub>${esc(label)} · exported ${esc(new Date().toLocaleDateString())} · novice linear progression</p>`+state.archives.map((a,i)=>block('Run '+(i+1)+' (ended '+new Date(a.archived_at).toLocaleDateString()+')',a.history)).join('')+block('Current run',state.history);print()};
 let clock=null,tSecs=180;const tDraw=()=>$('#timer').textContent=`${Math.floor(tSecs/60)}:${String(tSecs%60).padStart(2,'0')}`;
 function tStop(){clearInterval(clock);clock=null}
-$('#startTimer').onclick=()=>{const b=$('#startTimer');if(clock){tStop();b.textContent='Resume';return}if(tSecs<=0)tSecs=180;b.textContent='Pause';$('#resetTimer').hidden=false;tDraw();clock=setInterval(()=>{tSecs--;tDraw();if(tSecs<=0){tStop();b.textContent='Rest timer · 3:00';navigator.vibrate?.([200,100,200])}},1000)};
-$('#resetTimer').onclick=()=>{tStop();tSecs=180;$('#timer').textContent='';$('#startTimer').textContent='Rest timer · 3:00';$('#resetTimer').hidden=true};
+$('#startTimer').onclick=()=>{const b=$('#startTimer');if(clock){tStop();b.textContent='Resume';return}if(tSecs<=0)tSecs=180;b.textContent='Pause';$('#resetTimer').disabled=false;tDraw();clock=setInterval(()=>{tSecs--;tDraw();if(tSecs<=0){tStop();b.textContent='Start';navigator.vibrate?.([200,100,200])}},1000)};
+$('#resetTimer').onclick=()=>{tStop();tSecs=180;tDraw();$('#startTimer').textContent='Start';$('#resetTimer').disabled=true};
 let installEvent;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvent=e;$('#install').hidden=false});$('#install').onclick=async()=>{await installEvent?.prompt();$('#install').hidden=true};if('serviceWorker'in navigator)navigator.serviceWorker.register('/plusfive-sw.js');renderWorkout();
 const gate=$('#gate');if(gate&&gate.showModal){gate.addEventListener('cancel',e=>e.preventDefault());gate.showModal();$('#gateYes').onclick=()=>gate.close();$('#gateNo').onclick=()=>{$('#gateQ').hidden=true;$('#gateYes').hidden=true;$('#gateNo').hidden=true;$('#gateMsg').hidden=false;$('#gateDone').hidden=false};$('#gateDone').onclick=()=>{$('#gateMsg').hidden=true;$('#gateDone').hidden=true;$('#gateQ').hidden=false;$('#gateYes').hidden=false;$('#gateNo').hidden=false}}
 </script></body></html>
