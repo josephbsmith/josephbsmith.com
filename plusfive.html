@@ -1,6 +1,6 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PlusFive - Joseph B. Smith</title><meta name="description" content="A private, offline logbook for the Starting Strength novice progression. Everything is stored on your device; nothing is uploaded."><link rel="canonical" href="https://josephbsmith.com/plusfive"><link rel="stylesheet" href="/tool.css"><link rel="manifest" href="/plusfive.webmanifest"><link rel="apple-touch-icon" href="/plusfive-icon.png"><meta name="theme-color" content="#0796c2"><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PlusFive - Joseph B. Smith</title><meta name="description" content="A private, offline logbook for the Starting Strength novice progression. Everything is stored on your device; nothing is uploaded."><link rel="canonical" href="https://josephbsmith.com/plusfive"><link rel="stylesheet" href="/tool.css"><link rel="manifest" href="/plusfive.webmanifest"><link rel="apple-touch-icon" href="/plusfive-icon.png"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#0796c2"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b3d55"><style>
 /* Light blue-book palette with system typography and restrained app chrome. */
-:root{--bg:#b9e4f1;--fg:#142e3e;--muted:#567889;--rule:#8ccddd;--panel:#cfeef6;--client:#eaf7fb;--accent:#0796c2;--accent-dark:#066f91;--ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+:root{color-scheme:light;--bg:#b9e4f1;--fg:#142e3e;--muted:#567889;--rule:#8ccddd;--panel:#cfeef6;--client:#eaf7fb;--accent:#0796c2;--accent-dark:#066f91;--ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 body{font:14px/1.45 var(--ui);padding:4vh 16px 8vh}
 main{max-width:700px}
 .window{background:var(--client);border:1px solid rgba(7,111,145,.18);border-radius:14px;box-shadow:0 16px 48px rgba(20,67,87,.22);overflow:hidden}
@@ -108,6 +108,27 @@ button{min-height:44px;font-size:15px}
 .settings-grid{grid-template-columns:1.1fr 2fr}
 .statusbar{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
 .boundary{margin:14px 16px 20px}
+}
+@media(prefers-color-scheme:dark){
+:root{color-scheme:dark;--bg:#132c3d;--fg:#eff7fa;--muted:#aec4ce;--rule:#466d83;--panel:#234d67;--client:#1b3d55;--accent:#6fcbe9;--accent-dark:#b2e4f3}
+.window{border-color:rgba(111,203,233,.18);box-shadow:0 16px 48px rgba(2,13,21,.45)}
+input,select,textarea{background:#112b3c;color:var(--fg);border-color:var(--rule)}
+::placeholder{color:#88a7b5}
+button{background:#147fa8;color:#fff}
+button:hover{background:#0f6d90}
+button#complete,#gateYes{box-shadow:inset 0 0 0 1px #0b5d7d}
+button.danger{color:#efb2b4;box-shadow:inset 0 0 0 1px #9c6669}
+button.danger:hover{background:rgba(239,178,180,.08)}
+.scheme{background:rgba(5,25,37,.24)}
+.scheme td,td{border-bottom-color:rgba(70,109,131,.7)}
+.scheme .work td{background:rgba(111,203,233,.08)}
+details.run summary{background:rgba(5,25,37,.22)}
+.statusbar{background:rgba(5,25,37,.18)}
+.fine{color:#a7bfca}
+#gate{box-shadow:0 20px 70px rgba(2,13,21,.65)}
+#gate::backdrop{background:rgba(3,14,22,.72)}
+.video{background:#163b52}
+.actionrow{background:linear-gradient(rgba(27,61,85,0),var(--client) 35%)}
 }
 @media print{body>main>*{display:none!important}#printout{display:block!important}body{background:#fff;color:#000;padding:0;font:12px Georgia,serif}#printout h1{font:700 20px Georgia,serif;margin:0 0 2px}#printout .sub{color:#444;margin:0 0 14px;font-size:11px}#printout h2{font:700 14px Georgia,serif;margin:16px 0 6px;display:block}#printout table{width:100%;border-collapse:collapse;font-size:11px}#printout th,#printout td{border:1px solid #999;padding:4px 6px;text-align:left;color:#000;background:#fff}}
 </style></head><body><main>

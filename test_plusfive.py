@@ -10,5 +10,8 @@ assert '<span class="five">Five</span>' in page and "Novice Progression Logbook"
 assert 'class="toolbar timerbar"' in page and '>3:00</span><button id="resetTimer" disabled>' in page
 assert "starting-strength-basic-barbell-training" in page and "startingstrength.com/radio" in page
 assert "no payment, profit, commission, affiliate revenue, personal data, workout data, or analytics" in page
+assert "@media(prefers-color-scheme:dark)" in page and "color-scheme:dark" in page
+assert 'media="(prefers-color-scheme: light)"' in page and 'media="(prefers-color-scheme: dark)"' in page
+assert "--bg:#132c3d" in page and "--client:#1b3d55" in page
 
 print("PlusFive browser check passed")
