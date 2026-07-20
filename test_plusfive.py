@@ -7,7 +7,8 @@ assert 'data-step="5"' in page and 'data-step="2.5"' in page
 assert "--bg:#b9e4f1" in page and "--client:#eaf7fb" in page
 assert "<h3>${esc(name)}</h3>" in page and "lift.replace('_',' ')" not in page
 assert '<span class="five">Five</span>' in page and "Novice Progression Logbook" not in page
-assert 'class="toolbar timerbar"' in page and '>3:00</span><button id="resetTimer" disabled>' in page
+assert 'class="toolbar timerbar"' in page and '>Start rest</button><span id="timer" class="timer" aria-live="polite">3:00</span><button id="resetTimer" disabled>Reset rest</button>' in page
+assert "b.textContent='Pause rest'" in page and "b.textContent='Resume rest'" in page
 assert "starting-strength-basic-barbell-training" in page and "startingstrength.com/radio" in page
 assert "no payment, profit, commission, affiliate revenue, personal data, workout data, or analytics" in page
 assert "@media(prefers-color-scheme:dark)" in page and "color-scheme:dark" in page
