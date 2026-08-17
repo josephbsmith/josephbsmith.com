@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
-  <title>Critical Path — Chapter I</title>
+  <title>Critical Path</title>
   <style>
     :root {
       color-scheme: dark;
@@ -14,10 +14,9 @@
       --line: #2a3746;
       --text: #edf3f8;
       --muted: #98a8b8;
-      --accent: #71e2ae;
-      --accent-2: #65b8ff;
-      --warning: #f2c46d;
-      --danger: #ff8b87;
+      --good: #71e2ae;
+      --bad: #ff8b87;
+      --future: #65b8ff;
     }
     * { box-sizing: border-box; }
     body {
@@ -26,383 +25,259 @@
       color: var(--text);
       font: 15px/1.45 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    a { color: var(--accent-2); }
     button, input, select, textarea { font: inherit; }
-    button, .file-button {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel-2);
-      color: var(--text);
-      padding: 8px 11px;
-      cursor: pointer;
-    }
-    button:hover, .file-button:hover { border-color: var(--accent-2); }
-    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible,
-    summary:focus-visible, a:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 2px; }
-    input[type="date"], input[type="number"], input[type="text"], select, textarea {
-      width: 100%;
+    button, .file-button, select, input, textarea {
       border: 1px solid var(--line);
       border-radius: 7px;
-      background: var(--bg);
-      color: var(--text);
-      padding: 8px 9px;
-    }
-    input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
-    textarea { min-height: 88px; resize: vertical; }
-    progress { width: 100%; height: 8px; accent-color: var(--accent); }
-    header {
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(135deg, #111a24, #0b0f14 72%);
-    }
-    .wrap { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
-    .header-inner { padding: 28px 0 22px; display: flex; gap: 24px; justify-content: space-between; align-items: end; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 { margin-bottom: 4px; font-size: clamp(24px, 4vw, 38px); letter-spacing: -.03em; }
-    h2 { margin-bottom: 14px; font-size: 18px; }
-    h3 { font-size: 15px; }
-    .eyebrow { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-    .apex { max-width: 640px; margin-top: 9px; color: #c9d7e4; }
-    .muted, small { color: var(--muted); }
-    .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
-    .actions label { min-width: 150px; }
-    .actions span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
-    main { padding: 22px 0 48px; }
-    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
-    .stat, section, details {
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: var(--panel);
-    }
-    .stat { padding: 14px; }
-    .stat strong { display: block; margin-top: 3px; font-size: 24px; font-variant-numeric: tabular-nums; }
-    .stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
-    .layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr); gap: 18px; align-items: start; }
-    .column { display: grid; gap: 18px; }
-    section { padding: 17px; }
-    .schedule { display: grid; gap: 6px; }
-    .block {
-      display: grid;
-      grid-template-columns: 116px 22px minmax(0, 1fr);
-      gap: 10px;
-      align-items: center;
-      min-height: 42px;
-      padding: 7px 9px;
-      border-left: 3px solid var(--line);
       background: var(--panel-2);
-      border-radius: 6px;
+      color: var(--text);
     }
-    .block.current { border-left-color: var(--accent); background: #183227; }
-    .block.done .block-label { color: var(--muted); text-decoration: line-through; }
-    .block-time { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 13px; }
-    .section-head { display: flex; gap: 12px; justify-content: space-between; align-items: start; }
-    .week-grid, .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .field label, .field > span { display: block; margin-bottom: 5px; color: var(--muted); font-size: 12px; }
-    .checks { display: grid; gap: 9px; }
-    .check { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; align-items: start; }
-    details { overflow: hidden; }
-    details + details { margin-top: 9px; }
-    summary { cursor: pointer; padding: 13px 15px; background: var(--panel-2); }
-    summary strong { margin-right: 7px; }
-    .goal-body { padding: 14px 15px 16px; }
-    .goal-verbatim { margin-bottom: 12px; color: #c9d7e4; font-weight: 650; }
-    .goal-summary { color: var(--muted); font-size: 13px; margin: 7px 0 10px; }
-    .extra-only { border-color: #635533; }
-    .extra-only summary { background: #292319; }
-    .notice {
-      border-left: 3px solid var(--warning);
-      background: #292319;
-      border-radius: 6px;
-      padding: 10px 12px;
-      color: #f5dfb2;
-      margin-bottom: 12px;
+    button, .file-button { padding: 9px 12px; cursor: pointer; }
+    button:hover, .file-button:hover { border-color: var(--future); }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid var(--future);
+      outline-offset: 2px;
     }
-    .command { margin-bottom: 18px; border-color: #315a49; background: linear-gradient(135deg, #15251e, var(--panel) 70%); }
-    .command strong { display: block; font-size: clamp(21px, 3.4vw, 30px); line-height: 1.2; margin-bottom: 7px; }
-    .cue { color: var(--accent); margin-bottom: 0; }
-    .contract-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-    .contract-item { padding: 10px 11px; border-left: 3px solid var(--line); background: var(--panel-2); border-radius: 6px; }
-    .contract-item span { display: block; color: var(--muted); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 3px; }
-    .law { margin: 0; padding-left: 20px; }
-    .law li + li { margin-top: 7px; }
-    .dependencies { display: grid; gap: 7px; margin-top: 12px; }
-    .dependency { color: var(--muted); }
-    .dependency b { color: var(--text); }
-    .saved { color: var(--accent); min-height: 21px; margin: 10px 0 0; font-size: 13px; }
+    input, select, textarea { padding: 8px 9px; }
+    input[type="number"] { width: 110px; }
+    input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--good); }
+    textarea { width: 100%; min-height: 90px; resize: vertical; }
+    a { color: var(--future); }
+    h1, h2, p { margin-top: 0; }
+    h1 { margin-bottom: 4px; font-size: clamp(27px, 4vw, 38px); }
+    h2 { margin-bottom: 14px; font-size: 18px; }
+    .wrap { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
+    header { border-bottom: 1px solid var(--line); }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      padding: 24px 0;
+    }
+    .deadline, .muted, small { color: var(--muted); }
+    .controls { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }
+    .controls label span { display: block; margin-bottom: 4px; color: var(--muted); font-size: 12px; }
     .hidden { display: none; }
-    footer { border-top: 1px solid var(--line); padding: 18px 0 30px; color: var(--muted); }
-    @media (max-width: 820px) {
-      .header-inner { align-items: start; flex-direction: column; }
-      .layout { grid-template-columns: 1fr; }
-      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    main { padding: 20px 0 48px; display: grid; gap: 16px; }
+    section {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      padding: 17px;
+    }
+    .status {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      border-left: 5px solid var(--good);
+    }
+    .status.behind { border-left-color: var(--bad); }
+    .status.upcoming { border-left-color: var(--future); }
+    .status-label {
+      display: inline-block;
+      margin-bottom: 6px;
+      color: var(--good);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .behind .status-label { color: var(--bad); }
+    .upcoming .status-label { color: var(--future); }
+    .status h2 { margin-bottom: 3px; font-size: clamp(22px, 3vw, 30px); }
+    .score { text-align: right; }
+    .score strong { display: block; font-size: 28px; }
+    .shortfalls { margin: 12px 0 0; padding-left: 18px; color: var(--bad); }
+    .shortfalls:empty { display: none; }
+    .target-table { display: grid; gap: 7px; }
+    .target-row {
+      display: grid;
+      grid-template-columns: minmax(170px, 1fr) 140px 120px 120px;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 11px;
+      background: var(--panel-2);
+      border-radius: 7px;
+    }
+    .target-label { font-weight: 650; }
+    .target-value, .row-status { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .row-status { text-align: right; }
+    .row-status.complete, .row-status.on-pace { color: var(--good); }
+    .row-status.behind { color: var(--bad); }
+    .row-status.upcoming { color: var(--future); }
+    .outputs { display: grid; gap: 8px; }
+    .output {
+      display: grid;
+      grid-template-columns: 18px 115px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 11px;
+      background: var(--panel-2);
+      border-radius: 7px;
+    }
+    .output small { text-transform: uppercase; letter-spacing: .06em; }
+    .output.done .output-text { color: var(--muted); text-decoration: line-through; }
+    .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+    .goal-table { display: grid; gap: 7px; }
+    .goal-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(180px, 1.2fr) 80px;
+      gap: 12px;
+      align-items: center;
+      padding: 9px 11px;
+      background: var(--panel-2);
+      border-radius: 7px;
+    }
+    .goal-row label { font-weight: 650; }
+    .goal-fields { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .goal-fields input[type="number"] { width: 82px; }
+    .goal-fields span { color: var(--muted); font-size: 12px; }
+    .goal-result { text-align: right; color: var(--muted); }
+    .goal-result.complete { color: var(--good); }
+    .saved { min-height: 20px; margin: 9px 0 0; color: var(--muted); font-size: 12px; }
+    @media (max-width: 760px) {
+      .header, .status { grid-template-columns: 1fr; display: grid; }
+      .score { text-align: left; }
+      .target-row { grid-template-columns: minmax(0, 1fr) 105px; }
+      .target-value { grid-column: 1; }
+      .target-row input { grid-column: 2; grid-row: 1 / span 2; width: 100%; }
+      .row-status { grid-column: 1 / -1; text-align: left; }
+      .two-column { grid-template-columns: 1fr; }
+      .goal-row { grid-template-columns: 1fr; }
+      .goal-result { text-align: left; }
     }
     @media (max-width: 520px) {
-      .wrap { width: min(100% - 20px, 1180px); }
-      .stats, .week-grid, .field-grid { grid-template-columns: 1fr; }
-      .contract-grid { grid-template-columns: 1fr; }
-      .block { grid-template-columns: 96px 22px minmax(0, 1fr); padding-inline: 7px; }
-      .actions, .actions label, .actions button { width: 100%; }
+      .wrap { width: min(100% - 20px, 1100px); }
+      .controls, .controls button, .controls label, .controls select, .controls .file-button { width: 100%; }
+      .output { grid-template-columns: 18px minmax(0, 1fr); }
+      .output small { grid-column: 2; }
+      .output-text { grid-column: 2; }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="wrap header-inner">
+    <div class="wrap header">
       <div>
-        <div class="eyebrow">Chapter I · proof before ceremony</div>
         <h1>Critical Path</h1>
-        <div class="muted">17 Aug 2026 → 5 May 2027 at 21:00</div>
-        <div class="apex">Build enough durability, health, and provision to give Gabby a good life and outlive her.</div>
+        <div class="deadline">Deadline: May 5, 2027</div>
       </div>
-      <div class="actions">
-        <label><span>View date</span><input id="viewDate" type="date" min="2026-08-17" max="2027-05-07"></label>
-        <button id="todayButton" type="button">Today</button>
-        <a href="CRITICAL_PATH_CALENDAR.md">Canonical calendar</a>
-        <button id="exportButton" type="button">Export backup</button>
-        <button id="importButton" type="button">Import backup</button>
+      <div class="controls">
+        <button id="previousWeek" type="button">Previous</button>
+        <label><span>Week</span><select id="weekSelect" aria-label="Week"></select></label>
+        <button id="nextWeek" type="button">Next</button>
+        <button id="currentWeek" type="button">Current week</button>
+        <a href="CRITICAL_PATH_CALENDAR.md">Full calendar</a>
+        <button id="exportButton" type="button">Export</button>
+        <button id="importButton" type="button">Import</button>
         <input class="hidden" id="importFile" type="file" accept="application/json">
       </div>
     </div>
   </header>
 
   <main class="wrap">
-    <div class="stats" aria-label="Campaign status">
-      <div class="stat"><span>Days to evidence freeze</span><strong id="daysLeft">—</strong></div>
-      <div class="stat"><span>Campaign week</span><strong id="weekNumber">—</strong></div>
-      <div class="stat"><span>Goal proofs closed</span><strong id="proofsClosed">—</strong></div>
-      <div class="stat"><span>Viewed day complete</span><strong id="dayComplete">—</strong></div>
-    </div>
-
-    <section class="command" aria-live="polite">
-      <div class="eyebrow">One state transition</div>
-      <strong id="commandAction">—</strong>
-      <p class="cue" id="commandCue">—</p>
+    <section class="status" id="statusPanel" aria-live="polite">
+      <div>
+        <div class="status-label" id="statusLabel">—</div>
+        <h2 id="weekHeading">—</h2>
+        <div class="muted" id="weekDates">—</div>
+        <ul class="shortfalls" id="shortfalls"></ul>
+      </div>
+      <div class="score"><strong id="weekScore">—</strong><span class="muted">weekly targets complete</span></div>
     </section>
 
-    <div class="layout">
-      <div class="column">
-        <section>
-          <div class="section-head"><div><h2 id="contractHeading">Current week contract</h2><p class="muted" id="contractDates"></p></div><span class="muted">Outputs, not intentions</span></div>
-          <div class="contract-grid">
-            <div class="contract-item"><span>CPA / MAcc</span><div id="contractInstitutional"></div></div>
-            <div class="contract-item"><span>Branmoor</span><div id="contractBranmoor"></div></div>
-            <div class="contract-item"><span>Body</span><div id="contractBody"></div></div>
-            <div class="contract-item"><span>Household / work / health</span><div id="contractProof"></div></div>
+    <section>
+      <h2>Weekly targets</h2>
+      <div class="target-table" id="targetTable"></div>
+    </section>
+
+    <section>
+      <h2>Weekly outputs</h2>
+      <div class="outputs" id="outputs"></div>
+    </section>
+
+    <div class="two-column">
+      <section>
+        <h2>Week notes</h2>
+        <textarea id="weekNotes" aria-label="Week notes"></textarea>
+        <p class="saved" id="savedStatus" role="status"></p>
+      </section>
+
+      <section>
+        <h2>Overall goals <span class="muted" id="goalScore"></span></h2>
+        <div class="goal-table">
+          <div class="goal-row">
+            <label>Strength</label>
+            <div class="goal-fields"><span>Squat</span><input data-total="squat" type="number" min="0" step="2.5"><span>Press</span><input data-total="press" type="number" min="0" step="2.5"></div>
+            <div class="goal-result" data-goal-result="strength"></div>
           </div>
-        </section>
-
-        <section>
-          <div class="section-head">
-            <div><h2 id="dayHeading">Today's clock</h2><p class="muted" id="dayContext"></p></div>
-            <div class="muted" id="currentBlock"></div>
+          <div class="goal-row">
+            <label for="half">Half marathon under 3:00</label>
+            <div class="goal-fields"><input data-total="half" id="half" type="checkbox"></div>
+            <div class="goal-result" data-goal-result="half"></div>
           </div>
-          <div class="schedule" id="schedule"></div>
-        </section>
-
-        <section>
-          <div class="section-head"><h2 id="weekHeading">This week's proof</h2><span class="muted">Targets: CPA 10h · MAcc 8h · strength 3 · Branmoor 7h · $1,200</span></div>
-          <div class="week-grid">
-            <div class="field"><span>CPA hours</span><input data-week-key="cpaHours" type="number" min="0" step="0.25"></div>
-            <div class="field"><span>MAcc hours</span><input data-week-key="maccHours" type="number" min="0" step="0.25"></div>
-            <div class="field"><span>Strength sessions</span><input data-week-key="strengthSessions" type="number" min="0" max="7" step="1"></div>
-            <div class="field"><span>Branmoor hours</span><input data-week-key="branmoorHours" type="number" min="0" step="0.25"></div>
-            <div class="field"><span>Savings transferred</span><input data-week-key="transfer" type="number" min="0" step="1"></div>
-            <div class="check"><input data-week-key="youtube" id="weekYoutube" type="checkbox"><label for="weekYoutube">Weekly CPA video published</label></div>
-            <div class="field"><span>Sleep on-time nights (target 7)</span><input data-week-key="sleepNights" type="number" min="0" max="7" step="1"></div>
-            <div class="field"><span>Creatine days (target 7)</span><input data-week-key="creatineDays" type="number" min="0" max="7" step="1"></div>
-            <div class="field"><span>Seven-day bodyweight average</span><input data-week-key="bodyweight" type="number" min="0" step="0.1"></div>
-            <div class="field"><span>WHOOP HRV weekly average</span><input data-week-key="hrv" type="number" min="0" step="1"></div>
-            <div class="field"><span>Late/failed transitions</span><input data-week-key="lateTransitions" type="number" min="0" step="1"></div>
-            <div class="field"><span>New ideas refused entry</span><input data-week-key="ideasRefused" type="number" min="0" step="1"></div>
-            <div class="check"><input data-week-key="verdictAvoided" id="verdictAvoided" type="checkbox"><label for="verdictAvoided">A finish was avoided because it invited a verdict</label></div>
-            <div class="field"><span>External proof link / location</span><input data-week-key="externalProof" type="text"></div>
+          <div class="goal-row">
+            <label>CPA + YouTube</label>
+            <div class="goal-fields"><span>Exams</span><input data-total="cpaExams" type="number" min="0" max="4" step="1"><span>Requirements</span><input data-total="cpaRequirements" type="number" min="0" max="5" step="1"><span>Videos</span><input data-total="videos" type="number" min="0" step="1"></div>
+            <div class="goal-result" data-goal-result="cpa"></div>
           </div>
-          <div class="field" style="margin-top:12px"><span>Evidence / miss / exact recovery</span><textarea data-week-key="note" placeholder="What exists now that did not exist last Sunday?"></textarea></div>
-          <p class="saved" id="savedStatus" role="status"></p>
-        </section>
-
-        <section>
-          <h2>Operating law</h2>
-          <ol class="law">
-            <li><b>Externalize the transition.</b> Obey the displayed physical cue; do not hold the next action in working memory.</li>
-            <li><b>Protect the boring middle.</b> The printed cadence stays; novelty does not earn intake.</li>
-            <li><b>Count irreversible proof.</b> Questions submitted, bar completed, balance reconciled, artifact delivered, exam sat.</li>
-            <li><b>Append; never reset.</b> A miss changes the next block. It does not erase prior work or create a new identity/system.</li>
-            <li><b>Force the verdict.</b> If a finish is being kept private or almost-done, produce the evidence and let it be judged.</li>
-          </ol>
-          <h3 style="margin-top:18px">Dependency spine</h3>
-          <div class="dependencies">
-            <div class="dependency"><b>Sleep + training + health floor</b> → usable cognition, strength, fertility/longevity</div>
-            <div class="dependency"><b>MAcc + CPA</b> → credential, Providence portability, Branmoor credibility</div>
-            <div class="dependency"><b>Job proof + full bonus</b> → savings curve → funded move and household durability</div>
-            <div class="dependency"><b>CPA + cheap evidence-backed offer</b> → Branmoor launch readiness</div>
-            <div class="dependency"><b>History series</b> → extra time only; no dependency may borrow from it</div>
+          <div class="goal-row">
+            <label>Providence readiness</label>
+            <div class="goal-fields"><input data-total="moveStage" type="number" min="0" max="9" step="1"><span>/ 9 stages</span></div>
+            <div class="goal-result" data-goal-result="move"></div>
           </div>
-        </section>
-      </div>
-
-      <div class="column">
-        <section>
-          <h2>Nine-goal proof ledger</h2>
-
-          <details open>
-            <summary><strong>1</strong> Strength</summary>
-            <div class="goal-body">
-              <p class="goal-verbatim">Squatted 405 for three sets of five and overhead pressed 225 for three sets of five.</p>
-              <div class="field-grid">
-                <div class="field"><span>Squat 3×5</span><input data-key="squat" type="number" min="0" step="2.5"></div>
-                <div class="field"><span>Press 3×5</span><input data-key="press" type="number" min="0" step="2.5"></div>
-              </div>
-              <div class="field" style="margin-top:10px"><span>Last heavy exposure disposition</span><select data-key="strengthDisposition"><option value="complete">Completed — earn next addition</option><option value="repeat">First miss — repeat exact load</option><option value="deload">Second miss — deload 7.5%</option><option value="stop">Pain/unsafe technique — stop and adjust</option></select></div>
-              <p class="goal-summary" id="strengthSummary"></p><progress id="strengthProgress" max="100"></progress>
-            </div>
-          </details>
-
-          <details>
-            <summary><strong>2</strong> Half marathon</summary>
-            <div class="goal-body">
-              <p class="goal-verbatim">Ran a half marathon in under three hours.</p>
-              <div class="check"><input data-key="half" id="half" type="checkbox"><label for="half">Sub-three-hour finish proven (~2:30)</label></div>
-            </div>
-          </details>
-
-          <details>
-            <summary><strong>3</strong> CPA + requirements + YouTube</summary>
-            <div class="goal-body checks">
-              <p class="goal-verbatim">Passed all CPA exams and fulfilled every possible requirement AND successfully created a YouTube channel for this purpose along the way.</p>
-              <div class="field-grid">
-                <div class="field"><span>Next section</span><select data-key="nextSection"><option>FAR</option><option>AUD</option><option>ISC</option><option>REG</option><option>Retake</option></select></div>
-                <div class="field"><span>Next sit date</span><input data-key="nextExamDate" type="date"></div>
-                <div class="field"><span>Cumulative MCQ accuracy %</span><input data-key="mcqAccuracy" type="number" min="0" max="100" step="0.1"></div>
-                <div class="field"><span>Full simulations complete</span><input data-key="simulations" type="number" min="0" step="1"></div>
-              </div>
-              <div class="check"><input data-key="examBooked" id="examBooked" type="checkbox"><label for="examBooked">Next appointment actually booked</label></div>
-              <div class="check"><input data-key="far" id="far" type="checkbox"><label for="far">FAR passed</label></div>
-              <div class="check"><input data-key="aud" id="aud" type="checkbox"><label for="aud">AUD passed</label></div>
-              <div class="check"><input data-key="isc" id="isc" type="checkbox"><label for="isc">ISC passed</label></div>
-              <div class="check"><input data-key="reg" id="reg" type="checkbox"><label for="reg">REG passed</label></div>
-              <div class="check"><input data-key="ethics" id="ethics" type="checkbox"><label for="ethics">AICPA ethics complete</label></div>
-              <div class="check"><input data-key="experience" id="experience" type="checkbox"><label for="experience">Experience verification complete</label></div>
-              <div class="check"><input data-key="education" id="education" type="checkbox"><label for="education">Education/course-hour packet complete</label></div>
-              <div class="check"><input data-key="jurisdiction" id="jurisdiction" type="checkbox"><label for="jurisdiction">Jurisdiction/application packet complete</label></div>
-              <div class="check"><input data-key="channel" id="channel" type="checkbox"><label for="channel">CPA channel public</label></div>
-              <div class="field"><span>Weekly proof videos published</span><input data-key="youtubeCount" type="number" min="0" max="38" step="1"></div>
-              <p class="goal-summary" id="cpaSummary"></p><progress id="cpaProgress" max="100"></progress>
-            </div>
-          </details>
-
-          <details>
-            <summary><strong>4</strong> Providence move readiness</summary>
-            <div class="goal-body field">
-              <p class="goal-verbatim">Finalized preparations for a move to Providence.</p>
-              <span>Last irreversible artifact complete</span>
-              <select data-key="moveStage">
-                <option value="0">None</option><option value="1">August — window and housing ceiling</option>
-                <option value="2">September — shortlist and cost model</option><option value="3">October — license/tax implications</option>
-                <option value="4">November — inventory and estimates</option><option value="5">December — housing packet</option>
-                <option value="6">January — target-building list</option><option value="7">February — admin checklist</option>
-                <option value="8">March — notice/application/mover rules</option><option value="9">April/May — signed move dossier</option>
-              </select>
-              <span style="margin-top:10px">Target move week</span><input data-key="moveWeek" type="text" placeholder="e.g. 2027-06-14">
-            </div>
-          </details>
-
-          <details>
-            <summary><strong>5</strong> Joint savings</summary>
-            <div class="goal-body">
-              <p class="goal-verbatim">Amassed a joint savings of at least $75,000.</p>
-              <div class="field-grid">
-                <div class="field"><span>Opening eligible savings (17 Aug)</span><input data-key="openingSavings" type="number" min="0" step="1"></div>
-                <div class="field"><span>Eligible joint savings now</span><input data-key="savings" type="number" min="0" step="1"></div>
-              </div>
-              <p class="goal-summary" id="savingsSummary"></p><progress id="savingsProgress" max="75000"></progress>
-            </div>
-          </details>
-
-          <details>
-            <summary><strong>6</strong> Branmoor launch readiness</summary>
-            <div class="goal-body checks">
-              <p class="goal-verbatim">Grew Branmoor to a legitimately launch-ready state.</p>
-              <div class="check"><input data-key="bOffer" id="bOffer" type="checkbox"><label for="bOffer">One offer/buyer/price frozen</label></div>
-              <div class="check"><input data-key="bSample" id="bSample" type="checkbox"><label for="bSample">Source-backed sample complete</label></div>
-              <div class="check"><input data-key="bRun" id="bRun" type="checkbox"><label for="bRun">Clean reproducible run complete</label></div>
-              <div class="check"><input data-key="bPage" id="bPage" type="checkbox"><label for="bPage">Accurate public offer/method page</label></div>
-              <div class="check"><input data-key="bProspects" id="bProspects" type="checkbox"><label for="bProspects">20 prospects / 10 conversations / 1 written intent</label></div>
-              <div class="check"><input data-key="bChecklist" id="bChecklist" type="checkbox"><label for="bChecklist">Launch checklist complete</label></div>
-              <div class="field"><span>Chapter I cash spend (ceiling $2,250)</span><input data-key="branmoorSpend" type="number" min="0" step="1"></div>
-              <p class="goal-summary" id="branmoorSummary"></p>
-            </div>
-          </details>
-
-          <details>
-            <summary><strong>7</strong> Joint fertility/longevity readiness</summary>
-            <div class="goal-body checks">
-              <p class="goal-verbatim">Achieved joint biomarker readiness with my wife for fertility &amp; longevity.</p>
-              <div class="check"><input data-key="healthVisits" id="healthVisits" type="checkbox"><label for="healthVisits">Visits complete</label></div>
-              <div class="check"><input data-key="healthWork" id="healthWork" type="checkbox"><label for="healthWork">Clinician-ordered work complete</label></div>
-              <div class="check"><input data-key="healthReview" id="healthReview" type="checkbox"><label for="healthReview">Clinician review complete</label></div>
-              <div class="check"><input data-key="healthDisposition" id="healthDisposition" type="checkbox"><label for="healthDisposition">Every finding has disposition/next date</label></div>
-              <div class="field"><span>Next joint aggregate review date</span><input data-key="healthNextDate" type="date"></div>
-              <small>Aggregate state only; no spouse results stored here.</small>
-            </div>
-          </details>
-
-          <details>
-            <summary><strong>8</strong> Full annual bonus</summary>
-            <div class="goal-body field">
-              <p class="goal-verbatim">Awarded my full annual bonus at work by the end of March.</p>
-              <span>Evidence stage</span>
-              <select data-key="bonusStage"><option value="0">Criteria not confirmed</option><option value="1">Criteria confirmed</option>
-                <option value="2">Monthly manager checks active</option><option value="3">Midyear gap closed</option>
-                <option value="4">Evidence packet drafted</option><option value="5">Final self-review delivered</option>
-                <option value="6">Full bonus formally awarded</option></select>
-              <span style="margin-top:10px">Current manager-visible deliverable</span><input data-key="bonusDeliverable" type="text">
-            </div>
-          </details>
-
-          <details class="extra-only">
-            <summary><strong>9</strong> History series — extra time only</summary>
-            <div class="goal-body">
-              <p class="goal-verbatim">Publish a legitimate series of histories with my writing system.</p>
-              <div class="notice">Zero official minutes. These boxes record receipts; they never create calendar debt.</div>
-              <div class="checks">
-                <div class="check"><input data-key="historyN1" id="historyN1" type="checkbox"><label for="historyN1">N1 shipped</label></div>
-                <div class="check"><input data-key="historyN10" id="historyN10" type="checkbox"><label for="historyN10">N10 shipped</label></div>
-                <div class="check"><input data-key="historyN2" id="historyN2" type="checkbox"><label for="historyN2">N2 shipped</label></div>
-                <div class="check"><input data-key="historySeries" id="historySeries" type="checkbox"><label for="historySeries">Series page/metadata/distribution proven</label></div>
-              </div>
-            </div>
-          </details>
-        </section>
-      </div>
+          <div class="goal-row">
+            <label>Joint savings</label>
+            <div class="goal-fields"><span>Opening</span><input data-setting="openingSavings" type="number" min="0" step="1"><span id="latestSavings"></span></div>
+            <div class="goal-result" data-goal-result="savings"></div>
+          </div>
+          <div class="goal-row">
+            <label>Branmoor readiness</label>
+            <div class="goal-fields"><span>Gates</span><input data-total="branmoorGates" type="number" min="0" max="6" step="1"><span>Spend</span><input data-total="branmoorSpend" type="number" min="0" step="1"></div>
+            <div class="goal-result" data-goal-result="branmoor"></div>
+          </div>
+          <div class="goal-row">
+            <label>Biomarker readiness</label>
+            <div class="goal-fields"><input data-total="healthStage" type="number" min="0" max="4" step="1"><span>/ 4 stages</span></div>
+            <div class="goal-result" data-goal-result="health"></div>
+          </div>
+          <div class="goal-row">
+            <label>Full annual bonus</label>
+            <div class="goal-fields"><input data-total="bonusStage" type="number" min="0" max="6" step="1"><span>/ 6 stages</span></div>
+            <div class="goal-result" data-goal-result="bonus"></div>
+          </div>
+          <div class="goal-row">
+            <label>Histories published</label>
+            <div class="goal-fields"><input data-total="histories" type="number" min="0" max="4" step="1"><span>/ 4 receipts · extra time</span></div>
+            <div class="goal-result" data-goal-result="histories"></div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
-  <footer><div class="wrap">The markdown calendar controls. This file stores state only in this browser. Export a backup during the Sunday close.</div></footer>
-
   <script>
     "use strict";
-    const STORAGE_KEY = "hal.critical-path.chapter-1.v1";
+    const STORAGE_KEY = "hal.critical-path.weekly.v2";
+    const OLD_STORAGE_KEY = "hal.critical-path.chapter-1.v1";
     const START = "2026-08-17";
     const FREEZE = "2027-05-05";
-    const DEFAULT_FIELDS = {
-      squat: 185, press: 60, half: true, far: false, aud: false, isc: false, reg: false,
-      ethics: false, experience: false, education: false, jurisdiction: false, channel: false,
-      youtubeCount: 0, nextSection: "FAR", nextExamDate: "2026-11-07", examBooked: false,
-      mcqAccuracy: 0, simulations: 0, moveStage: "0", moveWeek: "", openingSavings: 30000,
-      savings: 30000, strengthDisposition: "complete", bOffer: false, bSample: false,
-      bRun: false, bPage: false, bProspects: false, bChecklist: false, branmoorSpend: 0,
-      healthVisits: false, healthWork: false, healthReview: false, healthDisposition: false,
-      healthNextDate: "", bonusStage: "0", bonusDeliverable: "", historyN1: false,
-      historyN10: false, historyN2: false, historySeries: false
-    };
-    const SCHEDULES = {
-      0: [["07:00","07:30","Wake and light food"],["07:30","08:45","Easy endurance"],["08:45","09:30","Shower and breakfast"],["09:30","10:30","Joint household close"],["10:30","12:30","Branmoor gate"],["12:30","13:30","Lunch"],["13:30","16:00","MAcc work and week-ahead check"],["16:00","18:00","Groceries, food prep, home reset"],["18:00","19:30","Dinner and Gabby"],["19:30","20:00","Critical Path proof close"],["20:00","20:20","CPA accountability video"],["20:20","22:00","Marriage/recovery; stage Monday"],["22:00","22:30","Shutdown and bed"]],
-      1: [["06:00","06:15","Wake, water, weigh, dress"],["06:15","07:30","Strength A"],["07:30","09:00","Shower, breakfast, commute"],["09:00","12:00","Work; 09:00–10:30 bonus criterion"],["12:00","12:30","CPA cumulative MCQs"],["12:30","13:00","Lunch and walk"],["13:00","17:00","Work"],["17:00","18:30","Commute, dinner, reset"],["18:30","20:00","CPA new material"],["20:00","22:00","Marriage/recovery; stage Tuesday"],["22:00","22:30","Shutdown and bed"]],
-      2: [["06:00","06:15","Wake; open Becker"],["06:15","07:45","CPA new material and practice"],["07:45","09:00","Breakfast and commute"],["09:00","12:00","Work"],["12:00","12:30","CPA cumulative MCQs"],["12:30","13:00","Lunch and walk"],["13:00","17:00","Work"],["17:00","18:30","Commute, dinner, reset"],["18:30","20:30","Branmoor gate"],["20:30","22:00","Marriage/recovery; stage Wednesday"],["22:00","22:30","Shutdown and bed"]],
-      3: [["06:00","06:15","Wake and dress"],["06:15","07:30","Strength B — technique"],["07:30","09:00","Shower, breakfast, commute"],["09:00","12:00","Work"],["12:00","12:30","CPA cumulative MCQs"],["12:30","13:00","Lunch and walk"],["13:00","17:00","Work"],["17:00","18:15","Commute, dinner, arrive for class"],["18:15","21:00","Fall MAcc class"],["21:00","22:15","Commute and reset"],["22:15","22:30","Bed"]],
-      4: [["06:00","06:15","Wake; open Becker"],["06:15","07:45","CPA new material and practice"],["07:45","09:00","Breakfast and WFH setup"],["09:00","12:00","Work from home"],["12:00","12:30","CPA cumulative MCQs"],["12:30","13:00","Lunch and walk at home"],["13:00","17:00","Work from home"],["17:00","18:15","Dinner, commute, arrive for class"],["18:15","21:00","Fall MAcc class"],["21:00","22:15","Commute and reset"],["22:15","22:30","Bed"]],
-      5: [["06:00","06:15","Wake and dress"],["06:15","07:30","Strength C"],["07:30","09:00","Shower, breakfast, commute"],["09:00","12:00","Work"],["12:00","12:30","CPA cumulative MCQs"],["12:30","13:00","Lunch and walk"],["13:00","16:30","Work"],["16:30","17:00","Bonus evidence close"],["17:00","23:00","Gabby, friends/family, recovery"]],
-      6: [["07:00","07:30","Wake, breakfast, desk ready"],["07:30","10:30","CPA simulation, TBSs, error log"],["10:30","11:00","Food and walk"],["11:00","14:00","Branmoor gate"],["14:00","15:30","MAcc overflow or dated appointment"],["15:30","23:00","Marriage, social life, errands, recovery"]]
+    const OUTPUT_LABELS = ["CPA / MAcc", "Branmoor", "Body", "Work / household / health"];
+    const DEFAULT_TOTALS = {
+      squat: 185,
+      press: 60,
+      half: true,
+      cpaExams: 0,
+      cpaRequirements: 0,
+      videos: 0,
+      moveStage: 0,
+      branmoorGates: 0,
+      branmoorSpend: 0,
+      healthStage: 0,
+      bonusStage: 0,
+      histories: 0
     };
     const WEEK_CONTRACTS = [
       ["Tennessee exam file transmitted; FAR starts; Fall class begins", "Branmoor asset inventory", "Repeat 185/60 as 3×5 baselines", "Channel kickoff; first $1,200; bonus criteria request; visits booked"],
@@ -442,220 +317,440 @@
       ["All-pass evidence or next retake", "Launch-checklist preflight", "Planned heavy exposures only", "Health readiness; move applications/reservations"],
       ["License packet final preflight", "Launch pack", "First 405/225 opportunity only if earned", "Branmoor ready; written intent; spend ≤$2,250"],
       ["Last class + finals", "None", "Final work-set opportunity; then recovery", "$74,141 floor; Providence ready"],
-      ["Finals + transcript action staged", "None", "No panic lifts; preserve proof", "$75,000 and evidence freeze; ceremony"],
-    ];
-    const STRENGTH_CHECKPOINTS = [
-      ["2026-08-31","200–210","67.5–72.5"],["2026-09-30","245–255","87.5–95"],
-      ["2026-10-31","285–300","107.5–117.5"],["2026-11-30","315–330","127.5–140"],
-      ["2026-12-31","340–350","155–165"],["2027-01-31","355–365","175–180"],
-      ["2027-02-28","370–375","190–195"],["2027-03-31","380–390","205–210"],
-      ["2027-04-30","405","225"]
+      ["Finals + transcript action staged", "None", "No panic lifts; preserve proof", "$75,000 and evidence freeze; ceremony"]
     ];
 
-    function blankState() { return { version: 1, fields: { ...DEFAULT_FIELDS }, days: {}, weeks: {}, updated: null }; }
+    function blankState() {
+      return { version: 2, openingSavings: 30000, totals: { ...DEFAULT_TOTALS }, weeks: {}, updated: null };
+    }
+    function number(value) {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+    function countTrue(fields, keys) {
+      return keys.filter(function (key) { return Boolean(fields[key]); }).length;
+    }
+    function migrateOld(old) {
+      const fields = old.fields || {};
+      const migrated = blankState();
+      migrated.openingSavings = number(fields.openingSavings) || 30000;
+      migrated.totals = {
+        squat: number(fields.squat) || 185,
+        press: number(fields.press) || 60,
+        half: Boolean(fields.half),
+        cpaExams: countTrue(fields, ["far", "aud", "isc", "reg"]),
+        cpaRequirements: countTrue(fields, ["ethics", "experience", "education", "jurisdiction", "channel"]),
+        videos: number(fields.youtubeCount),
+        moveStage: number(fields.moveStage),
+        branmoorGates: countTrue(fields, ["bOffer", "bSample", "bRun", "bPage", "bProspects", "bChecklist"]),
+        branmoorSpend: number(fields.branmoorSpend),
+        healthStage: countTrue(fields, ["healthVisits", "healthWork", "healthReview", "healthDisposition"]),
+        bonusStage: number(fields.bonusStage),
+        histories: countTrue(fields, ["historyN1", "historyN10", "historyN2", "historySeries"])
+      };
+      Object.entries(old.weeks || {}).forEach(function (entry) {
+        const key = entry[0];
+        const week = entry[1] || {};
+        migrated.weeks[key] = {
+          actuals: {
+            cpaHours: number(week.cpaHours),
+            maccHours: number(week.maccHours),
+            strengthSessions: number(week.strengthSessions) || Math.floor(number(week.strengthHours) / 1.25),
+            branmoorHours: number(week.branmoorHours),
+            youtube: week.youtube ? 1 : 0
+          },
+          outputs: {},
+          note: week.note || ""
+        };
+      });
+      return migrated;
+    }
     function loadState() {
       try {
-        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if (!parsed || parsed.version !== 1 || typeof parsed.fields !== "object") return blankState();
-        return { version: 1, fields: { ...DEFAULT_FIELDS, ...parsed.fields }, days: parsed.days || {}, weeks: parsed.weeks || {}, updated: parsed.updated || null };
-      } catch (_) { return blankState(); }
-    }
-    let state = loadState();
-    const viewDate = document.getElementById("viewDate");
-    const isoToday = () => new Date().toLocaleDateString("en-CA");
-    viewDate.value = isoToday() < START ? START : (isoToday() > "2027-05-07" ? "2027-05-07" : isoToday());
-
-    function utc(iso) { const [y,m,d] = iso.split("-").map(Number); return Date.UTC(y, m - 1, d); }
-    function daysBetween(a, b) { return Math.round((utc(b) - utc(a)) / 86400000); }
-    function campaignWeek(iso) { return Math.max(1, Math.min(38, Math.floor(daysBetween(START, iso) / 7) + 1)); }
-    function weekKey(iso) { return `W${String(campaignWeek(iso)).padStart(2,"0")}`; }
-    function savingsFloor(iso, opening = asNumber(state.fields.openingSavings)) {
-      const elapsed = Math.max(0, Math.min(daysBetween(START, iso), daysBetween(START, FREEZE)));
-      return Math.round(opening + (75000 - opening) * elapsed / daysBetween(START, FREEZE));
-    }
-    function asNumber(value) { const n = Number(value); return Number.isFinite(n) ? n : 0; }
-    function money(value) { return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value); }
-    function formDate(iso) { return new Date(`${iso}T12:00:00`).toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" }); }
-    function minutes(time) { const [h,m] = time.split(":").map(Number); return h * 60 + m; }
-    function cueFor(label) {
-      const text = label.toLowerCase();
-      if (text.includes("wake")) return "Feet on floor. Water. Phone remains outside the room.";
-      if (text.includes("strength")) return "Shoes on. Warm-up bar loaded. No load jump beyond the written rule.";
-      if (text.includes("cpa") || text.includes("becker")) return "Becker open. Submit the first MCQ before any inbox or feed.";
-      if (text.includes("work")) return "Highest-value bonus artifact open. Email waits until the first visible unit is moving.";
-      if (text.includes("commute") || text.includes("arrive")) return "Keys in hand at the block start. Count parking and walking; car movement is proof.";
-      if (text.includes("class")) return "Be seated with the course open before 18:15; arrival, not departure, closes the transition.";
-      if (text.includes("branmoor")) return "Open the one admitted gate. Save one client-visible artifact; do not open a new branch.";
-      if (text.includes("household")) return "Open the ERP/source balances. Reconcile cleared cash and name the next owned action.";
-      if (text.includes("macc")) return "Open the next graded deliverable. Produce the first answer before reading around it.";
-      if (text.includes("proof close")) return "Record facts, export the backup, and assign any miss to one exact future block.";
-      if (text.includes("video")) return "Camera on. State the dated proof. Upload with only dead air removed.";
-      if (text.includes("shutdown") || text === "bed") return "Phone outside the bedroom. Clothes, bag, and first document staged.";
-      if (text.includes("gabby") || text.includes("marriage") || text.includes("recovery")) return "Close the work surface. Be physically present; no HAL intake.";
-      return "Begin the printed block with one visible physical action.";
-    }
-    function weekDateRange(number) {
-      const start = new Date(utc(START) + (number - 1) * 7 * 86400000);
-      const end = new Date(start.getTime() + 6 * 86400000);
-      const fmt = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
-      return `${fmt.format(start)}–${fmt.format(end)}`;
+        const current = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        if (current && current.version === 2 && typeof current.weeks === "object") {
+          return {
+            version: 2,
+            openingSavings: number(current.openingSavings) || 30000,
+            totals: { ...DEFAULT_TOTALS, ...(current.totals || {}) },
+            weeks: current.weeks,
+            updated: current.updated || null
+          };
+        }
+        const old = JSON.parse(localStorage.getItem(OLD_STORAGE_KEY));
+        return old && old.version === 1 ? migrateOld(old) : blankState();
+      } catch (_) {
+        return blankState();
+      }
     }
     function save() {
       state.updated = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      document.getElementById("savedStatus").textContent = `Saved ${new Date(state.updated).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`;
-      renderSummaries();
+      document.getElementById("savedStatus").textContent = "Saved " + new Date(state.updated).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     }
-    function setControl(control, value) {
-      if (control.type === "checkbox") control.checked = Boolean(value);
-      else control.value = value ?? "";
+    function utc(iso) {
+      const parts = iso.split("-").map(Number);
+      return Date.UTC(parts[0], parts[1] - 1, parts[2]);
     }
-    function controlValue(control) {
-      if (control.type === "checkbox") return control.checked;
-      if (control.type === "number") return asNumber(control.value);
-      return control.value;
+    function isoFromUtc(milliseconds) {
+      return new Date(milliseconds).toISOString().slice(0, 10);
     }
-
-    document.querySelectorAll("[data-key]").forEach(control => {
-      setControl(control, state.fields[control.dataset.key]);
-      control.addEventListener("input", () => { state.fields[control.dataset.key] = controlValue(control); save(); });
-    });
-    document.querySelectorAll("[data-week-key]").forEach(control => {
-      control.addEventListener("input", () => {
-        const key = weekKey(viewDate.value);
-        state.weeks[key] ||= {};
-        state.weeks[key][control.dataset.weekKey] = controlValue(control);
-        save();
-      });
-    });
-
-    function renderWeek() {
-      const key = weekKey(viewDate.value);
-      document.getElementById("weekHeading").textContent = `${key} proof`;
-      const data = state.weeks[key] || {};
-      document.querySelectorAll("[data-week-key]").forEach(control => setControl(control, data[control.dataset.weekKey]));
+    function daysBetween(a, b) {
+      return Math.round((utc(b) - utc(a)) / 86400000);
     }
-
-    function renderSchedule() {
-      const iso = viewDate.value;
-      const date = new Date(`${iso}T12:00:00`);
-      const blocks = SCHEDULES[date.getDay()];
-      const dayState = state.days[iso] || {};
-      const holder = document.getElementById("schedule");
-      holder.replaceChildren();
-      let done = 0;
-      let activeText = "";
-      let nextText = "";
+    function isoToday() {
+      return new Date().toLocaleDateString("en-CA");
+    }
+    function currentCampaignWeek() {
+      return Math.max(1, Math.min(38, Math.floor(daysBetween(START, isoToday()) / 7) + 1));
+    }
+    function weekKey(week) {
+      return "W" + String(week).padStart(2, "0");
+    }
+    function weekStart(week) {
+      return isoFromUtc(utc(START) + (week - 1) * 7 * 86400000);
+    }
+    function weekEnd(week) {
+      return isoFromUtc(utc(START) + (week * 7 - 1) * 86400000);
+    }
+    function formatDate(iso) {
+      return new Date(iso + "T12:00:00").toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    }
+    function money(value) {
+      return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
+    }
+    function savingsFloor(iso) {
+      const elapsed = Math.max(0, Math.min(daysBetween(START, iso), daysBetween(START, FREEZE)));
+      return Math.round(state.openingSavings + (75000 - state.openingSavings) * elapsed / daysBetween(START, FREEZE));
+    }
+    function maccTarget(week) {
+      if (week <= 17 || week >= 22) return 8;
+      if (week === 21) return 4;
+      return 0;
+    }
+    function targetsFor(week) {
+      const targets = [
+        { key: "cpaHours", label: "CPA study", target: 10, unit: "h", pace: "linear" },
+        { key: "maccHours", label: "MAcc work", target: maccTarget(week), unit: "h", pace: "linear" },
+        { key: "strengthSessions", label: "Strength", target: 3, unit: "sessions", pace: "strength" },
+        { key: "enduranceSessions", label: "Endurance", target: 1, unit: "session", pace: "endurance" },
+        { key: "branmoorHours", label: "Branmoor", target: week <= 36 ? 7 : 0, unit: "h", pace: "linear" },
+        { key: "youtube", label: "CPA video", target: week <= 30 ? 1 : 0, unit: "video", pace: "video" },
+        { key: "savings", label: "Joint savings", target: savingsFloor(weekEnd(week)), unit: "$", pace: "savings" }
+      ];
+      return targets.filter(function (target) { return target.target > 0; });
+    }
+    function relation(week) {
+      const today = isoToday();
+      if (today < weekStart(week)) return "future";
+      if (today > weekEnd(week)) return "past";
+      return "current";
+    }
+    function completedDays(week) {
+      return relation(week) === "current" ? Math.max(0, Math.min(6, daysBetween(weekStart(week), isoToday()))) : relation(week) === "past" ? 7 : 0;
+    }
+    function scheduledDue(pace, week) {
+      const stateOfWeek = relation(week);
+      if (stateOfWeek === "past") return pace === "strength" ? 3 : 1;
+      if (stateOfWeek === "future") return 0;
+      const day = completedDays(week);
       const now = new Date();
-      const isToday = iso === isoToday();
-      const nowMinutes = now.getHours() * 60 + now.getMinutes();
-      blocks.forEach((block, index) => {
-        const [start, end, label] = block;
-        const displayLabel = label === "Fall MAcc class" && iso > "2026-12-10" ? "Reserved MAcc block — update for Spring timetable" : label;
-        const id = `${index}-${start}-${end}`;
-        const checked = Boolean(dayState[id]);
-        if (checked) done++;
-        const current = isToday && nowMinutes >= minutes(start) && nowMinutes < minutes(end);
-        if (current) activeText = displayLabel;
-        if (!nextText && !checked && (!isToday || minutes(end) > nowMinutes)) nextText = displayLabel;
-        const row = document.createElement("label");
-        row.className = `block${checked ? " done" : ""}${current ? " current" : ""}`;
-        const time = document.createElement("span"); time.className = "block-time"; time.textContent = `${start}–${end}`;
-        const box = document.createElement("input"); box.type = "checkbox"; box.checked = checked;
-        const text = document.createElement("span"); text.className = "block-label"; text.textContent = displayLabel;
-        box.addEventListener("change", () => {
-          state.days[iso] ||= {};
-          state.days[iso][id] = box.checked;
-          save(); renderSchedule();
-        });
-        row.append(time, box, text); holder.append(row);
+      const minutes = now.getHours() * 60 + now.getMinutes();
+      if (pace === "strength") {
+        return [[0, 450], [2, 450], [4, 450]].filter(function (due) {
+          return day > due[0] || (day === due[0] && minutes >= due[1]);
+        }).length;
+      }
+      if (pace === "endurance") return day === 6 && minutes >= 525 ? 1 : 0;
+      if (pace === "video") return day === 6 && minutes >= 1220 ? 1 : 0;
+      return 0;
+    }
+    function expectedByNow(target, week) {
+      const stateOfWeek = relation(week);
+      if (stateOfWeek === "past") return target.target;
+      if (stateOfWeek === "future") return 0;
+      if (["strength", "endurance", "video"].includes(target.pace)) return scheduledDue(target.pace, week);
+      const fraction = completedDays(week) / 7;
+      if (target.pace === "savings") {
+        const prior = week === 1 ? state.openingSavings : savingsFloor(weekEnd(week - 1));
+        return Math.round(prior + (target.target - prior) * fraction);
+      }
+      return Math.round(target.target * fraction * 4) / 4;
+    }
+    function weekRecord(week) {
+      const key = weekKey(week);
+      state.weeks[key] ||= { actuals: {}, outputs: {}, note: "" };
+      state.weeks[key].actuals ||= {};
+      state.weeks[key].outputs ||= {};
+      return state.weeks[key];
+    }
+    function latestSavings(throughWeek) {
+      for (let week = throughWeek; week >= 1; week -= 1) {
+        const value = state.weeks[weekKey(week)]?.actuals?.savings;
+        if (value !== undefined && value !== "") return number(value);
+      }
+      return state.openingSavings;
+    }
+    function actualFor(target, week) {
+      const value = weekRecord(week).actuals[target.key];
+      return target.key === "savings" && (value === undefined || value === "") ? latestSavings(week - 1) : number(value);
+    }
+    function displayTarget(target) {
+      return target.unit === "$" ? money(target.target) : target.target + " " + target.unit;
+    }
+    function displayShortfall(target, amount) {
+      if (target.unit === "$") return money(Math.ceil(amount));
+      return (Math.ceil(amount * 4) / 4) + " " + target.unit;
+    }
+    function metricStatus(target, week) {
+      const actual = actualFor(target, week);
+      const due = expectedByNow(target, week);
+      if (relation(week) === "future") return { className: "upcoming", label: "Upcoming", behind: 0 };
+      if (actual >= target.target) return { className: "complete", label: "Complete", behind: 0 };
+      if (actual + 0.001 < due) return { className: "behind", label: "Behind " + displayShortfall(target, due - actual), behind: due - actual };
+      return { className: "on-pace", label: "On pace", behind: 0 };
+    }
+    function selectedWeekFromUrl() {
+      const value = Number(new URLSearchParams(location.search).get("week"));
+      return value >= 1 && value <= 38 ? value : currentCampaignWeek();
+    }
+
+    let state = loadState();
+    let selectedWeek = selectedWeekFromUrl();
+    const weekSelect = document.getElementById("weekSelect");
+
+    function buildWeekSelect() {
+      for (let week = 1; week <= 38; week += 1) {
+        const option = document.createElement("option");
+        option.value = week;
+        option.textContent = weekKey(week) + " · " + formatDate(weekStart(week)) + "–" + formatDate(weekEnd(week));
+        weekSelect.append(option);
+      }
+    }
+    function setWeek(week) {
+      selectedWeek = Math.max(1, Math.min(38, week));
+      const url = new URL(location.href);
+      url.searchParams.set("week", selectedWeek);
+      history.replaceState(null, "", url);
+      renderWeek();
+    }
+    function createTargetRow(target) {
+      const row = document.createElement("div");
+      row.className = "target-row";
+      const label = document.createElement("label");
+      label.className = "target-label";
+      label.htmlFor = "actual-" + target.key;
+      label.textContent = target.label;
+      const targetValue = document.createElement("div");
+      targetValue.className = "target-value";
+      targetValue.textContent = "Target " + displayTarget(target);
+      const input = document.createElement("input");
+      input.id = "actual-" + target.key;
+      input.type = "number";
+      input.min = "0";
+      input.step = target.key === "savings" ? "1" : target.key.includes("Sessions") || target.key === "youtube" ? "1" : ".25";
+      const stored = weekRecord(selectedWeek).actuals[target.key];
+      input.value = stored === undefined ? "" : stored;
+      if (target.key === "savings") input.placeholder = String(latestSavings(selectedWeek - 1));
+      input.addEventListener("input", function () {
+        weekRecord(selectedWeek).actuals[target.key] = input.value === "" ? "" : number(input.value);
+        save();
+        updateStatus();
+        updateGoals();
       });
-      document.getElementById("dayHeading").textContent = formDate(iso);
-      const classContext = iso > "2026-12-10" ? "Spring timetable pending; 18:15–21:00 remains protected for MAcc until replaced." : "Fall class begins at 18:15.";
-      document.getElementById("dayContext").textContent = date.getDay() === 4 ? `Thursday work is from home. ${classContext}` : (date.getDay() === 3 ? classContext : "Histories have no official block.");
-      document.getElementById("currentBlock").textContent = activeText ? `Now: ${activeText}` : "";
-      document.getElementById("dayComplete").textContent = `${done}/${blocks.length}`;
-      const command = activeText || nextText;
-      document.getElementById("commandAction").textContent = command || "Day closed. Stop and protect recovery.";
-      document.getElementById("commandCue").textContent = command ? cueFor(command) : "Do not invent another task because the printed work is complete.";
+      const status = document.createElement("div");
+      status.className = "row-status";
+      status.dataset.targetStatus = target.key;
+      row.append(label, targetValue, input, status);
+      return row;
+    }
+    function renderTargets() {
+      const table = document.getElementById("targetTable");
+      table.replaceChildren();
+      targetsFor(selectedWeek).forEach(function (target) { table.append(createTargetRow(target)); });
+    }
+    function renderOutputs() {
+      const holder = document.getElementById("outputs");
+      holder.replaceChildren();
+      WEEK_CONTRACTS[selectedWeek - 1].forEach(function (text, index) {
+        if (text === "None") return;
+        const label = document.createElement("label");
+        label.className = "output";
+        const box = document.createElement("input");
+        box.type = "checkbox";
+        box.checked = Boolean(weekRecord(selectedWeek).outputs[index]);
+        const category = document.createElement("small");
+        category.textContent = OUTPUT_LABELS[index];
+        const copy = document.createElement("span");
+        copy.className = "output-text";
+        copy.textContent = text;
+        label.classList.toggle("done", box.checked);
+        box.addEventListener("input", function () {
+          weekRecord(selectedWeek).outputs[index] = box.checked;
+          label.classList.toggle("done", box.checked);
+          save();
+          updateStatus();
+        });
+        label.append(box, category, copy);
+        holder.append(label);
+      });
+    }
+    function outputPace() {
+      const activeIndexes = WEEK_CONTRACTS[selectedWeek - 1].map(function (text, index) { return text === "None" ? -1 : index; }).filter(function (index) { return index >= 0; });
+      const active = activeIndexes.length;
+      const done = activeIndexes.filter(function (index) { return Boolean(weekRecord(selectedWeek).outputs[index]); }).length;
+      const due = relation(selectedWeek) === "past" ? active : relation(selectedWeek) === "future" ? 0 : Math.floor(active * completedDays(selectedWeek) / 7);
+      return { active, done, due, behind: Math.max(0, due - done) };
+    }
+    function updateStatus() {
+      const targets = targetsFor(selectedWeek);
+      const shortfalls = [];
+      let complete = 0;
+      targets.forEach(function (target) {
+        const result = metricStatus(target, selectedWeek);
+        const cell = document.querySelector('[data-target-status="' + target.key + '"]');
+        cell.className = "row-status " + result.className;
+        cell.textContent = result.label;
+        if (actualFor(target, selectedWeek) >= target.target) complete += 1;
+        if (result.behind > 0) shortfalls.push(target.label + ": " + displayShortfall(target, result.behind) + " behind pace");
+      });
+      const outputs = outputPace();
+      complete += outputs.done;
+      if (outputs.behind) shortfalls.push("Weekly outputs: " + outputs.behind + " behind pace");
+      const total = targets.length + outputs.active;
+      document.getElementById("weekScore").textContent = complete + "/" + total;
+      const relationNow = relation(selectedWeek);
+      const panel = document.getElementById("statusPanel");
+      panel.className = "status";
+      let label = "On track";
+      if (relationNow === "future") {
+        label = "Upcoming";
+        panel.classList.add("upcoming");
+      } else if (shortfalls.length) {
+        label = "Behind";
+        panel.classList.add("behind");
+      }
+      document.getElementById("statusLabel").textContent = label;
+      const list = document.getElementById("shortfalls");
+      list.replaceChildren();
+      shortfalls.forEach(function (text) {
+        const item = document.createElement("li");
+        item.textContent = text;
+        list.append(item);
+      });
+    }
+    function goalResults() {
+      const totals = state.totals;
+      const savings = latestSavings(38);
+      return {
+        strength: number(totals.squat) >= 405 && number(totals.press) >= 225,
+        half: Boolean(totals.half),
+        cpa: number(totals.cpaExams) >= 4 && number(totals.cpaRequirements) >= 5 && number(totals.videos) >= 30,
+        move: number(totals.moveStage) >= 9,
+        savings: savings >= 75000,
+        branmoor: number(totals.branmoorGates) >= 6 && number(totals.branmoorSpend) <= 2250,
+        health: number(totals.healthStage) >= 4,
+        bonus: number(totals.bonusStage) >= 6,
+        histories: number(totals.histories) >= 4
+      };
+    }
+    function updateGoals() {
+      const results = goalResults();
+      Object.entries(results).forEach(function (entry) {
+        const holder = document.querySelector('[data-goal-result="' + entry[0] + '"]');
+        holder.textContent = entry[1] ? "Complete" : "Open";
+        holder.classList.toggle("complete", entry[1]);
+      });
+      document.getElementById("goalScore").textContent = Object.values(results).filter(Boolean).length + "/9 complete";
+      document.getElementById("latestSavings").textContent = "Latest " + money(latestSavings(38));
+    }
+    function bindTotals() {
+      document.querySelectorAll("[data-total]").forEach(function (input) {
+        const key = input.dataset.total;
+        if (input.type === "checkbox") input.checked = Boolean(state.totals[key]);
+        else input.value = state.totals[key];
+        input.addEventListener("input", function () {
+          state.totals[key] = input.type === "checkbox" ? input.checked : number(input.value);
+          save();
+          updateGoals();
+        });
+      });
+      const opening = document.querySelector('[data-setting="openingSavings"]');
+      opening.value = state.openingSavings;
+      opening.addEventListener("input", function () {
+        state.openingSavings = number(opening.value);
+        save();
+        renderTargets();
+        updateStatus();
+        updateGoals();
+      });
+    }
+    function renderWeek() {
+      weekSelect.value = selectedWeek;
+      document.title = "Critical Path · " + weekKey(selectedWeek);
+      document.getElementById("weekHeading").textContent = "Week " + selectedWeek + " of 38";
+      document.getElementById("weekDates").textContent = formatDate(weekStart(selectedWeek)) + "–" + formatDate(weekEnd(selectedWeek));
+      document.getElementById("previousWeek").disabled = selectedWeek === 1;
+      document.getElementById("nextWeek").disabled = selectedWeek === 38;
+      document.getElementById("weekNotes").value = weekRecord(selectedWeek).note || "";
+      renderTargets();
+      renderOutputs();
+      updateStatus();
+      updateGoals();
     }
 
-    function renderWeekContract() {
-      const number = campaignWeek(viewDate.value);
-      const contract = WEEK_CONTRACTS[number - 1];
-      document.getElementById("contractHeading").textContent = `W${String(number).padStart(2,"0")} contract`;
-      document.getElementById("contractDates").textContent = weekDateRange(number);
-      document.getElementById("contractInstitutional").textContent = contract[0];
-      document.getElementById("contractBranmoor").textContent = contract[1];
-      document.getElementById("contractBody").textContent = contract[2];
-      document.getElementById("contractProof").textContent = contract[3];
-    }
-
-    function nextStrengthCheckpoint(iso) { return STRENGTH_CHECKPOINTS.find(row => row[0] >= iso) || STRENGTH_CHECKPOINTS.at(-1); }
-    function goalProofs() {
-      const f = state.fields;
-      const cpa = ["far","aud","isc","reg","ethics","experience","education","jurisdiction","channel"].every(k => f[k]) && asNumber(f.youtubeCount) >= 30;
-      const branmoor = ["bOffer","bSample","bRun","bPage","bProspects","bChecklist"].every(k => f[k]) && asNumber(f.branmoorSpend) <= 2250;
-      const health = ["healthVisits","healthWork","healthReview","healthDisposition"].every(k => f[k]);
-      return [asNumber(f.squat) >= 405 && asNumber(f.press) >= 225, f.half, cpa, f.moveStage === "9", asNumber(f.savings) >= 75000, branmoor, health, f.bonusStage === "6", ["historyN1","historyN10","historyN2","historySeries"].every(k => f[k])].filter(Boolean).length;
-    }
-    function renderSummaries() {
-      const f = state.fields;
-      const squatPct = Math.max(0, Math.min(1, (asNumber(f.squat) - 185) / 220));
-      const pressPct = Math.max(0, Math.min(1, (asNumber(f.press) - 60) / 165));
-      const strengthPct = Math.round((squatPct + pressPct) * 50);
-      const next = nextStrengthCheckpoint(viewDate.value);
-      const strengthRule = f.strengthDisposition === "complete" ? `next heavy ${asNumber(f.squat) + 5} / ${asNumber(f.press) + 2.5}` :
-        (f.strengthDisposition === "repeat" ? `repeat ${f.squat} / ${f.press}` :
-        (f.strengthDisposition === "deload" ? `rebuild from ${Math.round(asNumber(f.squat) * .925 / 2.5) * 2.5} / ${Math.round(asNumber(f.press) * .925 / 2.5) * 2.5}` : "stop condition active; adjust before loading"));
-      document.getElementById("strengthSummary").textContent = `Current ${f.squat} / ${f.press} lb · ${strengthRule} · checkpoint ${next[0]}: ${next[1]} / ${next[2]}`;
-      document.getElementById("strengthProgress").value = strengthPct;
-      const cpaKeys = ["far","aud","isc","reg","ethics","experience","education","jurisdiction","channel"];
-      const cpaDone = cpaKeys.filter(k => f[k]).length;
-      document.getElementById("cpaSummary").textContent = `${cpaDone}/9 credential/channel gates · ${asNumber(f.youtubeCount)}/30 videos · next ${f.nextSection} ${f.nextExamDate || "undated"} (${f.examBooked ? "booked" : "not booked"})`;
-      document.getElementById("cpaProgress").value = Math.round(((cpaDone / 9) * .8 + Math.min(asNumber(f.youtubeCount), 30) / 30 * .2) * 100);
-      const floor = savingsFloor(viewDate.value), current = asNumber(f.savings), gap = current - floor;
-      document.getElementById("savingsSummary").textContent = `${money(current)} current · ${money(floor)} dated floor · ${gap >= 0 ? money(gap) + " ahead" : money(-gap) + " behind"}`;
-      document.getElementById("savingsProgress").value = Math.min(current, 75000);
-      const bKeys = ["bOffer","bSample","bRun","bPage","bProspects","bChecklist"];
-      document.getElementById("branmoorSummary").textContent = `${bKeys.filter(k => f[k]).length}/6 gates · ${money(asNumber(f.branmoorSpend))}/$2,250 spent`;
-      document.getElementById("proofsClosed").textContent = `${goalProofs()}/9`;
-      document.getElementById("daysLeft").textContent = Math.max(0, daysBetween(viewDate.value, FREEZE));
-      document.getElementById("weekNumber").textContent = `${weekKey(viewDate.value)}/38`;
-    }
-
-    function render() { renderSchedule(); renderWeekContract(); renderWeek(); renderSummaries(); }
-    viewDate.addEventListener("input", render);
-    document.getElementById("todayButton").addEventListener("click", () => { viewDate.value = isoToday(); render(); });
-    document.getElementById("exportButton").addEventListener("click", () => {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-      const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `critical-path-backup-${isoToday()}.json`; link.click(); URL.revokeObjectURL(link.href);
+    buildWeekSelect();
+    bindTotals();
+    weekSelect.addEventListener("input", function () { setWeek(number(weekSelect.value)); });
+    document.getElementById("previousWeek").addEventListener("click", function () { setWeek(selectedWeek - 1); });
+    document.getElementById("nextWeek").addEventListener("click", function () { setWeek(selectedWeek + 1); });
+    document.getElementById("currentWeek").addEventListener("click", function () { setWeek(currentCampaignWeek()); });
+    document.getElementById("weekNotes").addEventListener("input", function (event) {
+      weekRecord(selectedWeek).note = event.target.value;
+      save();
     });
-    document.getElementById("importButton").addEventListener("click", () => document.getElementById("importFile").click());
-    document.getElementById("importFile").addEventListener("change", async event => {
+    document.getElementById("exportButton").addEventListener("click", function () {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: "application/json" }));
+      link.download = "critical-path-backup-" + isoToday() + ".json";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+    document.getElementById("importButton").addEventListener("click", function () {
+      document.getElementById("importFile").click();
+    });
+    document.getElementById("importFile").addEventListener("change", async function (event) {
       try {
         const parsed = JSON.parse(await event.target.files[0].text());
-        if (!parsed || parsed.version !== 1 || typeof parsed.fields !== "object" || typeof parsed.days !== "object" || typeof parsed.weeks !== "object") throw new Error("Not a Chapter I backup");
-        state = { version: 1, fields: { ...DEFAULT_FIELDS, ...parsed.fields }, days: parsed.days, weeks: parsed.weeks, updated: parsed.updated || null };
-        document.querySelectorAll("[data-key]").forEach(control => setControl(control, state.fields[control.dataset.key]));
-        save(); render();
-      } catch (error) { document.getElementById("savedStatus").textContent = `Import failed: ${error.message}`; }
+        if (!parsed || ![1, 2].includes(parsed.version)) throw new Error("Invalid backup");
+        state = parsed.version === 1 ? migrateOld(parsed) : {
+          version: 2,
+          openingSavings: number(parsed.openingSavings) || 30000,
+          totals: { ...DEFAULT_TOTALS, ...(parsed.totals || {}) },
+          weeks: parsed.weeks || {},
+          updated: parsed.updated || null
+        };
+        save();
+        location.reload();
+      } catch (error) {
+        document.getElementById("savedStatus").textContent = "Import failed: " + error.message;
+      }
       event.target.value = "";
     });
 
-    window.__criticalPathSelfTest = () => {
+    window.__criticalPathSelfTest = function () {
       const checks = {
-        weeks: campaignWeek(START) === 1 && campaignWeek("2027-05-07") === 38,
-        savings: savingsFloor(START, 30000) === 30000 && savingsFloor(FREEZE, 30000) === 75000,
-        clock: SCHEDULES[3].some(row => row[0] === "18:15" && row[2] === "Fall MAcc class") && SCHEDULES[4].some(row => row[2] === "Work from home"),
-        historiesUnscheduled: !Object.values(SCHEDULES).flat().some(row => row[2].toLowerCase().includes("histor")),
-        contracts: WEEK_CONTRACTS.length === 38
+        weeks: WEEK_CONTRACTS.length === 38 && weekStart(1) === START && weekEnd(38) === "2027-05-09",
+        savings: savingsFloor(START) === state.openingSavings && savingsFloor(FREEZE) === 75000,
+        targets: targetsFor(1).length === 7 && !targetsFor(37).some(function (target) { return target.key === "branmoorHours"; }),
+        weeklyOnly: !document.querySelector("input[type=date]") && document.getElementById("weekSelect").options.length === 38,
+        concise: document.querySelectorAll(".command, .law, .dependencies").length === 0
       };
-      if (Object.values(checks).some(value => !value)) throw new Error(JSON.stringify(checks));
+      if (Object.values(checks).some(function (value) { return !value; })) throw new Error(JSON.stringify(checks));
       return checks;
     };
+    renderWeek();
     document.documentElement.dataset.selfTest = JSON.stringify(window.__criticalPathSelfTest());
-    render();
   </script>
 </body>
 </html>
