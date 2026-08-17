@@ -1,6 +1,8 @@
 .wrangler/
 .DS_Store
 node_modules/
+.dev.vars*
+.env*
 
 # OpenF1 replay data is deployed for the attributed demonstration, not redistributed in source.
 demo/pit-wall/snapshots.json
