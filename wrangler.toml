@@ -10,3 +10,8 @@ database_id = "59b21b8b-40dd-49b5-8d45-510a2d24fb78"
 preview_database_id = "DB"
 
 [env.production]
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "josephbsmith-erp"
+database_id = "59b21b8b-40dd-49b5-8d45-510a2d24fb78"
