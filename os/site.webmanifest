@@ -1,0 +1,11 @@
+{
+  "name": "Smith OS",
+  "short_name": "Smith OS",
+  "description": "Private personal ERP and Chapter I operating system.",
+  "start_url": "/os/",
+  "scope": "/os/",
+  "display": "standalone",
+  "background_color": "#101411",
+  "theme_color": "#101411",
+  "icons": [{ "src": "/icon.png", "sizes": "any", "type": "image/png" }]
+}
