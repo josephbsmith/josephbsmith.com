@@ -68,7 +68,9 @@ function html(body, status = 200, extra = {}) {
 }
 
 function sameOrigin(request) {
-  return request.headers.get("Origin") === new URL(request.url).origin;
+  const origin = request.headers.get("Origin");
+  if (origin) return origin === new URL(request.url).origin;
+  return request.headers.get("Sec-Fetch-Site") !== "cross-site";
 }
 
 async function attemptKey(request, secret) {
