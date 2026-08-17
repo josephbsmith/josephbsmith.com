@@ -17,6 +17,7 @@
       --good: #71e2ae;
       --bad: #ff8b87;
       --future: #65b8ff;
+      --focus: #ffcb66;
     }
     * { box-sizing: border-box; }
     body {
@@ -34,6 +35,14 @@
     }
     button, .file-button { padding: 9px 12px; cursor: pointer; }
     button:hover, .file-button:hover { border-color: var(--future); }
+    button:disabled { cursor: default; opacity: .45; }
+    button.primary {
+      border-color: var(--focus);
+      background: var(--focus);
+      color: #111820;
+      font-weight: 800;
+    }
+    button.primary:hover { border-color: #ffe1a3; background: #ffe1a3; }
     button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible {
       outline: 3px solid var(--future);
       outline-offset: 2px;
@@ -66,6 +75,62 @@
       background: var(--panel);
       padding: 17px;
     }
+    .today {
+      overflow: hidden;
+      border-color: #4b4230;
+      background:
+        radial-gradient(circle at 88% 8%, rgba(255, 203, 102, .12), transparent 30%),
+        var(--panel);
+    }
+    .today.secured { border-color: rgba(113, 226, 174, .6); }
+    .today-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 26px;
+      align-items: start;
+    }
+    .kicker {
+      margin-bottom: 7px;
+      color: var(--focus);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .secured .kicker { color: var(--good); }
+    .today h2 { max-width: 720px; margin-bottom: 5px; font-size: clamp(23px, 3.5vw, 34px); }
+    .action-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 17px; }
+    .action-controls button { min-height: 43px; }
+    .momentum { min-width: 190px; text-align: right; }
+    .momentum strong { display: block; font-size: 25px; font-variant-numeric: tabular-nums; }
+    .days { display: flex; justify-content: flex-end; gap: 6px; margin-top: 10px; }
+    .day { display: grid; gap: 4px; justify-items: center; color: var(--muted); font-size: 10px; }
+    .day-dot { width: 15px; height: 15px; border: 1px solid var(--line); border-radius: 50%; background: var(--panel-2); }
+    .day.active .day-dot { border-color: var(--good); background: var(--good); box-shadow: 0 0 0 3px rgba(113, 226, 174, .09); }
+    .day.today .day-dot { border-color: var(--focus); }
+    .day.today.active .day-dot { border-color: var(--good); }
+    .progress-track { height: 8px; margin-top: 17px; overflow: hidden; border-radius: 999px; background: #0a0e13; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--future), var(--good)); transition: width .35s ease; }
+    .progress-copy { display: flex; justify-content: space-between; gap: 12px; margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .toast {
+      position: fixed;
+      z-index: 10;
+      right: 18px;
+      bottom: 18px;
+      transform: translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      border: 1px solid var(--good);
+      border-radius: 8px;
+      background: #10251d;
+      color: var(--good);
+      padding: 11px 14px;
+      font-weight: 750;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .today.pulse { animation: pulse .45s ease; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 5px rgba(113, 226, 174, .14); } }
     .status {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -94,7 +159,7 @@
     .target-table { display: grid; gap: 7px; }
     .target-row {
       display: grid;
-      grid-template-columns: minmax(170px, 1fr) 140px 120px 120px;
+      grid-template-columns: minmax(170px, 1fr) 140px 110px 82px 120px;
       gap: 12px;
       align-items: center;
       padding: 10px 11px;
@@ -107,6 +172,7 @@
     .row-status.complete, .row-status.on-pace { color: var(--good); }
     .row-status.behind { color: var(--bad); }
     .row-status.upcoming { color: var(--future); }
+    .quick-log { padding: 7px 9px; font-size: 12px; }
     .outputs { display: grid; gap: 8px; }
     .output {
       display: grid;
@@ -139,10 +205,14 @@
     .saved { min-height: 20px; margin: 9px 0 0; color: var(--muted); font-size: 12px; }
     @media (max-width: 760px) {
       .header, .status { grid-template-columns: 1fr; display: grid; }
+      .today-grid { grid-template-columns: 1fr; }
+      .momentum { min-width: 0; text-align: left; }
+      .days { justify-content: flex-start; }
       .score { text-align: left; }
-      .target-row { grid-template-columns: minmax(0, 1fr) 105px; }
+      .target-row { grid-template-columns: minmax(0, 1fr) 92px 72px; }
       .target-value { grid-column: 1; }
       .target-row input { grid-column: 2; grid-row: 1 / span 2; width: 100%; }
+      .target-row .quick-log { grid-column: 3; grid-row: 1 / span 2; }
       .row-status { grid-column: 1 / -1; text-align: left; }
       .two-column { grid-template-columns: 1fr; }
       .goal-row { grid-template-columns: 1fr; }
@@ -178,6 +248,28 @@
   </header>
 
   <main class="wrap">
+    <section class="today" id="todayPanel" aria-live="polite">
+      <div class="today-grid">
+        <div>
+          <div class="kicker" id="todayKicker">Today</div>
+          <h2 id="nextAction">—</h2>
+          <div class="muted" id="actionCue">—</div>
+          <div class="action-controls">
+            <button class="primary" id="actionButton" type="button">Start</button>
+            <button id="switchAction" type="button">Switch lane</button>
+            <button id="receiptButton" type="button">Copy receipt</button>
+          </div>
+        </div>
+        <div class="momentum">
+          <strong id="momentumScore">0/7</strong>
+          <span class="muted">active days</span>
+          <div class="days" id="activityDays" aria-label="Seven-day activity"></div>
+        </div>
+      </div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="weekProgress"></div></div>
+      <div class="progress-copy"><span id="progressLabel">0% of week complete</span><span id="progressRemaining">—</span></div>
+    </section>
+
     <section class="status" id="statusPanel" aria-live="polite">
       <div>
         <div class="status-label" id="statusLabel">—</div>
@@ -257,6 +349,7 @@
       </section>
     </div>
   </main>
+  <div class="toast" id="toast" role="status"></div>
 
   <script>
     "use strict";
@@ -278,6 +371,24 @@
       healthStage: 0,
       bonusStage: 0,
       histories: 0
+    };
+    const ACTION_META = {
+      cpaHours: { copy: "Open the current CPA module and work the next clean block.", add: .25, button: "Start 15:00" },
+      maccHours: { copy: "Open the next due MAcc item and work the next clean block.", add: .25, button: "Start 15:00" },
+      strengthSessions: { copy: "Begin today’s programmed strength session.", add: 1, button: "Start session" },
+      enduranceSessions: { copy: "Begin this week’s endurance session.", add: 1, button: "Start session" },
+      branmoorHours: { copy: "Open this week’s Branmoor output and move it for one clean block.", add: .25, button: "Start 15:00" },
+      youtube: { copy: "Finish and publish this week’s CPA video.", add: 1, button: "Start video" },
+      savings: { copy: "Enter the current joint savings balance.", add: 0, button: "Update balance" }
+    };
+    const DAY_FOCUS = {
+      0: ["enduranceSessions", "youtube", "cpaHours", "branmoorHours"],
+      1: ["strengthSessions", "cpaHours", "branmoorHours"],
+      2: ["cpaHours", "branmoorHours", "maccHours"],
+      3: ["strengthSessions", "maccHours", "cpaHours"],
+      4: ["maccHours", "cpaHours", "branmoorHours"],
+      5: ["strengthSessions", "branmoorHours", "cpaHours"],
+      6: ["cpaHours", "branmoorHours", "enduranceSessions", "youtube"]
     };
     const WEEK_CONTRACTS = [
       ["Tennessee exam file transmitted; FAR starts; Fall class begins", "Branmoor asset inventory", "Repeat 185/60 as 3×5 baselines", "Channel kickoff; first $1,200; bonus criteria request; visits booked"],
@@ -321,7 +432,7 @@
     ];
 
     function blankState() {
-      return { version: 2, openingSavings: 30000, totals: { ...DEFAULT_TOTALS }, weeks: {}, updated: null };
+      return { version: 2, openingSavings: 30000, totals: { ...DEFAULT_TOTALS }, weeks: {}, activity: {}, activeAction: null, updated: null };
     }
     function number(value) {
       const parsed = Number(value);
@@ -374,6 +485,8 @@
             openingSavings: number(current.openingSavings) || 30000,
             totals: { ...DEFAULT_TOTALS, ...(current.totals || {}) },
             weeks: current.weeks,
+            activity: current.activity || {},
+            activeAction: current.activeAction || null,
             updated: current.updated || null
           };
         }
@@ -510,6 +623,62 @@
       if (actual + 0.001 < due) return { className: "behind", label: "Behind " + displayShortfall(target, due - actual), behind: due - actual };
       return { className: "on-pace", label: "On pace", behind: 0 };
     }
+    function dayIso(offset) {
+      return isoFromUtc(utc(isoToday()) + offset * 86400000);
+    }
+    function markActivity(key, amount) {
+      const date = isoToday();
+      state.activity[date] ||= { actions: 0, units: {}, updated: null };
+      state.activity[date].actions += 1;
+      state.activity[date].units[key] = number(state.activity[date].units[key]) + number(amount);
+      state.activity[date].updated = new Date().toISOString();
+    }
+    function timingCue(key) {
+      const day = new Date().getDay();
+      if (key === "strengthSessions") return "Cue: before work · Monday / Wednesday / Friday";
+      if (key === "maccHours" && [3, 4].includes(day)) return "Cue: class · 6:15–9:00 PM";
+      if (key === "cpaHours" && day === 4) return "Cue: first protected WFH gap";
+      if (day === 6) return "Cue: first Saturday work block";
+      if (day === 0) return "Cue: before noon";
+      return "Cue: first transition after work";
+    }
+    function dailyCandidates() {
+      const targets = targetsFor(selectedWeek).filter(function (target) { return actualFor(target, selectedWeek) < target.target; });
+      const preferred = DAY_FOCUS[new Date().getDay()] || [];
+      return targets.sort(function (a, b) {
+        const aBehind = metricStatus(a, selectedWeek).behind > 0 ? 0 : 1;
+        const bBehind = metricStatus(b, selectedWeek).behind > 0 ? 0 : 1;
+        if (aBehind !== bBehind) return aBehind - bBehind;
+        const aPreferred = preferred.includes(a.key) ? preferred.indexOf(a.key) : 99;
+        const bPreferred = preferred.includes(b.key) ? preferred.indexOf(b.key) : 99;
+        if (aPreferred !== bPreferred) return aPreferred - bPreferred;
+        return actualFor(a, selectedWeek) / a.target - actualFor(b, selectedWeek) / b.target;
+      });
+    }
+    function activeDays() {
+      return Array.from({ length: 7 }, function (_, index) { return dayIso(index - 6); }).filter(function (date) {
+        return number(state.activity[date]?.actions) > 0;
+      }).length;
+    }
+    function weekCompletion() {
+      const targets = targetsFor(selectedWeek);
+      const targetProgress = targets.reduce(function (sum, target) {
+        return sum + Math.min(1, actualFor(target, selectedWeek) / target.target);
+      }, 0);
+      const activeOutputs = WEEK_CONTRACTS[selectedWeek - 1].map(function (text, index) { return text === "None" ? -1 : index; }).filter(function (index) { return index >= 0; });
+      const outputProgress = activeOutputs.filter(function (index) { return Boolean(weekRecord(selectedWeek).outputs[index]); }).length;
+      return Math.round(100 * (targetProgress + outputProgress) / (targets.length + activeOutputs.length));
+    }
+    function flash(message) {
+      const toast = document.getElementById("toast");
+      const panel = document.getElementById("todayPanel");
+      toast.textContent = message;
+      toast.classList.add("show");
+      panel.classList.remove("pulse");
+      requestAnimationFrame(function () { panel.classList.add("pulse"); });
+      clearTimeout(flash.timer);
+      flash.timer = setTimeout(function () { toast.classList.remove("show"); }, 1800);
+    }
     function selectedWeekFromUrl() {
       const value = Number(new URLSearchParams(location.search).get("week"));
       return value >= 1 && value <= 38 ? value : currentCampaignWeek();
@@ -517,6 +686,9 @@
 
     let state = loadState();
     let selectedWeek = selectedWeekFromUrl();
+    let actionIndex = 0;
+    let renderedAction = null;
+    let actionClock = null;
     const weekSelect = document.getElementById("weekSelect");
 
     function buildWeekSelect() {
@@ -529,10 +701,25 @@
     }
     function setWeek(week) {
       selectedWeek = Math.max(1, Math.min(38, week));
+      actionIndex = 0;
       const url = new URL(location.href);
       url.searchParams.set("week", selectedWeek);
       history.replaceState(null, "", url);
       renderWeek();
+    }
+    function recordMetric(key, amount, message) {
+      const target = targetsFor(selectedWeek).find(function (item) { return item.key === key; });
+      if (!target) return;
+      const next = Math.min(target.target, actualFor(target, selectedWeek) + amount);
+      weekRecord(selectedWeek).actuals[key] = Math.round(next * 100) / 100;
+      markActivity(key, amount);
+      state.activeAction = null;
+      actionIndex = 0;
+      save();
+      renderTargets();
+      updateStatus();
+      updateGoals();
+      flash(message);
     }
     function createTargetRow(target) {
       const row = document.createElement("div");
@@ -550,6 +737,7 @@
       input.min = "0";
       input.step = target.key === "savings" ? "1" : target.key.includes("Sessions") || target.key === "youtube" ? "1" : ".25";
       const stored = weekRecord(selectedWeek).actuals[target.key];
+      let startingValue = actualFor(target, selectedWeek);
       input.value = stored === undefined ? "" : stored;
       if (target.key === "savings") input.placeholder = String(latestSavings(selectedWeek - 1));
       input.addEventListener("input", function () {
@@ -558,10 +746,31 @@
         updateStatus();
         updateGoals();
       });
+      input.addEventListener("change", function () {
+        if (relation(selectedWeek) === "current" && number(input.value) > startingValue) {
+          markActivity(target.key, number(input.value) - startingValue);
+          save();
+          renderToday();
+        }
+        startingValue = number(input.value);
+      });
+      const quick = document.createElement("button");
+      quick.className = "quick-log";
+      quick.type = "button";
+      if (target.key === "savings") {
+        quick.textContent = "Update";
+        quick.addEventListener("click", function () { input.focus(); input.select(); });
+      } else {
+        const amount = ACTION_META[target.key].add;
+        quick.textContent = amount === .25 ? "+15m" : "+1";
+        quick.addEventListener("click", function () {
+          recordMetric(target.key, amount, target.label + " recorded");
+        });
+      }
       const status = document.createElement("div");
       status.className = "row-status";
       status.dataset.targetStatus = target.key;
-      row.append(label, targetValue, input, status);
+      row.append(label, targetValue, input, quick, status);
       return row;
     }
     function renderTargets() {
@@ -587,9 +796,11 @@
         label.classList.toggle("done", box.checked);
         box.addEventListener("input", function () {
           weekRecord(selectedWeek).outputs[index] = box.checked;
+          if (box.checked && relation(selectedWeek) === "current") markActivity("output-" + index, 1);
           label.classList.toggle("done", box.checked);
           save();
           updateStatus();
+          if (box.checked) flash(OUTPUT_LABELS[index] + " output closed");
         });
         label.append(box, category, copy);
         holder.append(label);
@@ -601,6 +812,171 @@
       const done = activeIndexes.filter(function (index) { return Boolean(weekRecord(selectedWeek).outputs[index]); }).length;
       const due = relation(selectedWeek) === "past" ? active : relation(selectedWeek) === "future" ? 0 : Math.floor(active * completedDays(selectedWeek) / 7);
       return { active, done, due, behind: Math.max(0, due - done) };
+    }
+    function availableActions() {
+      const metricActions = dailyCandidates().map(function (target) {
+        return {
+          kind: "metric",
+          key: target.key,
+          target,
+          copy: ACTION_META[target.key].copy,
+          button: ACTION_META[target.key].button
+        };
+      });
+      if (metricActions.length) return metricActions;
+      return WEEK_CONTRACTS[selectedWeek - 1].map(function (copy, index) {
+        return { kind: "output", index, copy, button: "Start output" };
+      }).filter(function (action) {
+        return action.copy !== "None" && !weekRecord(selectedWeek).outputs[action.index];
+      });
+    }
+    function actionFromState(actions) {
+      const active = state.activeAction;
+      if (!active || active.date !== isoToday() || active.week !== selectedWeek) return null;
+      return actions.find(function (action) {
+        return action.kind === active.kind && (action.kind === "metric" ? action.key === active.key : action.index === active.index);
+      }) || null;
+    }
+    function renderActivityDays() {
+      const holder = document.getElementById("activityDays");
+      holder.replaceChildren();
+      for (let offset = -6; offset <= 0; offset += 1) {
+        const date = dayIso(offset);
+        const item = document.createElement("span");
+        item.className = "day";
+        if (number(state.activity[date]?.actions) > 0) item.classList.add("active");
+        if (offset === 0) item.classList.add("today");
+        item.title = date;
+        const name = document.createElement("span");
+        name.textContent = new Date(date + "T12:00:00").toLocaleDateString(undefined, { weekday: "narrow" });
+        const dot = document.createElement("span");
+        dot.className = "day-dot";
+        item.append(name, dot);
+        holder.append(item);
+      }
+    }
+    function renderToday() {
+      const panel = document.getElementById("todayPanel");
+      const isCurrent = relation(selectedWeek) === "current";
+      panel.hidden = !isCurrent;
+      if (!isCurrent) {
+        clearInterval(actionClock);
+        actionClock = null;
+        return;
+      }
+      const todayActive = number(state.activity[isoToday()]?.actions) > 0;
+      panel.classList.toggle("secured", todayActive);
+      document.getElementById("todayKicker").textContent = "Today · " + new Date().toLocaleDateString(undefined, { weekday: "long" }) + (todayActive ? " · secured" : "");
+      document.getElementById("momentumScore").textContent = activeDays() + "/7";
+      renderActivityDays();
+
+      const progress = weekCompletion();
+      document.getElementById("weekProgress").style.width = progress + "%";
+      document.getElementById("progressLabel").textContent = progress + "% of week complete";
+      document.getElementById("progressRemaining").textContent = progress === 100 ? "Closed" : (100 - progress) + "% left";
+
+      const actions = availableActions();
+      const activeAction = actionFromState(actions);
+      renderedAction = activeAction || actions[actionIndex % Math.max(1, actions.length)] || null;
+      const actionButton = document.getElementById("actionButton");
+      const switchButton = document.getElementById("switchAction");
+      if (!renderedAction) {
+        document.getElementById("nextAction").textContent = "All weekly work is closed.";
+        document.getElementById("actionCue").textContent = "No open targets or outputs.";
+        actionButton.textContent = "Week complete";
+        actionButton.disabled = true;
+        switchButton.disabled = true;
+        clearInterval(actionClock);
+        actionClock = null;
+        return;
+      }
+
+      document.getElementById("nextAction").textContent = renderedAction.copy;
+      document.getElementById("actionCue").textContent = renderedAction.kind === "metric"
+        ? renderedAction.target.label + " · " + timingCue(renderedAction.key)
+        : OUTPUT_LABELS[renderedAction.index] + " · closes one weekly output";
+      actionButton.disabled = false;
+      switchButton.disabled = actions.length < 2 && !activeAction;
+      switchButton.textContent = activeAction ? "Cancel" : "Switch lane";
+
+      if (activeAction) {
+        const saved = state.activeAction;
+        if (saved.duration) {
+          const remaining = Math.max(0, saved.duration - (Date.now() - saved.startedAt));
+          if (remaining > 0) {
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            actionButton.textContent = minutes + ":" + String(seconds).padStart(2, "0");
+            actionButton.disabled = true;
+            if (!actionClock) actionClock = setInterval(renderToday, 1000);
+          } else {
+            actionButton.textContent = "Log +15 min";
+            clearInterval(actionClock);
+            actionClock = null;
+          }
+        } else {
+          actionButton.textContent = renderedAction.kind === "output" ? "Mark output done" : renderedAction.key === "youtube" ? "Mark video done" : "Mark session done";
+        }
+      } else {
+        actionButton.textContent = renderedAction.button;
+        clearInterval(actionClock);
+        actionClock = null;
+      }
+    }
+    function handleAction() {
+      if (!renderedAction) return;
+      if (renderedAction.kind === "metric" && renderedAction.key === "savings") {
+        const input = document.getElementById("actual-savings");
+        input.focus();
+        input.select();
+        return;
+      }
+      const active = actionFromState(availableActions());
+      if (!active) {
+        state.activeAction = {
+          date: isoToday(),
+          week: selectedWeek,
+          kind: renderedAction.kind,
+          key: renderedAction.key,
+          index: renderedAction.index,
+          startedAt: Date.now(),
+          duration: renderedAction.kind === "metric" && ACTION_META[renderedAction.key].add === .25 ? 15 * 60 * 1000 : 0
+        };
+        save();
+        renderToday();
+        return;
+      }
+      if (state.activeAction.duration && Date.now() - state.activeAction.startedAt < state.activeAction.duration) return;
+      if (active.kind === "metric") {
+        recordMetric(active.key, ACTION_META[active.key].add, active.target.label + " recorded");
+      } else {
+        weekRecord(selectedWeek).outputs[active.index] = true;
+        markActivity("output-" + active.index, 1);
+        state.activeAction = null;
+        save();
+        renderOutputs();
+        updateStatus();
+        flash(OUTPUT_LABELS[active.index] + " output closed");
+      }
+    }
+    function handleSwitch() {
+      if (actionFromState(availableActions())) {
+        state.activeAction = null;
+        save();
+      } else {
+        actionIndex += 1;
+      }
+      renderToday();
+    }
+    async function copyReceipt() {
+      const gaps = document.getElementById("shortfalls").children.length;
+      const receipt = "Critical Path " + weekKey(selectedWeek) + " · " + weekCompletion() + "% complete · " + activeDays() + "/7 active days · " + (gaps ? gaps + " pace gap" + (gaps === 1 ? "" : "s") : "on pace");
+      try {
+        await navigator.clipboard.writeText(receipt);
+        flash("Receipt copied");
+      } catch (_) {
+        flash("Clipboard unavailable");
+      }
     }
     function updateStatus() {
       const targets = targetsFor(selectedWeek);
@@ -638,6 +1014,7 @@
         item.textContent = text;
         list.append(item);
       });
+      renderToday();
     }
     function goalResults() {
       const totals = state.totals;
@@ -705,6 +1082,9 @@
     document.getElementById("previousWeek").addEventListener("click", function () { setWeek(selectedWeek - 1); });
     document.getElementById("nextWeek").addEventListener("click", function () { setWeek(selectedWeek + 1); });
     document.getElementById("currentWeek").addEventListener("click", function () { setWeek(currentCampaignWeek()); });
+    document.getElementById("actionButton").addEventListener("click", handleAction);
+    document.getElementById("switchAction").addEventListener("click", handleSwitch);
+    document.getElementById("receiptButton").addEventListener("click", copyReceipt);
     document.getElementById("weekNotes").addEventListener("input", function (event) {
       weekRecord(selectedWeek).note = event.target.value;
       save();
@@ -728,6 +1108,8 @@
           openingSavings: number(parsed.openingSavings) || 30000,
           totals: { ...DEFAULT_TOTALS, ...(parsed.totals || {}) },
           weeks: parsed.weeks || {},
+          activity: parsed.activity || {},
+          activeAction: parsed.activeAction || null,
           updated: parsed.updated || null
         };
         save();
@@ -744,7 +1126,9 @@
         savings: savingsFloor(START) === state.openingSavings && savingsFloor(FREEZE) === 75000,
         targets: targetsFor(1).length === 7 && !targetsFor(37).some(function (target) { return target.key === "branmoorHours"; }),
         weeklyOnly: !document.querySelector("input[type=date]") && document.getElementById("weekSelect").options.length === 38,
-        concise: document.querySelectorAll(".command, .law, .dependencies").length === 0
+        concise: document.querySelectorAll(".command, .law, .dependencies").length === 0,
+        behaviorLoop: Boolean(document.getElementById("actionButton") && document.getElementById("activityDays") && document.getElementById("weekProgress")),
+        finite: !document.querySelector("[data-infinite-scroll], video[autoplay]")
       };
       if (Object.values(checks).some(function (value) { return !value; })) throw new Error(JSON.stringify(checks));
       return checks;
