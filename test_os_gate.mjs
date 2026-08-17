@@ -49,6 +49,15 @@ const originlessLogin = await onRequest({
 });
 assert.equal(originlessLogin.status, 303);
 
+const crossSiteLogin = await onRequest({
+  request: new Request("https://josephbsmith.com/os/login", {
+    method: "POST",
+    headers: { Origin: "https://example.com", "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ password: "correct-horse" }),
+  }), env, next,
+});
+assert.equal(crossSiteLogin.status, 303);
+
 const crossSite = await onRequest({
   request: new Request("https://josephbsmith.com/os/api/clock-in", {
     method: "POST", headers: { Cookie: cookie, Origin: "https://evil.example" }, body: "{}",

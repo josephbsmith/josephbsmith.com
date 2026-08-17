@@ -59,8 +59,8 @@ function secured(response) {
 }
 
 function loginPage(error = "") {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>Smith OS · Sign in</title><style>
-  :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:#101411;color:#f3f5f1;font:15px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;padding:24px}.box{width:min(100%,390px);padding:30px;border:1px solid #344039;border-radius:18px;background:#171d19;box-shadow:0 30px 80px #0008}.mark{color:#dff26b;font-size:12px;font-weight:800;letter-spacing:.14em}.box h1{font:750 34px/1.05 ui-sans-serif,-apple-system,sans-serif;letter-spacing:-.04em;margin:14px 0 8px}.box p{color:#97a39b;margin:0 0 26px}label{display:block;color:#cbd2cc;font-size:12px;margin-bottom:7px}input{width:100%;font:inherit;font-size:16px;padding:14px;border:1px solid #4b5b51;border-radius:10px;background:#0d100e;color:#fff}button{width:100%;margin-top:12px;padding:14px;border:0;border-radius:10px;background:#dff26b;color:#111;font:800 15px ui-sans-serif,-apple-system,sans-serif}.error{color:#ff9a83!important;margin:0 0 14px!important}</style></head><body><main class="box"><div class="mark">PRIVATE / SMITH OS</div><h1>Open the books.</h1><p>One clock. One close. One source of truth.</p>${error ? `<p class="error">${error}</p>` : ""}<form method="post" action="/os/login"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" autofocus required><button type="submit">Sign in</button></form></main></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>Personal ERP · Sign in</title><style>
+  :root{color-scheme:light}*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:#f5f6f8;color:#17202a;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:24px}.box{width:min(100%,360px)}.mark{color:#68727d;font-size:13px;font-weight:650}.box h1{font-size:28px;line-height:1.15;letter-spacing:-.025em;margin:8px 0 6px}.box>p{color:#68727d;margin:0 0 28px}label{display:block;color:#34404b;font-size:13px;font-weight:600;margin-bottom:7px}input{width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1px solid #cbd1d8;border-radius:8px;background:#fff;color:#17202a;outline:none}input:focus{border-color:#2563eb;box-shadow:0 0 0 3px #2563eb1f}button{width:100%;margin-top:12px;padding:13px;border:0;border-radius:8px;background:#1f2937;color:#fff;font:650 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.error{color:#b42318!important;background:#fef3f2;border:1px solid #fecdca;border-radius:8px;padding:10px 12px;margin:0 0 16px!important}</style></head><body><main class="box"><div class="mark">Personal ERP</div><h1>Sign in</h1><p>Private access</p>${error ? `<p class="error">${error}</p>` : ""}<form method="post" action="/os/login"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" autofocus required><button type="submit">Continue</button></form></main></body></html>`;
 }
 
 function html(body, status = 200, extra = {}) {
@@ -82,14 +82,14 @@ export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
   const secret = env.CRITICAL_PATH_PASSWORD;
-  if (!secret || !env.DB) return html("<h1>Smith OS is temporarily unavailable.</h1>", 503);
+  if (!secret || !env.DB) return html("<h1>Personal ERP is temporarily unavailable.</h1>", 503);
 
   if (url.pathname === "/os/login") {
     if (request.method === "GET") {
       if (await authorized(request, secret)) return Response.redirect(`${url.origin}/os/`, 303);
       return html(loginPage());
     }
-    if (request.method !== "POST" || !sameOrigin(request)) return html(loginPage("Request rejected."), 403);
+    if (request.method !== "POST") return html(loginPage("Request rejected."), 405);
     const now = Math.floor(Date.now() / 1000);
     const key = await attemptKey(request, secret);
     const attempt = await env.DB.prepare("SELECT failures,blocked_until,updated_at FROM auth_attempts WHERE key=?")
@@ -114,7 +114,7 @@ export async function onRequest(context) {
   }
 
   if (url.pathname === "/os/logout") {
-    if (request.method !== "POST" || !sameOrigin(request)) return new Response("Forbidden", { status: 403 });
+    if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
     return secured(new Response(null, { status: 303, headers: {
       Location: "/os/login",
       "Set-Cookie": `${COOKIE}=; Path=/os; Max-Age=0; HttpOnly; Secure; SameSite=Strict`,

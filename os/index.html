@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#101411">
+  <meta name="theme-color" content="#f5f6f8">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Smith OS">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Personal ERP">
   <link rel="manifest" href="/os/site.webmanifest">
   <link rel="stylesheet" href="/os/styles.css">
-  <title>Smith OS</title>
+  <title>Personal ERP</title>
 </head>
 <body>
   <header class="topbar">
-    <div><span class="mark">SMITH OS</span><span id="week-chip" class="week-chip">W—</span></div>
-    <form action="/os/logout" method="post"><button class="text-button" type="submit">Lock</button></form>
+    <div><span class="mark">Personal ERP</span><span id="week-chip" class="week-chip">Week —</span></div>
+    <form action="/os/logout" method="post"><button class="text-button" type="submit">Sign out</button></form>
   </header>
   <main id="app" aria-live="polite">
-    <section class="loading"><span></span><p>Opening the books</p></section>
+    <section class="loading"><span></span><p>Loading</p></section>
   </main>
-  <nav class="dock" aria-label="OS sections">
-    <button data-view="now" class="active"><b>◉</b><span>Now</span></button>
-    <button data-view="goals"><b>⌁</b><span>Goals</span></button>
-    <button data-view="money"><b>$</b><span>Money</span></button>
-    <button data-view="close"><b>✓</b><span>Close</span></button>
+  <nav class="dock" aria-label="Sections">
+    <button data-view="now" class="active"><span>Today</span></button>
+    <button data-view="goals"><span>Goals</span></button>
+    <button data-view="money"><span>Finances</span></button>
+    <button data-view="close"><span>Close</span></button>
   </nav>
   <dialog id="dialog"><button class="dialog-x" id="dialog-close" aria-label="Close">×</button><div id="dialog-body"></div></dialog>
   <div id="toast" role="status"></div>
