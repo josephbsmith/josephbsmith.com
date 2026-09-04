@@ -2,157 +2,98 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>F1 Pit Wall - Joseph B. Smith</title>
-<meta name="description" content="A local second screen for a Formula 1 session: gaps, tyre age, pace trends, stint history, and a transparent pit-rejoin estimate. Replay of a real race below.">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>F1 Pit Wall — Joseph B. Smith</title>
+<meta name="description" content="A local Formula 1 strategy screen with running order, gaps, tyre life, pace, race control, and a transparent pit-rejoin estimate.">
 <meta property="og:title" content="F1 Pit Wall">
-<meta property="og:description" content="A local second screen for a Formula 1 session. Replay of a real race, one Python file, OpenF1 data.">
+<meta property="og:description" content="See the whole race: live timing, tyre life, pace, and pit rejoin windows in one local screen.">
 <meta property="og:image" content="https://josephbsmith.com/og-card.png">
 <link rel="canonical" href="https://josephbsmith.com/pit-wall">
-<meta name="theme-color" content="#0f0e10">
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230a0a24"/><rect x="5" y="4" width="6" height="1" fill="%23ffd27a"/><rect x="4" y="5" width="8" height="2" fill="%23ffd27a"/><rect x="4" y="7" width="8" height="1" fill="%23ff9a3c"/><rect x="5" y="9" width="6" height="1" fill="%23ff9a3c"/><rect x="4" y="11" width="8" height="1" fill="%23fb923c"/><rect x="2" y="13" width="12" height="1" fill="%23452158"/></svg>'>
+<meta name="theme-color" content="#e10600">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%23111217"/><path d="M2 5h9l3 3-3 3H2z" fill="%23e10600"/><path d="M4 7h6v2H4z" fill="white"/></svg>'>
 <style>
-  :root {
-    --bg: #0f0e10; --fg: #e9e7e4; --muted: #98938c; --rule: #2a272b;
-    --accent: #fb923c;
-    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  }
-  * { box-sizing: border-box; }
-  html { background: var(--bg); color-scheme: dark; }
-  body {
-    margin: 0; background: var(--bg); color: var(--fg);
-    font: 17px/1.65 Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
-    -webkit-font-smoothing: antialiased;
-    padding: 6vh 24px 12vh;
-    display: flex; flex-direction: column; align-items: center;
-  }
-  main { width: 100%; max-width: 860px; }
-  .back {
-    display: inline-block; font: 600 12px var(--mono); letter-spacing: .1em;
-    text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 3rem;
-  }
-  .back:hover { color: var(--accent); }
-  h1 { font-size: 2.6rem; margin: 0 0 .5rem; font-weight: 700; }
-  .tag { color: var(--muted); font: 500 13px var(--mono); letter-spacing: .05em; margin: 0 0 2rem; }
-  .lede { font-size: 1.15rem; margin: 0 0 1.1rem; max-width: 62ch; }
-  a.link { color: var(--accent); text-decoration: none; }
-  a.link:hover { text-decoration: underline; }
-  h2 { font-size: 1.05rem; font-family: var(--mono); font-weight: 600; letter-spacing: .12em;
-       text-transform: uppercase; color: var(--muted); margin: 4rem 0 1.4rem;
-       padding-top: 1.4rem; border-top: 1px solid var(--rule); }
-  pre {
-    background: #17161a; border: 1px solid var(--rule); border-radius: 8px;
-    padding: 18px 20px; overflow-x: auto;
-    font: 13px/1.7 var(--mono); color: #cfcbc5;
-  }
-  pre .c { color: var(--muted); }
-  p.fine { color: var(--muted); font-size: .95rem; }
-
-  /* the wall */
-  #meta { font: 12px var(--mono); color: var(--muted); letter-spacing: .03em; }
-  #transport { display: flex; align-items: center; gap: 12px; margin: .8rem 0 1rem; }
-  #transport button {
-    font: 600 12px var(--mono); letter-spacing: .1em; text-transform: uppercase;
-    background: var(--accent); color: var(--bg); border: 0; border-radius: 6px;
-    padding: 8px 16px; cursor: pointer;
-  }
-  #transport input[type=range] { flex: 1; accent-color: var(--accent); }
-  #tick { font: 12px var(--mono); color: var(--muted); min-width: 52px; text-align: right; }
-  #weather { font: 12px var(--mono); color: var(--muted); margin-bottom: .6rem; }
-  .wall { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; }
-  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: .88rem; }
-  th, td { padding: .5rem .65rem; border-bottom: 1px solid var(--rule); text-align: left; white-space: nowrap; }
-  th { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-  tr:last-child td { border-bottom: 0; }
-  .team { border-left: 4px solid; padding-left: .45rem; font-weight: 600; }
-  .spark { color: var(--accent); vertical-align: middle; }
-  .stintbar { display: flex; width: 84px; height: 9px; border-radius: 2px; overflow: hidden; background: #1c1b1e; }
-  .stintbar span { display: block; }
-  #messages { font-size: .95rem; padding-left: 1.2rem; }
-  #messages li { margin: .3rem 0; }
+:root{--red:#e10600;--ink:#111217;--black:#090a0d;--panel:#1a1c22;--panel2:#22252d;--line:#343741;--white:#f7f4ef;--muted:#999da8;--green:#b6f238;--cyan:#36c5f0;--purple:#c58cff;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:Arial,Helvetica,sans-serif}
+*{box-sizing:border-box}html{background:var(--ink);color-scheme:dark;scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--white);font-family:var(--sans);min-height:100vh}.topbar{height:76px;background:var(--red);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,64px);position:relative;overflow:hidden}.topbar:after{content:"";position:absolute;inset:0 0 0 55%;background:radial-gradient(circle,rgba(0,0,0,.3) 1.2px,transparent 1.5px);background-size:8px 8px;transform:skewX(-18deg);transform-origin:bottom}.brand,.nav{position:relative;z-index:1}.brand{display:flex;align-items:center;gap:13px;color:#fff;text-decoration:none}.brand-mark{width:42px;height:23px;border-top:7px solid #fff;border-right:7px solid #fff;transform:skewX(-24deg)}.brand strong{font-size:18px;font-style:italic;letter-spacing:-.03em}.nav{display:flex;align-items:center;gap:24px}.nav a{color:#fff;text-decoration:none;font:800 10px var(--mono);letter-spacing:.1em;text-transform:uppercase}.nav a:hover{text-decoration:underline;text-underline-offset:4px}
+.hero{position:relative;overflow:hidden;min-height:520px;display:grid;align-items:center;background:var(--black)}.hero:before{content:"";position:absolute;width:min(57vw,830px);aspect-ratio:1;right:-8%;top:-29%;background:radial-gradient(circle,var(--red) 1.5px,transparent 1.9px);background-size:12px 12px;transform:skewX(-12deg);mask-image:linear-gradient(125deg,#000 18%,transparent 72%)}.hero:after{content:"";position:absolute;right:10%;bottom:12%;width:38%;height:9px;background:var(--red);transform:skewX(-35deg)}.hero-inner{width:min(1320px,100%);margin:auto;padding:70px clamp(20px,5vw,72px) 86px;position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.6fr);gap:70px;align-items:end}.kicker{color:var(--red);font:900 11px var(--mono);letter-spacing:.18em;text-transform:uppercase;margin-bottom:17px}.hero h1{margin:0;max-width:900px;font:900 italic clamp(56px,9vw,126px)/.77 var(--sans);letter-spacing:-.08em;text-transform:uppercase}.hero h1 span{display:block;color:transparent;-webkit-text-stroke:1.5px var(--white);padding-left:.08em}.hero-copy p{max-width:620px;margin:28px 0 0;color:#c4c5ca;font:600 clamp(15px,1.6vw,19px)/1.45 var(--sans)}.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}.button{display:inline-flex;align-items:center;min-height:43px;padding:0 18px;background:var(--red);color:#fff;text-decoration:none;font:900 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;clip-path:polygon(0 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%)}.button.secondary{background:#2b2e36}.button:hover{background:#fff;color:var(--black)}.hero-readout{border-left:1px solid #4a4d55;padding-left:26px}.hero-readout small{display:block;color:var(--muted);font:800 9px var(--mono);letter-spacing:.15em;text-transform:uppercase}.hero-readout strong{display:block;font:900 italic 44px var(--sans);margin:7px 0 21px}.hero-readout dl{margin:0}.hero-readout div{display:flex;justify-content:space-between;gap:20px;padding:11px 0;border-top:1px solid #32343b;font:700 10px var(--mono);letter-spacing:.05em;text-transform:uppercase}.hero-readout dt{color:var(--muted)}.hero-readout dd{margin:0;color:#fff}
+.race-section{width:min(1480px,100%);margin:auto;padding:clamp(34px,5vw,72px) clamp(10px,3vw,42px)}.section-lead{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}.eyebrow{display:block;color:var(--red);font:800 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;margin-bottom:7px}.section-lead h2{margin:0;font:900 italic clamp(34px,5vw,64px)/.88 var(--sans);letter-spacing:-.065em;text-transform:uppercase}.section-lead h2 span{color:transparent;-webkit-text-stroke:1px var(--white)}.meta{margin:0;color:var(--muted);font:600 10px/1.5 var(--mono);letter-spacing:.06em;text-align:right;text-transform:uppercase}
+.session-strip{min-height:74px;background:var(--red);display:grid;grid-template-columns:minmax(220px,1.4fr) repeat(3,minmax(110px,.7fr));align-items:stretch;clip-path:polygon(0 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%)}.session-strip>div{padding:15px 20px;border-right:1px solid rgba(255,255,255,.22)}.session-strip small{display:block;font:700 9px var(--mono);letter-spacing:.16em;opacity:.72;text-transform:uppercase;margin-bottom:7px}.session-strip strong{display:block;font:900 18px/1 var(--sans);letter-spacing:-.025em;text-transform:uppercase}.session-strip .race-name strong{font-size:22px;font-style:italic}
+#transport{display:flex;align-items:center;gap:16px;background:#0b0c0f;border:1px solid var(--line);border-top:0;padding:12px 16px}#play{width:38px;height:34px;border:0;background:var(--white);color:var(--ink);font:900 15px var(--sans);cursor:pointer;clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%)}#play:hover{background:var(--red);color:#fff}#scrub{flex:1;accent-color:var(--red)}#tick{min-width:112px;text-align:right;color:var(--muted);font:700 10px var(--mono);letter-spacing:.08em}
+.timing-grid{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(290px,.8fr);gap:12px;margin-top:12px}.panel{background:var(--panel);border-top:3px solid var(--red);min-width:0}.panel-title{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--line);font:800 11px var(--mono);letter-spacing:.13em;text-transform:uppercase}.panel-title span{color:var(--muted);font-size:9px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:850px;font-variant-numeric:tabular-nums}th{height:34px;padding:0 10px;background:#0d0e12;color:#848895;text-align:left;font:700 9px var(--mono);letter-spacing:.12em;text-transform:uppercase}td{height:56px;padding:6px 10px;border-top:1px solid var(--line);font:700 12px var(--mono);white-space:nowrap}tbody tr{background:var(--panel)}tbody tr:hover{background:var(--panel2)}.pos{width:44px;color:#fff;font:900 italic 20px var(--sans);text-align:center}.driver-cell{display:flex;align-items:center;gap:10px;border-left:4px solid;padding-left:10px}.driver-no{color:var(--muted);font-size:9px}.driver-name{display:block;color:#fff;font:900 italic 16px var(--sans);letter-spacing:-.025em}.driver-team{display:block;max-width:130px;overflow:hidden;text-overflow:ellipsis;color:var(--muted);font:600 8px var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}.leader{color:var(--purple)}.tyre{display:inline-flex;align-items:center;gap:6px}.tyre-dot{width:18px;height:18px;border:3px solid var(--tyre);border-radius:50%;display:inline-grid;place-items:center;color:var(--tyre);font:900 8px var(--sans)}.tyre-age{color:var(--muted);font-size:9px}.pace{color:var(--green)}.spark{color:var(--green);vertical-align:middle}.spark-grid{stroke:#444852;stroke-width:.7}.rejoin{font:900 15px var(--sans)}.loss{display:block;color:var(--red);font:700 8px var(--mono);letter-spacing:.04em;margin-top:2px}.hold{color:var(--muted)}.stint-history{display:flex;gap:4px}.stint{width:18px;height:18px;border:2px solid var(--tyre);border-radius:50%;display:grid;place-items:center;color:var(--tyre);font:800 7px var(--sans)}
+.side{display:grid;align-content:start;gap:12px}.weather-grid{display:grid;grid-template-columns:1fr 1fr}.weather-stat{min-height:78px;padding:14px 15px;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}.weather-stat:nth-child(even){border-right:0}.weather-stat:nth-last-child(-n+2){border-bottom:0}.weather-stat small{display:block;color:var(--muted);font:700 8px var(--mono);letter-spacing:.13em;text-transform:uppercase;margin-bottom:8px}.weather-stat strong{font:900 20px var(--mono)}.weather-stat .unit{color:var(--muted);font-size:10px;margin-left:3px}.messages{list-style:none;margin:0;padding:0;max-height:510px;overflow:auto}.messages li{display:grid;grid-template-columns:44px 1fr;gap:9px;padding:12px 14px;border-top:1px solid var(--line);font:600 10px/1.45 var(--mono)}.messages li:first-child{border-top:0}.lap-tag{align-self:start;background:var(--red);color:white;padding:4px 5px;text-align:center;font-size:8px;font-weight:800}.message-type{display:block;color:var(--muted);font-size:8px;letter-spacing:.1em;margin-bottom:3px;text-transform:uppercase}.empty{padding:28px 16px!important;color:var(--muted)}.legend{display:flex;flex-wrap:wrap;gap:16px;padding:16px 2px;color:var(--muted);font:600 9px var(--mono);letter-spacing:.06em;text-transform:uppercase}.legend b{color:var(--white)}.legend i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:6px}.error{color:#fff;background:var(--red);padding:10px 14px}
+.details{background:var(--white);color:var(--black);padding:clamp(55px,8vw,100px) clamp(20px,5vw,72px)}.details-inner{width:min(1180px,100%);margin:auto;display:grid;grid-template-columns:minmax(280px,.75fr) minmax(0,1.25fr);gap:clamp(45px,8vw,110px)}.details h2{margin:0;font:900 italic clamp(38px,6vw,72px)/.86 var(--sans);letter-spacing:-.065em;text-transform:uppercase}.details h2 span{color:var(--red)}.details-copy{display:grid;grid-template-columns:1fr 1fr;gap:40px}.details h3{margin:0 0 16px;border-top:5px solid var(--black);padding-top:12px;font:900 italic 17px var(--sans);text-transform:uppercase}.details p,.details li{font:600 14px/1.55 var(--sans)}.details ul{padding-left:18px}.details code{font:700 12px/1.7 var(--mono)}.command{grid-column:1/-1;background:var(--black);color:#fff;padding:18px 20px;overflow:auto;clip-path:polygon(0 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%)}.command .comment{color:var(--muted)}.site-footer{background:var(--red);color:#fff;padding:28px clamp(20px,5vw,72px);display:flex;justify-content:space-between;gap:20px;align-items:center;font:700 9px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase}.site-footer a{color:#fff}.site-footer span:last-child{text-align:right}
+@media(max-width:980px){.hero-inner{grid-template-columns:1fr}.hero-readout{display:none}.timing-grid{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.messages{max-height:320px}.details-inner{grid-template-columns:1fr}}
+@media(max-width:700px){.topbar{height:60px}.nav a:first-child{display:none}.hero{min-height:480px}.hero-inner{padding:60px 18px 70px}.hero h1{font-size:58px}.race-section{padding:34px 10px}.section-lead{align-items:start}.section-lead h2{font-size:38px}.meta{display:none}.session-strip{grid-template-columns:1.5fr 1fr}.session-strip>div:nth-child(3),.session-strip>div:nth-child(4){display:none}.session-strip .race-name strong{font-size:17px}#transport{gap:9px;padding:10px}#tick{min-width:74px;font-size:8px}.side{grid-template-columns:1fr}table{min-width:0;table-layout:fixed}th,td{padding-left:4px;padding-right:4px}.optional{display:none}th:first-child{width:36px}.pos{width:36px;font-size:16px}.driver-col{width:76px}.driver-cell{gap:4px;padding-left:6px}.driver-name{font-size:13px}.driver-team,.driver-no{display:none}.gap-col{width:64px}.tyre-col{width:58px}.pace-col{width:72px}.rejoin-col{width:54px}.tyre-age{font-size:8px}.legend{gap:10px}.messages{max-height:none}.details{padding:55px 18px}.details-copy{grid-template-columns:1fr}.site-footer{align-items:start;flex-direction:column}.site-footer span:last-child{text-align:left}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
+<header class="topbar"><a class="brand" href="/tools"><span class="brand-mark" aria-hidden="true"></span><strong>PIT WALL</strong></a><nav class="nav" aria-label="Page"><a href="#timing">Timing replay</a><a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Source ↗</a></nav></header>
 <main>
-  <a class="back" href="/tools">← tools</a>
-
-  <h1>F1 Pit Wall</h1>
-  <p class="tag">The strategic state of a race, on your own machine</p>
-
-  <p class="lede">
-    Television coverage follows the battle; the pit wall follows the race. This tool keeps
-    the whole strategic picture in one local browser tab - running order, gaps, tyre
-    compound and age, stint history, five-lap pace trends, and what position a driver
-    would rejoin in after a stop, computed transparently as gap plus pit loss.
-  </p>
-  <p class="lede small" style="color:var(--muted); font-size:1.02rem">
-    Below is the actual dashboard replaying the 2025 Monaco Grand Prix from OpenF1 data,
-    one state every two minutes. Press play, or scrub.
-  </p>
-
-  <h2>The wall</h2>
-  <p id="meta">Loading replay…</p>
-  <div id="transport">
-    <button id="play">Play</button>
-    <input id="scrub" type="range" min="0" max="0" value="0" aria-label="Replay position">
-    <span id="tick"></span>
-  </div>
-  <div id="weather"></div>
-  <div class="wall">
-  <table>
-    <thead><tr><th>P</th><th>Driver</th><th>Gap</th><th>Int</th><th>Tyre</th><th>Age</th><th>Stints</th><th>Pace trend</th><th>Last-3</th><th>Rejoin</th></tr></thead>
-    <tbody id="board"></tbody>
-  </table>
-  </div>
-  <h2>Race control</h2>
-  <ul id="messages"></ul>
-
-  <h2>Run it yourself</h2>
-  <pre><span class="c"># live session (or any historical one), one file, standard library only</span>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy"><div class="kicker">OpenF1 data / local strategy screen</div><h1>Call the <span>whole race.</span></h1><p>Broadcasts follow the fight at the front. Pit Wall keeps every driver, gap, tyre, pace trend, and estimated pit rejoin on one screen.</p><div class="hero-actions"><a class="button" href="#timing">Open race replay ↓</a><a class="button secondary" href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Get the code ↗</a></div></div>
+      <aside class="hero-readout" aria-label="Project summary"><small>Strategy channel</small><strong>01</strong><dl><div><dt>Runtime</dt><dd>1 Python file</dd></div><div><dt>Refresh</dt><dd>10 seconds</dd></div><div><dt>Video</dt><dd>None</dd></div><div><dt>Storage</dt><dd>None</dd></div></dl></aside>
+    </div>
+  </section>
+  <section class="race-section" id="timing">
+    <div class="section-lead"><div><span class="eyebrow">2025 Monaco Grand Prix</span><h2>Race <span>replay.</span></h2></div><p class="meta" id="meta" aria-live="polite">Loading archived timing…</p></div>
+    <section class="session-strip" aria-label="Session status"><div class="race-name"><small>Session</small><strong>Monaco GP</strong></div><div><small>Race status</small><strong id="lapNow">—</strong></div><div><small>Pit loss model</small><strong id="pitLoss">—</strong></div><div><small>Data mode</small><strong>REPLAY</strong></div></section>
+    <div id="transport"><button id="play" aria-label="Play replay">▶</button><input id="scrub" type="range" min="0" max="0" value="0" aria-label="Replay position"><span id="tick"></span></div>
+    <div class="timing-grid">
+      <section class="panel"><div class="panel-title">Timing tower <span>Gap + strategy model</span></div><div class="table-wrap"><table><caption hidden>Monaco Grand Prix running order and strategy data</caption><thead><tr><th>Pos</th><th class="driver-col">Driver</th><th class="gap-col">Gap</th><th class="optional">Interval</th><th class="tyre-col">Tyre</th><th class="pace-col">Last 3</th><th class="optional">Pace</th><th class="rejoin-col">Rejoin</th><th class="optional">Stints</th></tr></thead><tbody id="board"><tr><td class="empty" colspan="9">LOADING TIMING ARCHIVE…</td></tr></tbody></table></div></section>
+      <aside class="side"><section class="panel"><div class="panel-title">Track conditions <span>Latest</span></div><div class="weather-grid"><div class="weather-stat"><small>Air</small><strong id="air">—</strong><span class="unit">°C</span></div><div class="weather-stat"><small>Track</small><strong id="track">—</strong><span class="unit">°C</span></div><div class="weather-stat"><small>Wind</small><strong id="wind">—</strong><span class="unit">m/s</span></div><div class="weather-stat"><small>Rain</small><strong id="rain">—</strong></div></div></section><section class="panel"><div class="panel-title">Race control <span>Latest messages</span></div><ol class="messages" id="messages"><li class="empty">NO MESSAGES</li></ol></section></aside>
+    </div>
+    <div class="legend"><span><i></i><b>Rejoin</b>&nbsp; = current gap + 22s pit loss</span><span><b>Last 3</b>&nbsp; = median lap time</span><span>Scrub the complete field · 2-minute intervals</span></div>
+  </section>
+  <section class="details"><div class="details-inner"><h2>The race,<br><span>not the feed.</span></h2><div class="details-copy"><div><h3>What it answers</h3><ul><li>Who is in another driver's pit window?</li><li>Which tyres are old, and what came before?</li><li>Who has pace over the last three laps?</li><li>Where would a stop put each driver?</li></ul></div><div><h3>What it does not do</h3><p>The rejoin number is transparent arithmetic: gap to the leader plus an adjustable pit-loss assumption, ranked back into the field. It is a quick decision aid, not a strategy prediction.</p></div><pre class="command"><code><span class="comment"># live session; standard library only</span>
 python3 pitwall.py serve --session latest
 
-<span class="c"># bake a replay like the one above, then watch it offline</span>
-python3 pitwall.py snapshots --session 9979 --every 120 --out monaco.json
-python3 pitwall.py serve --replay monaco.json</pre>
-
-  <h2>The fine print</h2>
-  <p class="fine">
-    Race data from the <a class="link" href="https://openf1.org" target="_blank" rel="noopener">OpenF1</a> API,
-    used with attribution; this page replays a baked snapshot file and makes no live requests.
-    The rejoin column is arithmetic - current gap plus a stated pit-loss assumption - not a
-    strategy model. Not affiliated with Formula 1. MIT license.
-    <a class="link" href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Source on GitHub</a>.
-  </p>
+<span class="comment"># adjust the circuit's pit-loss assumption</span>
+python3 pitwall.py serve --pit-loss 22</code></pre></div></div></section>
 </main>
+<footer class="site-footer"><span>OpenF1 data · MIT licensed · Not affiliated with Formula 1</span><span><a href="/tools">← More tools</a> &nbsp; <a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">GitHub ↗</a></span></footer>
 <script>
-const show = v => v === null || v === undefined ? '—' : v;
-const esc = v => String(show(v)).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const TYRE = {SOFT:'#e33', MEDIUM:'#fc3', HARD:'#eee', INTERMEDIATE:'#3a3', WET:'#36c'};
+const $=id=>document.getElementById(id);
+const elements={meta:$('meta'),lapNow:$('lapNow'),pitLoss:$('pitLoss'),play:$('play'),scrub:$('scrub'),tick:$('tick'),board:$('board'),messages:$('messages'),air:$('air'),track:$('track'),wind:$('wind'),rain:$('rain')};
+const TYRE={SOFT:'#ff1e20',MEDIUM:'#ffd12e',HARD:'#f4f4f4',INTERMEDIATE:'#3acb5a',WET:'#2f8cff'};
+const show=v=>v===null||v===undefined||v===''?'—':v;
+const esc=v=>String(show(v)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const number=v=>v===null||v===undefined||v===''?Number.NaN:typeof v==='number'?v:Number(v);
+const gap=(v,leader=false)=>{if(leader)return 'LEADER';const n=number(v);return Number.isFinite(n)?n===0?'—':`+${n.toFixed(3)}`:show(v)};
+const lapTime=v=>{if(!Number.isFinite(v))return '—';const minutes=Math.floor(v/60);return `${minutes}:${(v-minutes*60).toFixed(3).padStart(6,'0')}`};
+const compound=v=>v==='INTERMEDIATE'?'I':v==='WET'?'W':v?String(v)[0]:'?';
+function currentLap(s){return s.lap_number||Math.max(0,...(s.race_control||[]).map(m=>Number(m.lap_number)||0))}
+function strategyAt(r,lap,precise){
+  if(precise||!lap||!r.stint_history?.length)return {compound:r.compound,age:r.tyre_age_laps,history:r.stint_history||[]};
+  let remaining=lap;const history=[];
+  for(const stint of r.stint_history){const length=Number(stint.laps)||0;if(remaining<=0)break;const used=Math.min(length,remaining);history.push({...stint,laps:used});if(remaining<=length)return {compound:stint.compound,age:used,history};remaining-=length}
+  return {compound:r.compound,age:r.tyre_age_laps,history};
+}
 function render(s){
-  weather.textContent = s.weather.air_temperature === undefined ? '' :
-    `Air ${s.weather.air_temperature}°C · Track ${s.weather.track_temperature}°C · Rain ${s.weather.rainfall}`;
-  board.innerHTML = s.board.map(r => {
-    const colour = String(r.team_colour || '777').replace(/[^0-9a-f]/gi,'').slice(0,6) || '777';
-    const spark = r.pace_sparkline_path ? `<svg class=spark width=60 height=20 viewBox="0 0 60 20"><path d="${r.pace_sparkline_path}" fill=none stroke=currentColor stroke-width=1.5/></svg>` : '—';
-    const stints = (r.stint_history && r.stint_history.length) ? `<div class=stintbar>${r.stint_history.map(t=>`<span style="flex:${t.laps};background:${TYRE[t.compound]||'#777'}"></span>`).join('')}</div>` : '—';
-    return `<tr><td>${esc(r.position)}</td><td><span class=team style="border-color:#${colour}">${esc(r.name)}</span></td><td>${esc(r.gap_to_leader)}</td><td>${esc(r.interval)}</td><td>${esc(r.compound)}</td><td>${esc(r.tyre_age_laps)}</td><td>${stints}</td><td>${spark}</td><td>${r.recent_pace_seconds ? esc(r.recent_pace_seconds.toFixed(3)) : '—'}</td><td>${r.estimated_rejoin_position ? 'P'+esc(r.estimated_rejoin_position) : '—'}</td></tr>`;
-  }).join('');
-  messages.innerHTML = s.race_control.map(m => `<li>L${esc(m.lap_number)} · ${esc(m.message)}</li>`).join('');
+  elements.lapNow.textContent=currentLap(s)?`LAP ${currentLap(s)}`:'SESSION';elements.pitLoss.textContent=`${show(s.pit_loss_seconds)} SEC`;
+  const w=s.weather||{};elements.air.textContent=show(w.air_temperature);elements.track.textContent=show(w.track_temperature);elements.wind.textContent=show(w.wind_speed);elements.rain.textContent=w.rainfall===undefined?'—':w.rainfall?'YES':'NO';
+  elements.board.innerHTML=s.board.length?s.board.map(r=>{
+    const colour=String(r.team_colour||'777777').replace(/[^0-9a-f]/gi,'').slice(0,6)||'777777';
+    const strategy=strategyAt(r,currentLap(s),Boolean(s.lap_number));
+    const tyre=TYRE[strategy.compound]||'#777b85';
+    const spark=r.pace_sparkline_path?`<svg class="spark" width="66" height="22" viewBox="0 0 60 20" aria-label="Five-lap pace trend"><path class="spark-grid" d="M0 10H60"/><path d="${r.pace_sparkline_path}" fill="none" stroke="currentColor" stroke-width="1.8" vector-effect="non-scaling-stroke"/></svg>`:'—';
+    const stints=strategy.history.map(t=>{const c=TYRE[t.compound]||'#777b85';return `<span class="stint" style="--tyre:${c}" title="${esc(t.compound)} · ${esc(t.laps)} laps">${esc(compound(t.compound))}</span>`}).join('')||'—';
+    const loss=Number(r.estimated_rejoin_position)-Number(r.position);
+    const rejoin=r.estimated_rejoin_position?`<span class="rejoin">P${esc(r.estimated_rejoin_position)}</span><span class="${loss>0?'loss':'loss hold'}">${loss>0?`−${loss} POS`:'HOLD'}</span>`:'—';
+    return `<tr><td class="pos">${esc(r.position)}</td><td><div class="driver-cell" style="border-color:#${colour}"><span class="driver-no">${esc(r.driver_number)}</span><span><span class="driver-name">${esc(r.name)}</span><span class="driver-team">${esc(r.team)}</span></span></div></td><td class="${r.position===1?'leader':''}">${esc(gap(r.gap_to_leader,r.position===1))}</td><td class="optional">${esc(gap(r.interval))}</td><td><span class="tyre"><span class="tyre-dot" style="--tyre:${tyre}">${esc(compound(strategy.compound))}</span><span class="tyre-age">${strategy.age===null||strategy.age===undefined?'—':`${esc(strategy.age)} L`}</span></span></td><td class="pace">${esc(lapTime(r.recent_pace_seconds))}</td><td class="optional">${spark}</td><td>${rejoin}</td><td class="optional"><div class="stint-history">${stints}</div></td></tr>`
+  }).join(''):'<tr><td class="empty" colspan="9">NO TIMING DATA YET</td></tr>';
+  const control=s.race_control||[];elements.messages.innerHTML=control.length?[...control].reverse().map(m=>`<li><span class="lap-tag">L${esc(m.lap_number)}</span><span><span class="message-type">${esc(m.category||m.flag||'Race control')}</span>${esc(m.message)}</span></li>`).join(''):'<li class="empty">NO RACE CONTROL MESSAGES</li>';
 }
 (async function(){
-  try {
-    const snaps = await fetch('/demo/pit-wall/snapshots.json').then(r => { if(!r.ok) throw Error(r.statusText); return r.json(); });
-    let i = 0, timer = null;
-    scrub.max = snaps.length - 1;
-    const draw = () => { render(snaps[i]); scrub.value = i; tick.textContent = `${i+1}/${snaps.length}`;
-      meta.textContent = `2025 Monaco Grand Prix · replayed from OpenF1 data · pit-loss assumption ${snaps[i].pit_loss_seconds}s`; };
-    const stop = () => { clearInterval(timer); timer = null; play.textContent = 'Play'; };
-    scrub.oninput = () => { i = +scrub.value; draw(); };
-    play.onclick = () => { if (timer) return stop(); play.textContent = 'Pause';
-      timer = setInterval(() => { if (i >= snaps.length - 1) return stop(); i++; draw(); }, 700); };
+  try{
+    const r=await fetch('/demo/pit-wall/snapshots.json');if(!r.ok)throw Error(`${r.status} ${r.statusText}`);
+    const snaps=await r.json();const start=snaps.findIndex(s=>currentLap(s)>=10&&s.board.some(r=>r.recent_pace_seconds));let i=start<0?0:start;let timer=null;elements.scrub.max=snaps.length-1;
+    const stop=()=>{clearInterval(timer);timer=null;elements.play.textContent='▶';elements.play.setAttribute('aria-label','Play replay')};
+    const draw=()=>{render(snaps[i]);elements.scrub.value=i;elements.tick.textContent=`FRAME ${String(i+1).padStart(2,'0')} / ${String(snaps.length).padStart(2,'0')}`;elements.meta.textContent=`Archived OpenF1 timing · lap ${currentLap(snaps[i])||'—'} · 22s pit-loss model`};
+    elements.scrub.oninput=()=>{i=Number(elements.scrub.value);stop();draw()};
+    elements.play.onclick=()=>{if(timer)return stop();elements.play.textContent='Ⅱ';elements.play.setAttribute('aria-label','Pause replay');timer=setInterval(()=>{if(i>=snaps.length-1)return stop();i++;draw()},900)};
     draw();
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) play.click();
-  } catch (e) { meta.textContent = 'Replay failed to load: ' + e.message; }
+  }catch(e){elements.meta.classList.add('error');elements.meta.textContent=`Replay unavailable · ${e.message}`;elements.board.innerHTML='<tr><td class="empty" colspan="9">TIMING ARCHIVE UNAVAILABLE</td></tr>'}
 })();
 </script>
 </body>
