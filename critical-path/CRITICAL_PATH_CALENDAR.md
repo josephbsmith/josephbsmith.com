@@ -20,7 +20,7 @@ This is a 38-week campaign: Monday, August 17, 2026 through Friday, May 7, 2027.
    YouTube channel for this purpose along the way.**
 4. **Finalized preparations for a move to Providence.**
 5. **Amassed a joint savings of at least $75,000.**
-6. **Grew Branmoor to a legitimately launch-ready state.**
+6. **Built a business to a legitimately launch-ready state.**
 7. **Achieved joint biomarker readiness with my wife for fertility & longevity.**
 8. **Awarded my full annual bonus at work by the end of March.**
 9. **Publish a legitimate series of histories with my writing system.**
@@ -38,21 +38,21 @@ not trigger a new plan or a softer definition.
   summer 2026. The calendar preserves endurance; it does not require a second race.
 - **Tuition:** the remaining MAcc tuition is financed with a loan. Tuition does not consume the
   $75,000 cash target. Loan payments and fees still enter the household close when they begin.
-- **Branmoor:** no prior plan is treated as stone. Branmoor stays cheap. Through graduation the cash
+- **Business:** no prior plan is treated as stone. It stays cheap. Through graduation the cash
   ceiling is **$250 per month and $2,250 total**, excluding costs Joseph explicitly substitutes for
   another household discretionary expense. No large legal retainer, paid data contract, office, or
   custom infrastructure is on the Chapter I path.
 - **Savings:** the working start remains approximately $30,000. The path adds $45,000 by May 5.
-  Loan proceeds, credit, receivables, retirement balances, and Branmoor valuation do not count.
+  Loan proceeds, credit, receivables, retirement balances, and Business valuation do not count.
 - **Work and class clock:** OneOncology is **09:00–17:00 Monday–Friday**; Thursday is work from
   home. Fall 2026 classes meet **Wednesday and Thursday, 18:15–21:00**. The spring class pattern is
   not yet known; the same eight-hour weekly MAcc envelope remains reserved until it can be reflowed.
 - **Writing series:** Goal 9 remains verbatim, but Joseph assigned it **zero official minutes**.
   History work is extra-time work only and may not displace sleep, work, MAcc, CPA, strength,
-  Branmoor, household/health work, or protected marriage/recovery. Any shipped history still must
+  Business, household/health work, or protected marriage/recovery. Any shipped history still must
   pass the current Writing OS and carry the required publication proof.
 - **CPA:** FAR first, then AUD, ISC, and REG. ISC is the working Discipline because it compounds with
-  controls, data, and Branmoor. The Tennessee exam file remains the testing route; the initial
+  controls, data, and Business. The Tennessee exam file remains the testing route; the initial
   Tennessee-versus-Rhode-Island license filing is resolved from current board rules by December 31.
 - **YouTube:** success means the CPA accountability channel is public, contains the kickoff, a short
   weekly proof video in at least 30 of the 38 campaign weeks, and a debrief after every exam sit. It
@@ -92,7 +92,7 @@ weekly MAcc total remains eight hours.
 | 20:00–22:00 | Marriage, recovery, staged Tuesday materials |
 | 22:00–22:30 | Shutdown and bed |
 
-### Tuesday — CPA plus Branmoor
+### Tuesday — CPA plus Business
 
 | Time | Required state |
 |---|---|
@@ -104,7 +104,7 @@ weekly MAcc total remains eight hours.
 | 12:30–13:00 | Lunch and walk |
 | 13:00–17:00 | OneOncology work |
 | 17:00–18:30 | Commute, dinner, reset |
-| 18:30–20:30 | Branmoor's current cheap launch-readiness gate |
+| 18:30–20:30 | Current low-cost business launch-readiness gate |
 | 20:30–22:00 | Marriage/recovery; stage lifting and class materials |
 | 22:00–22:30 | Shutdown and bed |
 
@@ -154,21 +154,21 @@ weekly MAcc total remains eight hours.
 | 16:30–17:00 | Private bonus close: output, praise, corrections, next visible deliverable |
 | 17:00–23:00 | Dinner, Gabby, friends/family, recovery; no HAL intake |
 
-### Saturday — exam simulation plus Branmoor
+### Saturday — exam simulation plus Business
 
 | Time | Required state |
 |---|---|
 | 07:00–07:30 | Wake, breakfast, desk ready |
 | 07:30–10:30 | CPA cumulative practice exam, TBSs, and error log |
 | 10:30–11:00 | Food and walk |
-| 11:00–14:00 | Branmoor's current cheap launch-readiness gate |
+| 11:00–14:00 | Current low-cost business launch-readiness gate |
 | 14:00–15:30 | MAcc overflow or a dated move/health appointment; otherwise recovery |
 | 15:30–23:00 | Marriage, social life, errands, recovery |
 
 On an exam Saturday, **07:30–14:00 becomes travel, check-in, the four-hour exam, food, and a
-15-minute camera debrief**. Branmoor does not receive a compensatory night block.
+15-minute camera debrief**. This work does not receive a compensatory night block.
 
-### Sunday — endurance, household close, Branmoor, MAcc, public proof
+### Sunday — endurance, household close, Business, MAcc, public proof
 
 | Time | Required state |
 |---|---|
@@ -176,7 +176,7 @@ On an exam Saturday, **07:30–14:00 becomes travel, check-in, the four-hour exa
 | 07:30–08:45 | Easy endurance: 45–75 minutes, conversational pace |
 | 08:45–09:30 | Shower and breakfast |
 | 09:30–10:30 | Joint household close: savings, loan, move, health appointments, next transfer |
-| 10:30–12:30 | Branmoor's current cheap launch-readiness gate |
+| 10:30–12:30 | Current low-cost business launch-readiness gate |
 | 12:30–13:30 | Lunch |
 | 13:30–16:00 | MAcc reading/problem set and week-ahead academic check |
 | 16:00–18:00 | Groceries, food prep, clothes/bags, home reset |
@@ -193,10 +193,10 @@ On an exam Saturday, **07:30–14:00 becomes travel, check-in, the four-hour exa
 | Sleep | 53.5 hours |
 | OneOncology including Friday proof close | 40 hours on the calendar, plus employer-required close/overtime |
 | CPA | 10 hours, plus exam travel on sit weeks |
-| MAcc | 8 hours: two 2.75-hour classes plus 2.5 hours Sunday; expands by replacing Branmoor during finals |
+| MAcc | 8 hours: two 2.75-hour classes plus 2.5 hours Sunday; expands by replacing Business during finals |
 | Strength | 3.75 hours |
 | Endurance | 1.25 hours |
-| Branmoor | 7 hours: Tuesday 2, Saturday 3, Sunday 2 |
+| Business | 7 hours: Tuesday 2, Saturday 3, Sunday 2 |
 | Histories | **0 official hours**; extra-time work only |
 | Joint money/move/health close | 1 hour |
 | Critical Path close + YouTube | 50 minutes |
@@ -298,7 +298,7 @@ Sunday 09:30–10:30 produces one move artifact per month:
 |---|---|
 | August | Joint move window, maximum monthly housing cost, and move-ready definition |
 | September | Neighborhood/commute shortlist and Providence cost model |
-| October | Tennessee/Rhode Island CPA and Branmoor implications; target move week |
+| October | Tennessee/Rhode Island CPA and Business implications; target move week |
 | November | Inventory/declutter list and three mover/travel estimates |
 | December | Housing application packet: IDs, income, references, credit documents |
 | January | Target-building/landlord list and decision calendar |
@@ -327,12 +327,12 @@ tax refund move to savings on receipt; they accelerate the curve and do not auth
 | May 5 | **$75,000** |
 
 If the actual August 16 opening balance differs from $30,000, add or subtract the difference from
-every floor immediately. Tuition loan proceeds never enter eligible savings. Branmoor spending must
+every floor immediately. Tuition loan proceeds never enter eligible savings. Business spending must
 fit below its cash ceiling without dropping the household below the curve.
 
-### 6. Branmoor launch readiness, kept cheap
+### 6. Business launch readiness, kept cheap
 
-By April 25 Branmoor has one frozen offer, one buyer, one price, one end-to-end sample, one public
+By April 25 Business has one frozen offer, one buyer, one price, one end-to-end sample, one public
 methodology/boundary, one intake path, one delivery checklist, and evidence that a real prospect
 would take the next conversation. Launch-ready does not require paid infrastructure or a licensed
 claim before licensure.
@@ -349,7 +349,7 @@ The graduation gate is:
    dependent filing; expensive items remain unpurchased until actually required.
 7. Total Chapter I cash spend at or below $2,250.
 
-During February, prospect conversations occupy the existing Tuesday/Saturday/Sunday Branmoor
+During February, prospect conversations occupy the existing Tuesday/Saturday/Sunday Business
 blocks. CPA retrieval, class, sleep, and the sit date do not move.
 
 ### 7. Joint biomarker readiness
@@ -386,7 +386,7 @@ Clearing House*, then N10 *Counting Machines*, then N2 *The Exchequer*—and pub
 requires the live Writing OS gates, immutable receipt, stable metadata, public landing page, and a
 purchasable or durably downloadable edition.
 
-## Branmoor production sequence
+## Business production sequence
 
 | Weeks | Only official production item |
 |---|---|
@@ -404,57 +404,57 @@ purchasable or durably downloadable edition.
 
 | Month | CPA/MAcc | Body | Production | Household, work, health |
 |---|---|---|---|---|
-| Aug. 16–31 | FAR foundation; Fall term begins Aug. 19; channel live Aug. 23 | Establish 185/60 work sets; 6 sessions; half-marathon goal recorded complete | Freeze Branmoor's one cheap offer | Savings $32,576; bonus rubric; medical visits booked; move definition |
-| September | FAR acquisition and cumulative MCQs | Linear return; target 245–255 squat / 87.5–95 press | Branmoor sample scope, inputs, boundary | Savings $37,729; initial clinical visits; Providence shortlist |
-| October | FAR completion and simulations | Target 285–300 / 107.5–117.5 | Branmoor sample produced, repeated, frozen | Savings $43,053; bonus gap close; move week/license implications |
-| November | FAR sit Nov. 7; AUD begins | Target 315–330 / 127.5–140 | Branmoor reproducible run, methodology, offer page | Savings $48,206; results review; mover estimates |
-| December | AUD; Fall finals; ethics Dec. 21–27 | Target 340–350 / 155–165; deload during finals | Branmoor prospect list, intake, delivery checklist | Savings $53,530; work evidence draft; housing packet |
-| January | AUD Jan. 9; Spring starts Jan. 13; ISC Jan. 30 | Target 355–365 / 175–180 | Branmoor pricing, correction path, two dry runs | Savings $58,855; medical plan execution; target-building list |
-| February | REG | Target 370–375 / 190–195 | Branmoor ten-conversation sprint | Savings $63,664; biomarker recheck; move operating checklist |
-| March | REG sit Mar. 6; retake reserve | Target 380–390 / 205–210 | Branmoor correction/repeat and written intent | Savings $68,988; full bonus by Mar. 31; funded move/notice plan |
-| April | Retake reserve; final classes Apr. 27 | Reach 405×5×3 and 225×5×3 by Apr. 30 | Branmoor launch pack ready Apr. 25 | Savings $74,141; health ready Apr. 15; move ready Apr. 30 |
+| Aug. 16–31 | FAR foundation; Fall term begins Aug. 19; channel live Aug. 23 | Establish 185/60 work sets; 6 sessions; half-marathon goal recorded complete | Freeze Business's one cheap offer | Savings $32,576; bonus rubric; medical visits booked; move definition |
+| September | FAR acquisition and cumulative MCQs | Linear return; target 245–255 squat / 87.5–95 press | Business sample scope, inputs, boundary | Savings $37,729; initial clinical visits; Providence shortlist |
+| October | FAR completion and simulations | Target 285–300 / 107.5–117.5 | Business sample produced, repeated, frozen | Savings $43,053; bonus gap close; move week/license implications |
+| November | FAR sit Nov. 7; AUD begins | Target 315–330 / 127.5–140 | Business reproducible run, methodology, offer page | Savings $48,206; results review; mover estimates |
+| December | AUD; Fall finals; ethics Dec. 21–27 | Target 340–350 / 155–165; deload during finals | Business prospect list, intake, delivery checklist | Savings $53,530; work evidence draft; housing packet |
+| January | AUD Jan. 9; Spring starts Jan. 13; ISC Jan. 30 | Target 355–365 / 175–180 | Business pricing, correction path, two dry runs | Savings $58,855; medical plan execution; target-building list |
+| February | REG | Target 370–375 / 190–195 | Business ten-conversation sprint | Savings $63,664; biomarker recheck; move operating checklist |
+| March | REG sit Mar. 6; retake reserve | Target 380–390 / 205–210 | Business correction/repeat and written intent | Savings $68,988; full bonus by Mar. 31; funded move/notice plan |
+| April | Retake reserve; final classes Apr. 27 | Reach 405×5×3 and 225×5×3 by Apr. 30 | Business launch pack ready Apr. 25 | Savings $74,141; health ready Apr. 15; move ready Apr. 30 |
 | May 1–7 | Finals Apr. 29–May 5; transcript action staged | Recovery and evidence only | None | $75,000 May 5; evidence freeze 21:00; commencement May 6–7 |
 
 ## All 38 weeks
 
-| Week | Dates | CPA and MAcc | Branmoor WIP | Physical checkpoint | Household/work/health proof |
+| Week | Dates | CPA and MAcc | Business WIP | Physical checkpoint | Household/work/health proof |
 |---|---|---|---|---|---|
-| W01 | Aug. 17–23 | Tennessee exam file transmitted; FAR starts; Fall class Aug. 19 | Branmoor asset inventory | Repeat 185/60 as 3×5 baselines | Channel kickoff; first $1,200; bonus criteria request; visits booked |
-| W02 | Aug. 24–30 | FAR modules + first cumulative Saturday | Branmoor buyer/problem/offer decision | Six total return sessions complete | Move definition; loan treatment; first manager criteria check |
-| W03 | Aug. 31–Sep. 6 | FAR error log stable | Branmoor offer frozen Sep. 6 | End-Aug. trajectory recorded | $32,576 floor; Providence budget; health appointments confirmed |
-| W04 | Sep. 7–13 | FAR | Branmoor sample scope/boundary | Heavy additions continue | Clinical visit 1 or booked date; savings transfer |
-| W05 | Sep. 14–20 | FAR | Branmoor sample inputs/data ready | First four-week technique review | Clinical visit 2 or booked date; manager check |
-| W06 | Sep. 21–27 | FAR | Branmoor sample analysis run 1 | No missed clock slots | Providence neighborhoods/commutes |
-| W07 | Sep. 28–Oct. 4 | FAR cumulative review | Branmoor sample report v1 | Sep. trajectory 245–255 / 87.5–95 | $37,729 floor; ordered medical work underway |
-| W08 | Oct. 5–11 | FAR completion begins | Branmoor sample QA/correction | Four-week review | Results/review appointments booked |
-| W09 | Oct. 12–18 | FAR simulations | Branmoor sample run 2 | Heavy sessions preserved | Graduation application completed before earliest published deadline |
-| W10 | Oct. 19–25 | FAR weak-area repair | Branmoor public methodology draft | No panic weight jumps | Bonus midyear draft; move date/license analysis |
-| W11 | Oct. 26–Nov. 1 | FAR final review | Branmoor sample frozen | Oct. trajectory 285–300 / 107.5–117.5 | $43,053 floor; midyear bonus gap closed |
-| W12 | Nov. 2–8 | FAR sit Nov. 7; debrief | Branmoor sample inputs | Exam-week training stays, Friday conservative | Exam video; sample scope; savings transfer |
-| W13 | Nov. 9–15 | AUD begins; FAR retake booked if needed | Branmoor sample analysis | Resume normal progression | Medical results dispositions start |
-| W14 | Nov. 16–22 | AUD | Branmoor sample report | Four-week review | Five prospects contacted; move inventory |
-| W15 | Nov. 23–29 | AUD; holiday minimum maintained | Branmoor offer page/methodology | Nov. trajectory 315–330 / 127.5–140 | $48,206 floor; three mover/travel estimates |
-| W16 | Nov. 30–Dec. 6 | AUD plus Fall final exams | Branmoor only if academic work complete | Deload volume, keep clock | Work evidence draft starts; savings transfer |
-| W17 | Dec. 7–13 | AUD plus finals through Dec. 10 | Branmoor 20-prospect list and handoff | Technique/recovery week | Housing application document list |
-| W18 | Dec. 14–20 | AUD final modules | Branmoor intake path | Progress resumes | Bonus evidence draft Dec. 18; savings transfer |
-| W19 | Dec. 21–27 | AICPA ethics; AUD cumulative | Branmoor delivery checklist | Holiday minimum: M/W/F clock remains | Health plan adherence; family time protected |
-| W20 | Dec. 28–Jan. 3 | AUD simulations; license/experience packet | Branmoor pricing/turnaround/correction path | Dec. trajectory 340–350 / 155–165 | $53,530 floor; housing packet complete |
-| W21 | Jan. 4–10 | AUD sit Jan. 9; debrief | Branmoor dry-run pack | Exam-week Friday conservative | Exam video; savings transfer |
-| W22 | Jan. 11–17 | ISC starts; Spring class Jan. 13 | Branmoor legal/commercial launch checklist | Four-week review | Final bonus evidence delivered by Jan. 15 |
-| W23 | Jan. 18–24 | ISC | Branmoor dry run 1 | Heavy additions continue | Target-building/landlord list |
-| W24 | Jan. 25–31 | ISC sit Jan. 30; debrief | Branmoor dry-run correction | Jan. trajectory 355–365 / 175–180 | $58,855 floor; clinical follow-up state |
-| W25 | Feb. 1–7 | REG starts | Branmoor end-to-end dry run | Progress exposure | First two prospect conversations |
-| W26 | Feb. 8–14 | REG | Branmoor correct/repeat dry run | Four-week review | Move admin master list; manager check |
-| W27 | Feb. 15–21 | REG | Branmoor conversations 3–5 and written feedback | No missed slots | Biomarker recheck/specialist review |
-| W28 | Feb. 22–28 | REG cumulative | Branmoor conversations 6–10 and feedback | Feb. trajectory 370–375 / 190–195 | $63,664 floor; move checklist complete |
-| W29 | Mar. 1–7 | REG sit Mar. 6; debrief | Branmoor feedback synthesis | Exam-week Friday conservative | Exam video; savings transfer |
-| W30 | Mar. 8–14 | Retake booking or license requirements | Branmoor correction iteration | Progress resumes | Bonus status confirmed; health dispositions audited |
-| W31 | Mar. 15–21 | CPA cumulative maintenance/retake | Branmoor corrected dry run | Four-week review | Move notice/application dates fixed |
-| W32 | Mar. 22–28 | Retake if needed | Branmoor written intent pursued | Heavy additions continue | Move reserve funded |
-| W33 | Mar. 29–Apr. 4 | CPA pass/retake evidence | Branmoor final sample repeat | Mar. trajectory 380–390 / 205–210 | Bonus award by Mar. 31; $68,988 floor |
-| W34 | Apr. 5–11 | Retake Apr. 10 if needed | Branmoor public page proof | Peak block begins | Savings transfer; health aggregate review |
-| W35 | Apr. 12–18 | All-pass evidence or next retake | Branmoor launch-checklist preflight | Planned heavy exposures only | Health readiness Apr. 15; move applications/reservations |
-| W36 | Apr. 19–25 | License packet final preflight | Branmoor launch pack | First 405/225 opportunity only if progression earns it | Branmoor ready Apr. 25; one written intent; spend ≤$2,250 |
+| W01 | Aug. 17–23 | Tennessee exam file transmitted; FAR starts; Fall class Aug. 19 | Business asset inventory | Repeat 185/60 as 3×5 baselines | Channel kickoff; first $1,200; bonus criteria request; visits booked |
+| W02 | Aug. 24–30 | FAR modules + first cumulative Saturday | Business buyer/problem/offer decision | Six total return sessions complete | Move definition; loan treatment; first manager criteria check |
+| W03 | Aug. 31–Sep. 6 | FAR error log stable | Business offer frozen Sep. 6 | End-Aug. trajectory recorded | $32,576 floor; Providence budget; health appointments confirmed |
+| W04 | Sep. 7–13 | FAR | Business sample scope/boundary | Heavy additions continue | Clinical visit 1 or booked date; savings transfer |
+| W05 | Sep. 14–20 | FAR | Business sample inputs/data ready | First four-week technique review | Clinical visit 2 or booked date; manager check |
+| W06 | Sep. 21–27 | FAR | Business sample analysis run 1 | No missed clock slots | Providence neighborhoods/commutes |
+| W07 | Sep. 28–Oct. 4 | FAR cumulative review | Business sample report v1 | Sep. trajectory 245–255 / 87.5–95 | $37,729 floor; ordered medical work underway |
+| W08 | Oct. 5–11 | FAR completion begins | Business sample QA/correction | Four-week review | Results/review appointments booked |
+| W09 | Oct. 12–18 | FAR simulations | Business sample run 2 | Heavy sessions preserved | Graduation application completed before earliest published deadline |
+| W10 | Oct. 19–25 | FAR weak-area repair | Business public methodology draft | No panic weight jumps | Bonus midyear draft; move date/license analysis |
+| W11 | Oct. 26–Nov. 1 | FAR final review | Business sample frozen | Oct. trajectory 285–300 / 107.5–117.5 | $43,053 floor; midyear bonus gap closed |
+| W12 | Nov. 2–8 | FAR sit Nov. 7; debrief | Business sample inputs | Exam-week training stays, Friday conservative | Exam video; sample scope; savings transfer |
+| W13 | Nov. 9–15 | AUD begins; FAR retake booked if needed | Business sample analysis | Resume normal progression | Medical results dispositions start |
+| W14 | Nov. 16–22 | AUD | Business sample report | Four-week review | Five prospects contacted; move inventory |
+| W15 | Nov. 23–29 | AUD; holiday minimum maintained | Business offer page/methodology | Nov. trajectory 315–330 / 127.5–140 | $48,206 floor; three mover/travel estimates |
+| W16 | Nov. 30–Dec. 6 | AUD plus Fall final exams | Business only if academic work complete | Deload volume, keep clock | Work evidence draft starts; savings transfer |
+| W17 | Dec. 7–13 | AUD plus finals through Dec. 10 | Business 20-prospect list and handoff | Technique/recovery week | Housing application document list |
+| W18 | Dec. 14–20 | AUD final modules | Business intake path | Progress resumes | Bonus evidence draft Dec. 18; savings transfer |
+| W19 | Dec. 21–27 | AICPA ethics; AUD cumulative | Business delivery checklist | Holiday minimum: M/W/F clock remains | Health plan adherence; family time protected |
+| W20 | Dec. 28–Jan. 3 | AUD simulations; license/experience packet | Business pricing/turnaround/correction path | Dec. trajectory 340–350 / 155–165 | $53,530 floor; housing packet complete |
+| W21 | Jan. 4–10 | AUD sit Jan. 9; debrief | Business dry-run pack | Exam-week Friday conservative | Exam video; savings transfer |
+| W22 | Jan. 11–17 | ISC starts; Spring class Jan. 13 | Business legal/commercial launch checklist | Four-week review | Final bonus evidence delivered by Jan. 15 |
+| W23 | Jan. 18–24 | ISC | Business dry run 1 | Heavy additions continue | Target-building/landlord list |
+| W24 | Jan. 25–31 | ISC sit Jan. 30; debrief | Business dry-run correction | Jan. trajectory 355–365 / 175–180 | $58,855 floor; clinical follow-up state |
+| W25 | Feb. 1–7 | REG starts | Business end-to-end dry run | Progress exposure | First two prospect conversations |
+| W26 | Feb. 8–14 | REG | Business correct/repeat dry run | Four-week review | Move admin master list; manager check |
+| W27 | Feb. 15–21 | REG | Business conversations 3–5 and written feedback | No missed slots | Biomarker recheck/specialist review |
+| W28 | Feb. 22–28 | REG cumulative | Business conversations 6–10 and feedback | Feb. trajectory 370–375 / 190–195 | $63,664 floor; move checklist complete |
+| W29 | Mar. 1–7 | REG sit Mar. 6; debrief | Business feedback synthesis | Exam-week Friday conservative | Exam video; savings transfer |
+| W30 | Mar. 8–14 | Retake booking or license requirements | Business correction iteration | Progress resumes | Bonus status confirmed; health dispositions audited |
+| W31 | Mar. 15–21 | CPA cumulative maintenance/retake | Business corrected dry run | Four-week review | Move notice/application dates fixed |
+| W32 | Mar. 22–28 | Retake if needed | Business written intent pursued | Heavy additions continue | Move reserve funded |
+| W33 | Mar. 29–Apr. 4 | CPA pass/retake evidence | Business final sample repeat | Mar. trajectory 380–390 / 205–210 | Bonus award by Mar. 31; $68,988 floor |
+| W34 | Apr. 5–11 | Retake Apr. 10 if needed | Business public page proof | Peak block begins | Savings transfer; health aggregate review |
+| W35 | Apr. 12–18 | All-pass evidence or next retake | Business launch-checklist preflight | Planned heavy exposures only | Health readiness Apr. 15; move applications/reservations |
+| W36 | Apr. 19–25 | License packet final preflight | Business launch pack | First 405/225 opportunity only if progression earns it | Business ready Apr. 25; one written intent; spend ≤$2,250 |
 | W37 | Apr. 26–May 2 | Last class Apr. 27; finals Apr. 29–30 | None | Final work-set opportunity Apr. 30; then recovery | $74,141 floor; Providence ready Apr. 30 |
 | W38 | May 3–7 | Finals May 3–5; final transcript action staged | None | No panic lifts; preserve proof | $75,000 and evidence freeze May 5; ceremony May 6–7 |
 
@@ -463,10 +463,10 @@ purchasable or durably downloadable edition.
 The response is mechanical:
 
 1. Resume at the next printed block; never restart the week.
-2. A missed CPA block replaces the next Branmoor block. MAcc graded emergencies do the same.
-3. A failed CPA score converts all Branmoor hours to CPA until the retake is sat; Branmoor resumes
+2. A missed CPA block replaces the next Business block. MAcc graded emergencies do the same.
+3. A failed CPA score converts all Business hours to CPA until the retake is sat; Business resumes
    at the same numbered stage afterward.
-4. Savings below its dated floor freezes Branmoor cash spending and discretionary purchases until
+4. Savings below its dated floor freezes Business cash spending and discretionary purchases until
    the curve is restored.
 5. A missed lift repeats the exact session at the next M/W/F slot. It does not become a weekend
    marathon session.
@@ -485,7 +485,7 @@ By May 5 at 21:00 one folder or printed binder contains:
 - four CPA passing scores, ethics/experience/education/jurisdiction packet, and channel URL/archive;
 - signed Providence move dossier;
 - May 5 reconciled $75,000 savings proof;
-- Branmoor launch checklist, sample, run receipt, prospect evidence, and spend ledger;
+- Business launch checklist, sample, run receipt, prospect evidence, and spend ledger;
 - aggregate joint health readiness states and next medical dates, with Gabby's results excluded;
 - formal full-bonus award evidence; and
 - N1, N10, and N2 ship receipts, public editions, and shared series page.
@@ -503,4 +503,3 @@ The ceremony is then allowed to be symbolic because the proof already exists.
 - Tennessee experience form: https://www.tn.gov/content/dam/tn/commerce/documents/regboards/accountancy/forms/AccountWorkExperience.pdf
 - Rhode Island requirements: https://dbr.ri.gov/building-design-fire-professionals-board-accountancy/board-accountancy
 - Preconception boundary: https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2019/01/prepregnancy-counseling
-

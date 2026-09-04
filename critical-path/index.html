@@ -326,9 +326,9 @@
             <div class="goal-result" data-goal-result="savings"></div>
           </div>
           <div class="goal-row">
-            <label>Branmoor readiness</label>
-            <div class="goal-fields"><span>Gates</span><input data-total="branmoorGates" type="number" min="0" max="6" step="1"><span>Spend</span><input data-total="branmoorSpend" type="number" min="0" step="1"></div>
-            <div class="goal-result" data-goal-result="branmoor"></div>
+            <label>Business readiness</label>
+            <div class="goal-fields"><span>Gates</span><input data-total="businessGates" type="number" min="0" max="6" step="1"><span>Spend</span><input data-total="businessSpend" type="number" min="0" step="1"></div>
+            <div class="goal-result" data-goal-result="business"></div>
           </div>
           <div class="goal-row">
             <label>Biomarker readiness</label>
@@ -357,7 +357,7 @@
     const OLD_STORAGE_KEY = "hal.critical-path.chapter-1.v1";
     const START = "2026-08-17";
     const FREEZE = "2027-05-05";
-    const OUTPUT_LABELS = ["CPA / MAcc", "Branmoor", "Body", "Work / household / health"];
+    const OUTPUT_LABELS = ["CPA / MAcc", "Business", "Body", "Work / household / health"];
     const DEFAULT_TOTALS = {
       squat: 185,
       press: 60,
@@ -366,8 +366,8 @@
       cpaRequirements: 0,
       videos: 0,
       moveStage: 0,
-      branmoorGates: 0,
-      branmoorSpend: 0,
+      businessGates: 0,
+      businessSpend: 0,
       healthStage: 0,
       bonusStage: 0,
       histories: 0
@@ -377,21 +377,21 @@
       maccHours: { copy: "Open the next due MAcc item and work the next clean block.", add: .25, button: "Start 15:00" },
       strengthSessions: { copy: "Begin today’s programmed strength session.", add: 1, button: "Start session" },
       enduranceSessions: { copy: "Begin this week’s endurance session.", add: 1, button: "Start session" },
-      branmoorHours: { copy: "Open this week’s Branmoor output and move it for one clean block.", add: .25, button: "Start 15:00" },
+      businessHours: { copy: "Open this week’s Business output and move it for one clean block.", add: .25, button: "Start 15:00" },
       youtube: { copy: "Finish and publish this week’s CPA video.", add: 1, button: "Start video" },
       savings: { copy: "Enter the current joint savings balance.", add: 0, button: "Update balance" }
     };
     const DAY_FOCUS = {
-      0: ["enduranceSessions", "youtube", "cpaHours", "branmoorHours"],
-      1: ["strengthSessions", "cpaHours", "branmoorHours"],
-      2: ["cpaHours", "branmoorHours", "maccHours"],
+      0: ["enduranceSessions", "youtube", "cpaHours", "businessHours"],
+      1: ["strengthSessions", "cpaHours", "businessHours"],
+      2: ["cpaHours", "businessHours", "maccHours"],
       3: ["strengthSessions", "maccHours", "cpaHours"],
-      4: ["maccHours", "cpaHours", "branmoorHours"],
-      5: ["strengthSessions", "branmoorHours", "cpaHours"],
-      6: ["cpaHours", "branmoorHours", "enduranceSessions", "youtube"]
+      4: ["maccHours", "cpaHours", "businessHours"],
+      5: ["strengthSessions", "businessHours", "cpaHours"],
+      6: ["cpaHours", "businessHours", "enduranceSessions", "youtube"]
     };
     const WEEK_CONTRACTS = [
-      ["Tennessee exam file transmitted; FAR starts; Fall class begins", "Branmoor asset inventory", "Repeat 185/60 as 3×5 baselines", "Channel kickoff; first $1,200; bonus criteria request; visits booked"],
+      ["Tennessee exam file transmitted; FAR starts; Fall class begins", "Business asset inventory", "Repeat 185/60 as 3×5 baselines", "Channel kickoff; first $1,200; bonus criteria request; visits booked"],
       ["FAR modules + first cumulative Saturday", "Buyer/problem/offer decision", "Six total return sessions complete", "Move definition; loan treatment; first manager criteria check"],
       ["FAR error log stable", "Offer frozen", "End-August trajectory recorded", "$32,576 floor; Providence budget; health appointments confirmed"],
       ["FAR acquisition", "Sample scope/boundary", "Heavy additions continue", "Clinical visit 1 or booked date; savings transfer"],
@@ -426,7 +426,7 @@
       ["CPA pass/retake evidence", "Final sample repeat", "March trajectory recorded", "Bonus award by March 31; $68,988 floor"],
       ["Retake if needed", "Public page proof", "Peak block begins", "Savings transfer; health aggregate review"],
       ["All-pass evidence or next retake", "Launch-checklist preflight", "Planned heavy exposures only", "Health readiness; move applications/reservations"],
-      ["License packet final preflight", "Launch pack", "First 405/225 opportunity only if earned", "Branmoor ready; written intent; spend ≤$2,250"],
+      ["License packet final preflight", "Launch pack", "First 405/225 opportunity only if earned", "Business ready; written intent; spend ≤$2,250"],
       ["Last class + finals", "None", "Final work-set opportunity; then recovery", "$74,141 floor; Providence ready"],
       ["Finals + transcript action staged", "None", "No panic lifts; preserve proof", "$75,000 and evidence freeze; ceremony"]
     ];
@@ -453,8 +453,8 @@
         cpaRequirements: countTrue(fields, ["ethics", "experience", "education", "jurisdiction", "channel"]),
         videos: number(fields.youtubeCount),
         moveStage: number(fields.moveStage),
-        branmoorGates: countTrue(fields, ["bOffer", "bSample", "bRun", "bPage", "bProspects", "bChecklist"]),
-        branmoorSpend: number(fields.branmoorSpend),
+        businessGates: countTrue(fields, ["bOffer", "bSample", "bRun", "bPage", "bProspects", "bChecklist"]),
+        businessSpend: number(fields.businessSpend),
         healthStage: countTrue(fields, ["healthVisits", "healthWork", "healthReview", "healthDisposition"]),
         bonusStage: number(fields.bonusStage),
         histories: countTrue(fields, ["historyN1", "historyN10", "historyN2", "historySeries"])
@@ -467,7 +467,7 @@
             cpaHours: number(week.cpaHours),
             maccHours: number(week.maccHours),
             strengthSessions: number(week.strengthSessions) || Math.floor(number(week.strengthHours) / 1.25),
-            branmoorHours: number(week.branmoorHours),
+            businessHours: number(week.businessHours),
             youtube: week.youtube ? 1 : 0
           },
           outputs: {},
@@ -547,7 +547,7 @@
         { key: "maccHours", label: "MAcc work", target: maccTarget(week), unit: "h", pace: "linear" },
         { key: "strengthSessions", label: "Strength", target: 3, unit: "sessions", pace: "strength" },
         { key: "enduranceSessions", label: "Endurance", target: 1, unit: "session", pace: "endurance" },
-        { key: "branmoorHours", label: "Branmoor", target: week <= 36 ? 7 : 0, unit: "h", pace: "linear" },
+        { key: "businessHours", label: "Business", target: week <= 36 ? 7 : 0, unit: "h", pace: "linear" },
         { key: "youtube", label: "CPA video", target: week <= 30 ? 1 : 0, unit: "video", pace: "video" },
         { key: "savings", label: "Joint savings", target: savingsFloor(weekEnd(week)), unit: "$", pace: "savings" }
       ];
@@ -1025,7 +1025,7 @@
         cpa: number(totals.cpaExams) >= 4 && number(totals.cpaRequirements) >= 5 && number(totals.videos) >= 30,
         move: number(totals.moveStage) >= 9,
         savings: savings >= 75000,
-        branmoor: number(totals.branmoorGates) >= 6 && number(totals.branmoorSpend) <= 2250,
+        business: number(totals.businessGates) >= 6 && number(totals.businessSpend) <= 2250,
         health: number(totals.healthStage) >= 4,
         bonus: number(totals.bonusStage) >= 6,
         histories: number(totals.histories) >= 4
@@ -1124,7 +1124,7 @@
       const checks = {
         weeks: WEEK_CONTRACTS.length === 38 && weekStart(1) === START && weekEnd(38) === "2027-05-09",
         savings: savingsFloor(START) === state.openingSavings && savingsFloor(FREEZE) === 75000,
-        targets: targetsFor(1).length === 7 && !targetsFor(37).some(function (target) { return target.key === "branmoorHours"; }),
+        targets: targetsFor(1).length === 7 && !targetsFor(37).some(function (target) { return target.key === "businessHours"; }),
         weeklyOnly: !document.querySelector("input[type=date]") && document.getElementById("weekSelect").options.length === 38,
         concise: document.querySelectorAll(".command, .law, .dependencies").length === 0,
         behaviorLoop: Boolean(document.getElementById("actionButton") && document.getElementById("activityDays") && document.getElementById("weekProgress")),
