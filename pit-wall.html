@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>F1 Pit Wall — Joseph B. Smith</title>
-<meta name="description" content="A local Formula 1 strategy screen with running order, gaps, tyre life, pace, race control, and a transparent pit-rejoin estimate.">
+<meta name="description" content="A public race-day Formula 1 strategy screen with live running order, gaps, tyre life, pace, race control, and pit-rejoin estimates.">
 <meta property="og:title" content="F1 Pit Wall">
-<meta property="og:description" content="See the whole race: live timing, tyre life, pace, and pit rejoin windows in one local screen.">
+<meta property="og:description" content="See the whole race live: timing, tyre life, pace, and pit rejoin windows in one race-day screen.">
 <meta property="og:image" content="https://josephbsmith.com/og-card.png">
 <link rel="canonical" href="https://josephbsmith.com/pit-wall">
 <meta name="theme-color" content="#e10600">
@@ -24,28 +24,29 @@
 @media(max-width:980px){.hero-inner{grid-template-columns:1fr}.hero-readout{display:none}.timing-grid{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.messages{max-height:320px}.details-inner{grid-template-columns:1fr}}
 @media(max-width:700px){.topbar{height:60px}.nav a:first-child{display:none}.hero{min-height:480px}.hero-inner{padding:60px 18px 70px}.hero h1{font-size:58px}.race-section{padding:34px 10px}.section-lead{align-items:start}.section-lead h2{font-size:38px}.meta{display:none}.session-strip{grid-template-columns:1.5fr 1fr}.session-strip>div:nth-child(3),.session-strip>div:nth-child(4){display:none}.session-strip .race-name strong{font-size:17px}#transport{gap:9px;padding:10px}#tick{min-width:74px;font-size:8px}.side{grid-template-columns:1fr}table{min-width:0;table-layout:fixed}th,td{padding-left:4px;padding-right:4px}.optional{display:none}th:first-child{width:36px}.pos{width:36px;font-size:16px}.driver-col{width:76px}.driver-cell{gap:4px;padding-left:6px}.driver-name{font-size:13px}.driver-team,.driver-no{display:none}.gap-col{width:64px}.tyre-col{width:58px}.pace-col{width:72px}.rejoin-col{width:54px}.tyre-age{font-size:8px}.legend{gap:10px}.messages{max-height:none}.details{padding:55px 18px}.details-copy{grid-template-columns:1fr}.site-footer{align-items:start;flex-direction:column}.site-footer span:last-child{text-align:left}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.top-mode{display:flex;align-items:center;gap:8px;color:#fff;font:800 10px var(--mono);letter-spacing:.1em;text-transform:uppercase}.signal{width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.18)}#transport[hidden]{display:none}#play{display:grid;place-items:center;font:inherit}#play svg{width:16px;height:16px;fill:currentColor}@media(max-width:700px){.nav a{display:none}}
 </style>
 </head>
 <body>
-<header class="topbar"><a class="brand" href="/tools"><span class="brand-mark" aria-hidden="true"></span><strong>PIT WALL</strong></a><nav class="nav" aria-label="Page"><a href="#timing">Timing replay</a><a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Source ↗</a></nav></header>
+<header class="topbar"><a class="brand" href="/tools"><span class="brand-mark" aria-hidden="true"></span><strong>PIT WALL</strong></a><nav class="nav" aria-label="Page"><span class="top-mode"><i class="signal"></i><span id="topMode">CHECKING GRID</span></span><a href="#timing">Race timing</a><a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Source ↗</a></nav></header>
 <main>
   <section class="hero">
     <div class="hero-inner">
-      <div class="hero-copy"><div class="kicker">OpenF1 data / local strategy screen</div><h1>Call the <span>whole race.</span></h1><p>Broadcasts follow the fight at the front. Pit Wall keeps every driver, gap, tyre, pace trend, and estimated pit rejoin on one screen.</p><div class="hero-actions"><a class="button" href="#timing">Open race replay ↓</a><a class="button secondary" href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Get the code ↗</a></div></div>
-      <aside class="hero-readout" aria-label="Project summary"><small>Strategy channel</small><strong>01</strong><dl><div><dt>Runtime</dt><dd>1 Python file</dd></div><div><dt>Refresh</dt><dd>10 seconds</dd></div><div><dt>Video</dt><dd>None</dd></div><div><dt>Storage</dt><dd>None</dd></div></dl></aside>
+      <div class="hero-copy"><div class="kicker">Live every Grand Prix / OpenF1 timing</div><h1>Call the <span>whole race.</span></h1><p>Broadcasts follow the fight at the front. Pit Wall keeps every driver, gap, tyre, pace trend, and estimated pit rejoin on one screen—live on race day.</p><div class="hero-actions"><a class="button" href="#timing">Open pit wall ↓</a><a class="button secondary" href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Get the code ↗</a></div></div>
+      <aside class="hero-readout" aria-label="Project summary"><small>Strategy channel</small><strong>01</strong><dl><div><dt>Race mode</dt><dd>Automatic</dd></div><div><dt>Refresh</dt><dd>10 seconds</dd></div><div><dt>Video</dt><dd>None</dd></div><div><dt>Between races</dt><dd>Replay</dd></div></dl></aside>
     </div>
   </section>
   <section class="race-section" id="timing">
-    <div class="section-lead"><div><span class="eyebrow">2025 Monaco Grand Prix</span><h2>Race <span>replay.</span></h2></div><p class="meta" id="meta" aria-live="polite">Loading archived timing…</p></div>
-    <section class="session-strip" aria-label="Session status"><div class="race-name"><small>Session</small><strong>Monaco GP</strong></div><div><small>Race status</small><strong id="lapNow">—</strong></div><div><small>Pit loss model</small><strong id="pitLoss">—</strong></div><div><small>Data mode</small><strong>REPLAY</strong></div></section>
-    <div id="transport"><button id="play" aria-label="Play replay">▶</button><input id="scrub" type="range" min="0" max="0" value="0" aria-label="Replay position"><span id="tick"></span></div>
+    <div class="section-lead"><div><span class="eyebrow" id="eventLabel">Checking race calendar</span><h2>Race <span>timing.</span></h2></div><p class="meta" id="meta" aria-live="polite">Connecting to the pit wall…</p></div>
+    <section class="session-strip" aria-label="Session status"><div class="race-name"><small>Session</small><strong id="sessionName">Pit Wall</strong></div><div><small>Race status</small><strong id="lapNow">—</strong></div><div><small>Pit loss model</small><strong id="pitLoss">—</strong></div><div><small>Data mode</small><strong id="dataMode">AUTO</strong></div></section>
+    <div id="transport" hidden><button id="play" aria-label="Play replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4Z"/></svg></button><input id="scrub" type="range" min="0" max="0" value="0" aria-label="Replay position"><span id="tick"></span></div>
     <div class="timing-grid">
-      <section class="panel"><div class="panel-title">Timing tower <span>Gap + strategy model</span></div><div class="table-wrap"><table><caption hidden>Monaco Grand Prix running order and strategy data</caption><thead><tr><th>Pos</th><th class="driver-col">Driver</th><th class="gap-col">Gap</th><th class="optional">Interval</th><th class="tyre-col">Tyre</th><th class="pace-col">Last 3</th><th class="optional">Pace</th><th class="rejoin-col">Rejoin</th><th class="optional">Stints</th></tr></thead><tbody id="board"><tr><td class="empty" colspan="9">LOADING TIMING ARCHIVE…</td></tr></tbody></table></div></section>
+      <section class="panel"><div class="panel-title">Timing tower <span>Gap + strategy model</span></div><div class="table-wrap"><table><caption hidden>Formula 1 running order and strategy data</caption><thead><tr><th>Pos</th><th class="driver-col">Driver</th><th class="gap-col">Gap</th><th class="optional">Interval</th><th class="tyre-col">Tyre</th><th class="pace-col">Last 3</th><th class="optional">Pace</th><th class="rejoin-col">Rejoin</th><th class="optional">Stints</th></tr></thead><tbody id="board"><tr><td class="empty" colspan="9">CONNECTING TO TIMING…</td></tr></tbody></table></div></section>
       <aside class="side"><section class="panel"><div class="panel-title">Track conditions <span>Latest</span></div><div class="weather-grid"><div class="weather-stat"><small>Air</small><strong id="air">—</strong><span class="unit">°C</span></div><div class="weather-stat"><small>Track</small><strong id="track">—</strong><span class="unit">°C</span></div><div class="weather-stat"><small>Wind</small><strong id="wind">—</strong><span class="unit">m/s</span></div><div class="weather-stat"><small>Rain</small><strong id="rain">—</strong></div></div></section><section class="panel"><div class="panel-title">Race control <span>Latest messages</span></div><ol class="messages" id="messages"><li class="empty">NO MESSAGES</li></ol></section></aside>
     </div>
-    <div class="legend"><span><i></i><b>Rejoin</b>&nbsp; = current gap + 22s pit loss</span><span><b>Last 3</b>&nbsp; = median lap time</span><span>Scrub the complete field · 2-minute intervals</span></div>
+    <div class="legend"><span><i></i><b>Rejoin</b>&nbsp; = current gap + 22s pit loss</span><span><b>Last 3</b>&nbsp; = median lap time</span><span id="feedNote">Live on race day · replay between races</span></div>
   </section>
-  <section class="details"><div class="details-inner"><h2>The race,<br><span>not the feed.</span></h2><div class="details-copy"><div><h3>What it answers</h3><ul><li>Who is in another driver's pit window?</li><li>Which tyres are old, and what came before?</li><li>Who has pace over the last three laps?</li><li>Where would a stop put each driver?</li></ul></div><div><h3>What it does not do</h3><p>The rejoin number is transparent arithmetic: gap to the leader plus an adjustable pit-loss assumption, ranked back into the field. It is a quick decision aid, not a strategy prediction.</p></div><pre class="command"><code><span class="comment"># live session; standard library only</span>
+  <section class="details"><div class="details-inner"><h2>The race,<br><span>not the feed.</span></h2><div class="details-copy"><div><h3>Race-day automatic</h3><p>This page reads the calendar, recognizes the current Grand Prix, and switches from the Monaco replay to public live timing. Leave it open: the tower refreshes throughout the race.</p></div><div><h3>Transparent model</h3><p>The rejoin number is simple arithmetic: gap to the leader plus an adjustable pit-loss assumption, ranked back into the field. It is a quick decision aid, not a strategy prediction.</p></div><pre class="command"><code><span class="comment"># run your own live wall; standard library only</span>
 python3 pitwall.py serve --session latest
 
 <span class="comment"># adjust the circuit's pit-loss assumption</span>
@@ -54,7 +55,7 @@ python3 pitwall.py serve --pit-loss 22</code></pre></div></div></section>
 <footer class="site-footer"><span>OpenF1 data · MIT licensed · Not affiliated with Formula 1</span><span><a href="/tools">← More tools</a> &nbsp; <a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">GitHub ↗</a></span></footer>
 <script>
 const $=id=>document.getElementById(id);
-const elements={meta:$('meta'),lapNow:$('lapNow'),pitLoss:$('pitLoss'),play:$('play'),scrub:$('scrub'),tick:$('tick'),board:$('board'),messages:$('messages'),air:$('air'),track:$('track'),wind:$('wind'),rain:$('rain')};
+const elements={meta:$('meta'),topMode:$('topMode'),eventLabel:$('eventLabel'),sessionName:$('sessionName'),lapNow:$('lapNow'),pitLoss:$('pitLoss'),dataMode:$('dataMode'),transport:$('transport'),play:$('play'),scrub:$('scrub'),tick:$('tick'),feedNote:$('feedNote'),board:$('board'),messages:$('messages'),air:$('air'),track:$('track'),wind:$('wind'),rain:$('rain')};
 const TYRE={SOFT:'#ff1e20',MEDIUM:'#ffd12e',HARD:'#f4f4f4',INTERMEDIATE:'#3acb5a',WET:'#2f8cff'};
 const show=v=>v===null||v===undefined||v===''?'—':v;
 const esc=v=>String(show(v)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -84,17 +85,42 @@ function render(s){
   }).join(''):'<tr><td class="empty" colspan="9">NO TIMING DATA YET</td></tr>';
   const control=s.race_control||[];elements.messages.innerHTML=control.length?[...control].reverse().map(m=>`<li><span class="lap-tag">L${esc(m.lap_number)}</span><span><span class="message-type">${esc(m.category||m.flag||'Race control')}</span>${esc(m.message)}</span></li>`).join(''):'<li class="empty">NO RACE CONTROL MESSAGES</li>';
 }
-(async function(){
+const ICON={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.4v13.2L19 12 8 5.4Z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>'};
+let snapshots=null,index=0,replayTimer=null,liveMode=false,checking=false;
+const clock=v=>{const d=new Date(v);return Number.isNaN(d.valueOf())?'—':d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit',second:'2-digit'})};
+const raceTime=v=>{const d=new Date(v);return Number.isNaN(d.valueOf())?'schedule pending':d.toLocaleString([],{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})};
+function setPlaying(playing){elements.play.innerHTML=playing?ICON.pause:ICON.play;elements.play.setAttribute('aria-label',playing?'Pause replay':'Play replay')}
+function stopReplay(){clearInterval(replayTimer);replayTimer=null;setPlaying(false)}
+function drawReplay(){render(snapshots[index]);elements.scrub.value=index;elements.tick.textContent=`FRAME ${String(index+1).padStart(2,'0')} / ${String(snapshots.length).padStart(2,'0')}`}
+async function loadReplay(){
+  if(!snapshots){const r=await fetch('/demo/pit-wall/snapshots.json');if(!r.ok)throw Error(`${r.status} ${r.statusText}`);snapshots=await r.json();const start=snapshots.findIndex(s=>currentLap(s)>=10&&s.board.some(r=>r.recent_pace_seconds));index=start<0?0:start;elements.scrub.max=snapshots.length-1;
+    elements.scrub.oninput=()=>{index=Number(elements.scrub.value);stopReplay();drawReplay()};
+    elements.play.onclick=()=>{if(replayTimer)return stopReplay();setPlaying(true);replayTimer=setInterval(()=>{if(index>=snapshots.length-1)return stopReplay();index++;drawReplay()},900)};
+  }
+  elements.transport.hidden=false;drawReplay();
+}
+function replayStatus(payload={}){
+  liveMode=false;elements.sessionName.textContent='MONACO REPLAY';elements.dataMode.textContent='REPLAY';elements.feedNote.textContent='Archived 2025 Monaco GP · 2-minute intervals';
+  if(payload.status==='setup_required'){
+    elements.topMode.textContent='LIVE LOCKED';elements.eventLabel.textContent=`LIVE · ${payload.session.meeting_name}`;elements.meta.classList.add('error');elements.meta.textContent='Live timing account not connected · showing Monaco replay';return;
+  }
+  const next=payload.next_session;elements.topMode.textContent=next?`NEXT · ${next.country_code}`:'REPLAY';elements.eventLabel.textContent=next?`NEXT · ${next.meeting_name}`:'BETWEEN RACES';elements.meta.classList.toggle('error',payload.status==='error');elements.meta.textContent=next?`Starts ${raceTime(next.date_start)} · Monaco replay below`:'Race calendar unavailable · Monaco replay below';
+}
+function showLive(payload){
+  liveMode=true;stopReplay();elements.transport.hidden=true;elements.meta.classList.remove('error');elements.topMode.textContent='LIVE TIMING';elements.eventLabel.textContent=`LIVE · ${payload.session.meeting_name}`;elements.sessionName.textContent=payload.session.meeting_name.replace('Grand Prix','GP');elements.dataMode.textContent='LIVE';elements.feedNote.textContent='Live OpenF1 timing · automatic 10-second refresh';elements.meta.textContent=`Updated ${clock(payload.state.generated_utc)} · ${payload.session.location}`;render(payload.state);
+}
+async function refresh(){
+  if(checking)return;checking=true;
   try{
-    const r=await fetch('/demo/pit-wall/snapshots.json');if(!r.ok)throw Error(`${r.status} ${r.statusText}`);
-    const snaps=await r.json();const start=snaps.findIndex(s=>currentLap(s)>=10&&s.board.some(r=>r.recent_pace_seconds));let i=start<0?0:start;let timer=null;elements.scrub.max=snaps.length-1;
-    const stop=()=>{clearInterval(timer);timer=null;elements.play.textContent='▶';elements.play.setAttribute('aria-label','Play replay')};
-    const draw=()=>{render(snaps[i]);elements.scrub.value=i;elements.tick.textContent=`FRAME ${String(i+1).padStart(2,'0')} / ${String(snaps.length).padStart(2,'0')}`;elements.meta.textContent=`Archived OpenF1 timing · lap ${currentLap(snaps[i])||'—'} · 22s pit-loss model`};
-    elements.scrub.oninput=()=>{i=Number(elements.scrub.value);stop();draw()};
-    elements.play.onclick=()=>{if(timer)return stop();elements.play.textContent='Ⅱ';elements.play.setAttribute('aria-label','Pause replay');timer=setInterval(()=>{if(i>=snaps.length-1)return stop();i++;draw()},900)};
-    draw();
-  }catch(e){elements.meta.classList.add('error');elements.meta.textContent=`Replay unavailable · ${e.message}`;elements.board.innerHTML='<tr><td class="empty" colspan="9">TIMING ARCHIVE UNAVAILABLE</td></tr>'}
-})();
+    const r=await fetch('/api/pit-wall',{cache:'no-store'});const payload=await r.json();if(!r.ok)throw Error(payload.message||`${r.status} ${r.statusText}`);
+    if(payload.status==='live'){showLive(payload);return}
+    if(!liveMode){replayStatus(payload);await loadReplay()}
+  }catch(e){
+    if(liveMode){elements.meta.classList.add('error');elements.meta.textContent='Live connection interrupted · retrying'}
+    else{replayStatus({status:'error'});try{await loadReplay()}catch(replayError){elements.meta.textContent=`Timing unavailable · ${replayError.message}`;elements.board.innerHTML='<tr><td class="empty" colspan="9">TIMING UNAVAILABLE</td></tr>'}}
+  }finally{checking=false}
+}
+refresh();setInterval(refresh,10000);
 </script>
 </body>
 </html>
