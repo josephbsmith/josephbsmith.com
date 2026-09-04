@@ -1,14 +1,14 @@
-# old locations → new (books moved under /writing, landing page too)
-/pdfs/* /writing/:splat 301
-/the-economist-and-the-artist /writing/the-economist-and-the-artist 301
+# retired writing routes
+/writing / 301
+/writing/* / 301
+/pdfs/* / 301
+/the-economist-and-the-artist / 301
 
 # unlisted family-history landing page
 /ancestry /ancestry/index.html 200
 
 # rooms live in one document; serve the app shell for their URLs
 /work / 200
-/writing / 200
 /code / 200
 /colophon / 200
 /contact / 200
-/writing/the-economist-and-the-artist /writing 301
