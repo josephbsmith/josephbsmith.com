@@ -3,6 +3,7 @@ const DATA_ENDPOINTS = ["drivers", "position", "intervals", "laps", "stints", "r
 const PIT_LOSS_SECONDS = 22;
 
 let credentials = { token: "", expires: 0 };
+let scheduleCache = { year: 0, expires: 0, sessions: [], meetings: [] };
 
 function response(data, maxAge = 10, status = 200) {
   return Response.json(data, { status, headers: {
@@ -182,14 +183,18 @@ export function buildState(data, pitLoss = PIT_LOSS_SECONDS) {
 
 async function calendar(token = "") {
   const year = new Date().getUTCFullYear();
+  if (scheduleCache.year === year && Date.now() < scheduleCache.expires) return scheduleCache;
   const results = await Promise.all([
     openF1(`/v1/sessions?year=${year}&session_name=Race`, token),
     openF1(`/v1/meetings?year=${year}`, token),
   ]);
-  return {
+  scheduleCache = {
+    year,
+    expires: Date.now() + 6 * 60 * 60 * 1000,
     sessions: results[0],
     meetings: results[1],
   };
+  return scheduleCache;
 }
 
 async function livePayload(env) {
@@ -201,8 +206,9 @@ async function livePayload(env) {
   if (!configured) {
     return { data: { status: "setup_required", session: race.active, next_session: race.next }, maxAge: 60 };
   }
-  const records = await Promise.all(DATA_ENDPOINTS.map((endpoint) =>
+  const firstSix = await Promise.all(DATA_ENDPOINTS.slice(0, 6).map((endpoint) =>
     openF1(`/v1/${endpoint}?session_key=${race.active.session_key}`, token)));
+  const records = [...firstSix, await openF1(`/v1/weather?session_key=${race.active.session_key}`, token)];
   const data = Object.fromEntries(DATA_ENDPOINTS.map((endpoint, index) => [endpoint, records[index]]));
   return { data: { status: "live", session: race.active, next_session: race.next, state: buildState(data) }, maxAge: 10 };
 }
