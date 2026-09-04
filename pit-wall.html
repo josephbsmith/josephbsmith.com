@@ -32,7 +32,7 @@
 <main>
   <section class="hero">
     <div class="hero-inner">
-      <div class="hero-copy"><div class="kicker">Live every Grand Prix / OpenF1 timing</div><h1>Call the <span>whole race.</span></h1><p>Broadcasts follow the fight at the front. Pit Wall keeps every driver, gap, tyre, pace trend, and estimated pit rejoin on one screen—live on race day.</p><div class="hero-actions"><a class="button" href="#timing">Open pit wall ↓</a><a class="button secondary" href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Get the code ↗</a></div></div>
+      <div class="hero-copy"><div class="kicker">Live every Grand Prix / OpenF1 timing</div><h1>Call the <span>whole race.</span></h1><p>Pit Wall puts every driver, gap, tyre, pace trend, and estimated pit rejoin on one race-day screen.</p><div class="hero-actions"><a class="button" href="#timing">Open pit wall ↓</a><a class="button secondary" href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">Get the code ↗</a></div></div>
       <aside class="hero-readout" aria-label="Project summary"><small>Strategy channel</small><strong>01</strong><dl><div><dt>Race mode</dt><dd>Automatic</dd></div><div><dt>Refresh</dt><dd>10 seconds</dd></div><div><dt>Video</dt><dd>None</dd></div><div><dt>Between races</dt><dd>Replay</dd></div></dl></aside>
     </div>
   </section>
@@ -46,13 +46,13 @@
     </div>
     <div class="legend"><span><i></i><b>Rejoin</b>&nbsp; = current gap + 22s pit loss</span><span><b>Last 3</b>&nbsp; = median lap time</span><span id="feedNote">Live on race day · replay between races</span></div>
   </section>
-  <section class="details"><div class="details-inner"><h2>The race,<br><span>not the feed.</span></h2><div class="details-copy"><div><h3>Race-day automatic</h3><p>This page reads the calendar, recognizes the current Grand Prix, and switches from the Monaco replay to public live timing. Leave it open: the tower refreshes throughout the race.</p></div><div><h3>Transparent model</h3><p>The rejoin number is simple arithmetic: gap to the leader plus an adjustable pit-loss assumption, ranked back into the field. It is a quick decision aid, not a strategy prediction.</p></div><pre class="command"><code><span class="comment"># run your own live wall; standard library only</span>
+  <section class="details"><div class="details-inner"><h2>Full-grid<br><span>strategy.</span></h2><div class="details-copy"><div><h3>Race-day automatic</h3><p>This page reads the calendar, recognizes the current Grand Prix, and switches from the Monaco replay to public live timing. Leave it open: the tower refreshes throughout the race.</p></div><div><h3>Transparent model</h3><p>The rejoin number is simple arithmetic: gap to the leader plus an adjustable pit-loss assumption, ranked back into the field. The calculation updates with every timing refresh.</p></div><pre class="command"><code><span class="comment"># run your own live wall; standard library only</span>
 python3 pitwall.py serve --session latest
 
 <span class="comment"># adjust the circuit's pit-loss assumption</span>
 python3 pitwall.py serve --pit-loss 22</code></pre></div></div></section>
 </main>
-<footer class="site-footer"><span><a href="https://openf1.org" target="_blank" rel="noopener">OpenF1 data</a> · Strategy code MIT · Not affiliated with Formula 1</span><span><a href="/tools">← More tools</a> &nbsp; <a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">GitHub ↗</a></span></footer>
+<footer class="site-footer"><span><a href="https://openf1.org" target="_blank" rel="noopener">OpenF1 data</a> · Strategy code MIT · Independent of Formula 1</span><span><a href="/tools">← More tools</a> &nbsp; <a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">GitHub ↗</a></span></footer>
 <script>
 const $=id=>document.getElementById(id);
 const elements={meta:$('meta'),topMode:$('topMode'),eventLabel:$('eventLabel'),sessionName:$('sessionName'),lapNow:$('lapNow'),pitLoss:$('pitLoss'),dataMode:$('dataMode'),transport:$('transport'),play:$('play'),scrub:$('scrub'),tick:$('tick'),feedNote:$('feedNote'),board:$('board'),messages:$('messages'),air:$('air'),track:$('track'),wind:$('wind'),rain:$('rain')};
