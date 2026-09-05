@@ -1,4 +1,5 @@
 const OPENF1 = "https://api.openf1.org";
+const F1_TIMING = "https://livetiming.formula1.com/static";
 const DATA_ENDPOINTS = [
   "drivers", "position", "intervals", "laps", "stints", "race_control", "weather",
   "pit", "overtakes", "session_result", "starting_grid", "team_radio",
@@ -10,6 +11,8 @@ const ACTIVE_AFTER_MS = 5 * 60 * 1000;
 
 let credentials = { token: "", expires: 0 };
 let scheduleCache = { year: 0, expires: 0, sessions: [], meetings: [] };
+let requestGate = Promise.resolve();
+let nextRequest = 0;
 
 function response(data, maxAge = 10, status = 200) {
   return Response.json(data, { status, headers: {
@@ -29,6 +32,13 @@ async function openF1(path, token = "") {
   const headers = { Accept: "application/json", "User-Agent": "F1-Pit-Wall/2.0" };
   if (token) headers.Authorization = `Bearer ${token}`;
   for (let attempt = 0; attempt < 4; attempt += 1) {
+    let release;
+    const previous = requestGate;
+    requestGate = new Promise((resolve) => { release = resolve; });
+    await previous;
+    await new Promise((resolve) => setTimeout(resolve, Math.max(0, nextRequest - Date.now())));
+    nextRequest = Date.now() + 360;
+    release();
     const result = await fetch(`${OPENF1}${path}`, { headers });
     if (result.ok) return result.json();
     if (result.status !== 429 || attempt === 3) throw new OpenF1Error(result.status);
@@ -36,6 +46,14 @@ async function openF1(path, token = "") {
     await new Promise((resolve) => setTimeout(resolve, retry * 1000));
   }
   throw new Error("OpenF1 request failed");
+}
+
+async function f1Timing(path) {
+  const result = await fetch(`${F1_TIMING}/${path}`, {
+    headers: { Accept: "application/json", "User-Agent": "BestHTTP" },
+  });
+  if (!result.ok) throw new Error(`F1 timing returned ${result.status}`);
+  return JSON.parse((await result.text()).replace(/^\uFEFF/, ""));
 }
 
 async function accessToken(env) {
@@ -72,6 +90,37 @@ function sessionDetails(session, meetings) {
     date_start: session.date_start,
     date_end: session.date_end,
   };
+}
+
+function utcDate(value, offset = "00:00:00") {
+  if (!value) return null;
+  const sign = offset.startsWith("-") ? "-" : "+";
+  return new Date(`${value}${sign}${offset.replace(/^[-+]/, "").slice(0, 5)}`).toISOString();
+}
+
+export function normalizeCalendar(index) {
+  const meetings = (index.Meetings || []).map((meeting) => ({
+    meeting_key: meeting.Key,
+    meeting_name: meeting.Name,
+    meeting_official_name: meeting.OfficialName,
+    location: meeting.Location,
+    country_name: meeting.Country?.Name,
+    country_code: meeting.Country?.Code,
+    circuit_short_name: meeting.Circuit?.ShortName,
+  }));
+  const sessions = (index.Meetings || []).flatMap((meeting) => (meeting.Sessions || []).map((session) => ({
+    session_key: session.Key,
+    meeting_key: meeting.Key,
+    session_name: session.Name,
+    session_type: session.Type,
+    location: meeting.Location,
+    country_name: meeting.Country?.Name,
+    country_code: meeting.Country?.Code,
+    circuit_short_name: meeting.Circuit?.ShortName,
+    date_start: utcDate(session.StartDate, session.GmtOffset),
+    date_end: utcDate(session.EndDate, session.GmtOffset),
+  })));
+  return { meetings, sessions };
 }
 
 function isActive(session, now = Date.now()) {
@@ -374,17 +423,30 @@ async function fetchBundle(sessionKey, token = "") {
 async function calendar() {
   const year = new Date().getUTCFullYear();
   if (scheduleCache.year === year && Date.now() < scheduleCache.expires) return scheduleCache;
-  const results = await Promise.all([
-    openF1(`/v1/sessions?year=${year}`),
-    openF1(`/v1/meetings?year=${year}`),
-  ]);
+  const results = normalizeCalendar(await f1Timing(`${year}/Index.json`));
   scheduleCache = {
     year,
     expires: Date.now() + 6 * 60 * 60 * 1000,
-    sessions: results[0],
-    meetings: results[1],
+    sessions: results.sessions,
+    meetings: results.meetings,
   };
   return scheduleCache;
+}
+
+function unavailable(target, schedule, selection, message) {
+  const session = sessionDetails(target, schedule.meetings);
+  return {
+    data: {
+      status: "setup_required",
+      message,
+      session,
+      sessions: schedule.sessions
+        .filter((item) => item.meeting_key === target.meeting_key)
+        .map((item) => sessionDetails(item, schedule.meetings)),
+      next_session: selection.next,
+    },
+    maxAge: 30,
+  };
 }
 
 async function livePayload(env, requestedSession, pitLoss) {
@@ -402,10 +464,19 @@ async function livePayload(env, requestedSession, pitLoss) {
   if (!target) return { data: { status: "waiting", next_session: selection.next }, maxAge: 300 };
   const active = isActive(target);
   if (active && !configured) {
-    return { data: { status: "setup_required", session: sessionDetails(target, schedule.meetings), next_session: selection.next }, maxAge: 60 };
+    return unavailable(target, schedule, selection, "Live timing requires an OpenF1 subscription.");
   }
   if (active && !token) token = await accessToken(env);
-  const state = buildState(await fetchBundle(target.session_key, token), pitLoss);
+  let bundle;
+  try {
+    bundle = await fetchBundle(target.session_key, token);
+  } catch (error) {
+    if (error.status === 401 && !configured) {
+      return unavailable(target, schedule, selection, "OpenF1 requires authentication while a live session is in progress.");
+    }
+    throw error;
+  }
+  const state = buildState(bundle, pitLoss);
   state.follow_latest = !requestedSession;
   return {
     data: {
