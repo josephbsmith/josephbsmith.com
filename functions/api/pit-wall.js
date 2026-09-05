@@ -31,7 +31,7 @@ class OpenF1Error extends Error {
 async function openF1(path, token = "") {
   const headers = { Accept: "application/json", "User-Agent": "F1-Pit-Wall/2.0" };
   if (token) headers.Authorization = `Bearer ${token}`;
-  for (let attempt = 0; attempt < 4; attempt += 1) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
     let release;
     const previous = requestGate;
     requestGate = new Promise((resolve) => { release = resolve; });
@@ -41,8 +41,8 @@ async function openF1(path, token = "") {
     release();
     const result = await fetch(`${OPENF1}${path}`, { headers });
     if (result.ok) return result.json();
-    if (result.status !== 429 || attempt === 3) throw new OpenF1Error(result.status);
-    const retry = Number(result.headers.get("Retry-After")) || 2 ** attempt;
+    if (result.status !== 429 || attempt === 1) throw new OpenF1Error(result.status);
+    const retry = Math.min(3, Number(result.headers.get("Retry-After")) || 1);
     await new Promise((resolve) => setTimeout(resolve, retry * 1000));
   }
   throw new Error("OpenF1 request failed");
@@ -388,18 +388,18 @@ function recordDate(record) {
   return raw ? new Date(raw) : null;
 }
 
-async function fetchBundle(sessionKey, token = "") {
-  const sessionRows = await openF1(`/v1/sessions?${query({ session_key: sessionKey })}`, token);
+async function fetchBundle(sessionKey, token = "", context = null) {
+  const sessionRows = context ? [context.session] : await openF1(`/v1/sessions?${query({ session_key: sessionKey })}`, token);
   const session = sessionRows.at(-1) || { session_key: sessionKey };
   const meetingKey = session.meeting_key;
-  const context = await Promise.all([
+  const surroundings = context ? [context.sessions, [context.meeting]] : await Promise.all([
     meetingKey ? openF1(`/v1/sessions?${query({ meeting_key: meetingKey })}`, token) : Promise.resolve(sessionRows),
     meetingKey ? openF1(`/v1/meetings?${query({ meeting_key: meetingKey })}`, token) : Promise.resolve([]),
   ]);
   const data = {
     session: sessionRows,
-    sessions: context[0],
-    meeting: context[1],
+    sessions: surroundings[0],
+    meeting: surroundings[1],
     ...Object.fromEntries(DATA_ENDPOINTS.map((endpoint) => [endpoint, []])),
   };
   const raceOnly = new Set(["intervals", "overtakes", "championship_drivers", "championship_teams"]);
@@ -486,7 +486,13 @@ async function livePayload(env, requestedSession, pitLoss) {
   if (active && !token) token = await accessToken(env);
   let bundle;
   try {
-    bundle = await fetchBundle(target.session_key, token);
+    const meeting = schedule.meetings.find((item) => item.meeting_key === target.meeting_key);
+    const context = meeting ? {
+      session: target,
+      meeting,
+      sessions: schedule.sessions.filter((item) => item.meeting_key === target.meeting_key),
+    } : null;
+    bundle = await fetchBundle(target.session_key, token, context);
   } catch (error) {
     if (error.status === 401 && !configured) {
       return unavailable(target, schedule, selection, "OpenF1 requires authentication while a live session is in progress.");
