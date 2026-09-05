@@ -93,6 +93,18 @@ function sessionDetails(session, meetings) {
   };
 }
 
+function meetingsFromSessions(sessions) {
+  return [...new Map(sessions.map((session) => [session.meeting_key, {
+    meeting_key: session.meeting_key,
+    meeting_name: `${session.country_name} Grand Prix`,
+    location: session.location,
+    country_name: session.country_name,
+    country_code: session.country_code,
+    circuit_short_name: session.circuit_short_name,
+    date_start: session.date_start,
+  }])).values()];
+}
+
 function utcDate(value, offset = "00:00:00") {
   if (!value) return null;
   const sign = offset.startsWith("-") ? "-" : "+";
@@ -442,24 +454,35 @@ async function fetchBundle(sessionKey, token = "", context = null, active = fals
 async function calendar(token = "") {
   const year = new Date().getUTCFullYear();
   if (scheduleCache.year === year && Date.now() < scheduleCache.expires && (!token || !scheduleCache.synthetic)) return scheduleCache;
+  const edge = globalThis.caches?.default;
+  const cacheKey = new Request(`https://josephbsmith.com/api/pit-wall-calendar?year=${year}`);
+  const cached = edge ? await edge.match(cacheKey) : null;
+  if (cached) {
+    scheduleCache = await cached.json();
+    return scheduleCache;
+  }
   let results;
   let synthetic = false;
   try {
     const sessions = await openF1(`/v1/sessions?year=${year}`, token);
-    const meetings = await openF1(`/v1/meetings?year=${year}`, token);
-    results = { sessions, meetings };
+    const meetings = await optional("meetings", { year }, token);
+    results = { sessions, meetings: meetings.length ? meetings : meetingsFromSessions(sessions) };
   } catch (error) {
-    if (error.status !== 401) throw error;
     results = normalizeCalendar(await fastF1Schedule(year));
     synthetic = true;
   }
   scheduleCache = {
     year,
-    expires: Date.now() + 6 * 60 * 60 * 1000,
+    expires: Date.now() + (synthetic ? 5 * 60 * 1000 : 6 * 60 * 60 * 1000),
     sessions: results.sessions,
     meetings: results.meetings,
     synthetic,
   };
+  if (edge && !synthetic) {
+    await edge.put(cacheKey, Response.json(scheduleCache, {
+      headers: { "Cache-Control": "public, max-age=21600" },
+    }));
+  }
   return scheduleCache;
 }
 
