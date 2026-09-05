@@ -419,13 +419,16 @@ async function fetchBundle(sessionKey, token = "", context = null, active = fals
   };
   const raceOnly = new Set(["intervals", "overtakes", "championship_drivers", "championship_teams"]);
   const race = ["Race", "Sprint"].includes(session.session_type);
+  const qualifying = String(session.session_type).includes("Qualifying");
   const liveEndpoints = new Set([
     "drivers", "position", "laps", "stints", "race_control", "weather", "pit", "team_radio",
     ...(race ? ["intervals", "overtakes", "starting_grid"] : []),
   ]);
-  const archiveEndpoints = new Set(race ? DATA_ENDPOINTS : [
-    "drivers", "laps", "stints", "race_control", "weather", "session_result", "team_radio",
-  ]);
+  const archiveEndpoints = new Set(race
+    ? ["drivers", "laps", "stints", "race_control", "pit", "session_result", "starting_grid"]
+    : qualifying
+      ? ["drivers", "laps", "race_control", "session_result"]
+      : ["drivers", "laps", "stints", "race_control"]);
   const endpoints = DATA_ENDPOINTS.filter((endpoint) => (active ? liveEndpoints : archiveEndpoints).has(endpoint)
     && (!raceOnly.has(endpoint) || race));
   const records = [];
