@@ -388,7 +388,7 @@ function recordDate(record) {
   return raw ? new Date(raw) : null;
 }
 
-async function fetchBundle(sessionKey, token = "", context = null) {
+async function fetchBundle(sessionKey, token = "", context = null, active = false) {
   const sessionRows = context ? [context.session] : await openF1(`/v1/sessions?${query({ session_key: sessionKey })}`, token);
   const session = sessionRows.at(-1) || { session_key: sessionKey };
   const meetingKey = session.meeting_key;
@@ -403,14 +403,23 @@ async function fetchBundle(sessionKey, token = "", context = null) {
     ...Object.fromEntries(DATA_ENDPOINTS.map((endpoint) => [endpoint, []])),
   };
   const raceOnly = new Set(["intervals", "overtakes", "championship_drivers", "championship_teams"]);
-  const endpoints = DATA_ENDPOINTS.filter((endpoint) => !raceOnly.has(endpoint) || ["Race", "Sprint"].includes(session.session_type));
+  const race = ["Race", "Sprint"].includes(session.session_type);
+  const liveEndpoints = new Set([
+    "drivers", "position", "laps", "stints", "race_control", "weather", "pit", "team_radio",
+    ...(race ? ["intervals", "overtakes", "starting_grid"] : []),
+  ]);
+  const archiveEndpoints = new Set(race ? DATA_ENDPOINTS : [
+    "drivers", "laps", "stints", "race_control", "weather", "session_result", "team_radio",
+  ]);
+  const endpoints = DATA_ENDPOINTS.filter((endpoint) => (active ? liveEndpoints : archiveEndpoints).has(endpoint)
+    && (!raceOnly.has(endpoint) || race));
   const records = await Promise.all(endpoints.map((endpoint) => optional(endpoint, { session_key: sessionKey }, token)));
   endpoints.forEach((endpoint, index) => { data[endpoint] = records[index]; });
 
   const dates = ["position", "laps"].flatMap((endpoint) => data[endpoint].map(recordDate).filter(Boolean));
   data.location = [];
   data.car_data = [];
-  if (dates.length) {
+  if (dates.length && (active || race)) {
     const anchor = new Date(Math.max(...dates.map(Number)));
     const lapCounts = new Map();
     for (const lap of data.laps) lapCounts.set(lap.driver_number, (lapCounts.get(lap.driver_number) || 0) + 1);
@@ -492,7 +501,7 @@ async function livePayload(env, requestedSession, pitLoss) {
       meeting,
       sessions: schedule.sessions.filter((item) => item.meeting_key === target.meeting_key),
     } : null;
-    bundle = await fetchBundle(target.session_key, token, context);
+    bundle = await fetchBundle(target.session_key, token, context, active);
   } catch (error) {
     if (error.status === 401 && !configured) {
       return unavailable(target, schedule, selection, "OpenF1 requires authentication while a live session is in progress.");
@@ -508,7 +517,7 @@ async function livePayload(env, requestedSession, pitLoss) {
       next_session: selection.next,
       state,
     },
-    maxAge: active ? 8 : 3600,
+    maxAge: active ? 30 : 3600,
   };
 }
 
