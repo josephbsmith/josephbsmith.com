@@ -378,7 +378,10 @@ async function optional(endpoint, params, token) {
   try {
     return await openF1(`/v1/${endpoint}?${query(params)}`, token);
   } catch (error) {
-    if ([404, 422].includes(error.status)) return [];
+    if ([404, 422, 429, 500, 502, 503, 504].includes(error.status)) {
+      console.warn(`Pit Wall skipped ${endpoint}: OpenF1 returned ${error.status}`);
+      return [];
+    }
     throw error;
   }
 }
