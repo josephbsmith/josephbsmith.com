@@ -390,8 +390,8 @@ async function optional(endpoint, params, token) {
   try {
     return await openF1(`/v1/${endpoint}?${query(params)}`, token);
   } catch (error) {
-    if ([404, 422, 429, 500, 502, 503, 504].includes(error.status)) {
-      console.warn(`Pit Wall skipped ${endpoint}: OpenF1 returned ${error.status}`);
+    if (![401, 403].includes(error.status)) {
+      console.warn(`Pit Wall skipped ${endpoint}: ${error.message}`);
       return [];
     }
     throw error;
@@ -428,7 +428,11 @@ async function fetchBundle(sessionKey, token = "", context = null, active = fals
   ]);
   const endpoints = DATA_ENDPOINTS.filter((endpoint) => (active ? liveEndpoints : archiveEndpoints).has(endpoint)
     && (!raceOnly.has(endpoint) || race));
-  const records = await Promise.all(endpoints.map((endpoint) => optional(endpoint, { session_key: sessionKey }, token)));
+  const records = [];
+  for (let index = 0; index < endpoints.length; index += 3) {
+    records.push(...await Promise.all(endpoints.slice(index, index + 3)
+      .map((endpoint) => optional(endpoint, { session_key: sessionKey }, token))));
+  }
   endpoints.forEach((endpoint, index) => { data[endpoint] = records[index]; });
 
   const dates = ["position", "laps"].flatMap((endpoint) => data[endpoint].map(recordDate).filter(Boolean));
