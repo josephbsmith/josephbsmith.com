@@ -6,7 +6,6 @@ const DATA_ENDPOINTS = [
   "championship_drivers", "championship_teams",
 ];
 const PIT_LOSS_SECONDS = 22;
-const ACTIVE_BEFORE_MS = 30 * 60 * 1000;
 const ACTIVE_AFTER_MS = 5 * 60 * 1000;
 
 let credentials = { token: "", expires: 0 };
@@ -143,7 +142,7 @@ export function normalizeCalendar(index) {
 }
 
 function isActive(session, now = Date.now()) {
-  return Date.parse(session.date_start) - ACTIVE_BEFORE_MS <= now
+  return Date.parse(session.date_start) <= now
     && now <= Date.parse(session.date_end) + ACTIVE_AFTER_MS;
 }
 
@@ -493,11 +492,11 @@ async function calendar(token = "") {
   return scheduleCache;
 }
 
-function unavailable(target, schedule, selection, message) {
+function notice(target, schedule, selection, status, message) {
   const session = sessionDetails(target, schedule.meetings);
   return {
     data: {
-      status: "setup_required",
+      status,
       message,
       session,
       sessions: schedule.sessions
@@ -516,14 +515,17 @@ async function livePayload(env, requestedSession, pitLoss) {
   const selection = selectSession(schedule.sessions, schedule.meetings);
   let target = requestedSession
     ? schedule.sessions.find((session) => String(session.session_key) === String(requestedSession))
-    : selection.active || selection.latest;
+    : selection.active || selection.next || selection.latest;
   if (!target && requestedSession) {
     target = (await openF1(`/v1/sessions?${query({ session_key: requestedSession })}`, token)).at(-1);
   }
   if (!target) return { data: { status: "waiting", next_session: selection.next }, maxAge: 300 };
   const active = isActive(target);
+  if (!active && Date.parse(target.date_start) > Date.now()) {
+    return notice(target, schedule, selection, "waiting", `Waiting for ${target.session_name} to start.`);
+  }
   if (active && !configured) {
-    return unavailable(target, schedule, selection, "Live timing requires an OpenF1 subscription.");
+    return notice(target, schedule, selection, "setup_required", "Live timing requires an OpenF1 subscription.");
   }
   if (active && !token) token = await accessToken(env);
   let bundle;
@@ -537,7 +539,7 @@ async function livePayload(env, requestedSession, pitLoss) {
     bundle = await fetchBundle(target.session_key, token, context, active);
   } catch (error) {
     if (error.status === 401 && !configured) {
-      return unavailable(target, schedule, selection, "OpenF1 requires authentication while a live session is in progress.");
+      return notice(target, schedule, selection, "setup_required", "OpenF1 requires authentication while a live session is in progress.");
     }
     throw error;
   }

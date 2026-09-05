@@ -27,6 +27,9 @@ const between = selectSession(sessions, meetings, Date.parse("2026-09-04T12:00:0
 assert.equal(between.active, null);
 assert.equal(between.latest.session_name, "Practice 1");
 assert.equal(between.next.session_name, "Practice 2");
+const shortlyBefore = selectSession(sessions, meetings, Date.parse("2026-09-04T13:45:00Z"));
+assert.equal(shortlyBefore.active, null);
+assert.equal(shortlyBefore.next.session_key, 2);
 const live = selectSession(sessions, meetings, Date.parse("2026-09-04T14:30:00Z"));
 assert.equal(live.active.session_key, 2);
 assert.equal(live.next.session_key, 3);
