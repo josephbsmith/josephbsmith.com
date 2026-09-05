@@ -543,7 +543,7 @@ async function livePayload(env, requestedSession, pitLoss) {
       next_session: selection.next,
       state,
     },
-    maxAge: active ? 30 : 3600,
+    maxAge: active || !state.board.length ? 30 : 3600,
   };
 }
 
