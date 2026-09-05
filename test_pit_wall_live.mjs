@@ -2,14 +2,18 @@ import assert from "node:assert/strict";
 
 const { buildState, normalizeCalendar, selectSession } = await import("./functions/api/pit-wall.js");
 
-const calendar = normalizeCalendar({ Meetings: [{
-  Key: 20, Name: "Italian Grand Prix", OfficialName: "FORMULA 1 ITALIAN GRAND PRIX 2026",
-  Location: "Monza", Country: { Code: "ITA", Name: "Italy" }, Circuit: { ShortName: "Monza" },
-  Sessions: [{ Key: 1, Type: "Practice", Name: "Practice 1", StartDate: "2026-09-04T12:30:00", EndDate: "2026-09-04T13:30:00", GmtOffset: "02:00:00" }],
-}] });
+const calendar = normalizeCalendar({
+  event_name: { 14: "Italian Grand Prix" }, official_event_name: { 14: "FORMULA 1 ITALIAN GRAND PRIX 2026" },
+  location: { 14: "Monza" }, country: { 14: "Italy" }, gmt_offset: { 14: "+02:00" },
+  session1: { 14: "Practice 1" }, session1_date: { 14: "2026-09-04T12:30:00" },
+  session2: { 14: "Practice 2" }, session2_date: { 14: "2026-09-04T16:00:00" },
+  session3: { 14: "Practice 3" }, session3_date: { 14: "2026-09-05T12:30:00" },
+  session4: { 14: "Qualifying" }, session4_date: { 14: "2026-09-05T16:00:00" },
+  session5: { 14: "Race" }, session5_date: { 14: "2026-09-06T15:00:00" },
+});
 assert.equal(calendar.sessions[0].date_start, "2026-09-04T10:30:00.000Z");
-assert.equal(calendar.sessions[0].meeting_key, 20);
-assert.equal(calendar.meetings[0].circuit_short_name, "Monza");
+assert.equal(calendar.sessions[0].meeting_key, 800014);
+assert.equal(calendar.sessions[4].date_end, "2026-09-06T15:00:00.000Z");
 
 const sessions = [
   { session_key: 1, meeting_key: 20, session_name: "Practice 1", session_type: "Practice", country_name: "Italy", date_start: "2026-09-04T10:00:00Z", date_end: "2026-09-04T11:00:00Z" },

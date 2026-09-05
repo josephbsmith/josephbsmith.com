@@ -1,5 +1,5 @@
 const OPENF1 = "https://api.openf1.org";
-const F1_TIMING = "https://livetiming.formula1.com/static";
+const FASTF1_SCHEDULE = "https://raw.githubusercontent.com/theOehrly/f1schedule/master";
 const DATA_ENDPOINTS = [
   "drivers", "position", "intervals", "laps", "stints", "race_control", "weather",
   "pit", "overtakes", "session_result", "starting_grid", "team_radio",
@@ -48,12 +48,13 @@ async function openF1(path, token = "") {
   throw new Error("OpenF1 request failed");
 }
 
-async function f1Timing(path) {
-  const result = await fetch(`${F1_TIMING}/${path}`, {
-    headers: { Accept: "application/json", "User-Agent": "BestHTTP" },
+async function fastF1Schedule(year) {
+  const result = await fetch(`${FASTF1_SCHEDULE}/schedule_${year}.json`, {
+    headers: { Accept: "application/json", "User-Agent": "F1-Pit-Wall/2.0" },
+    signal: AbortSignal.timeout(5000),
   });
-  if (!result.ok) throw new Error(`F1 timing returned ${result.status}`);
-  return JSON.parse((await result.text()).replace(/^\uFEFF/, ""));
+  if (!result.ok) throw new Error(`FastF1 schedule returned ${result.status}`);
+  return result.json();
 }
 
 async function accessToken(env) {
@@ -99,27 +100,33 @@ function utcDate(value, offset = "00:00:00") {
 }
 
 export function normalizeCalendar(index) {
-  const meetings = (index.Meetings || []).map((meeting) => ({
-    meeting_key: meeting.Key,
-    meeting_name: meeting.Name,
-    meeting_official_name: meeting.OfficialName,
-    location: meeting.Location,
-    country_name: meeting.Country?.Name,
-    country_code: meeting.Country?.Code,
-    circuit_short_name: meeting.Circuit?.ShortName,
+  const rows = Object.keys(index.event_name || {});
+  const meetings = rows.map((row) => ({
+    meeting_key: 800000 + Number(row),
+    meeting_name: index.event_name[row],
+    meeting_official_name: index.official_event_name[row],
+    location: index.location[row],
+    country_name: index.country[row],
+    circuit_short_name: index.location[row],
   }));
-  const sessions = (index.Meetings || []).flatMap((meeting) => (meeting.Sessions || []).map((session) => ({
-    session_key: session.Key,
-    meeting_key: meeting.Key,
-    session_name: session.Name,
-    session_type: session.Type,
-    location: meeting.Location,
-    country_name: meeting.Country?.Name,
-    country_code: meeting.Country?.Code,
-    circuit_short_name: meeting.Circuit?.ShortName,
-    date_start: utcDate(session.StartDate, session.GmtOffset),
-    date_end: utcDate(session.EndDate, session.GmtOffset),
-  })));
+  const sessions = rows.flatMap((row) => [1, 2, 3, 4, 5].flatMap((number) => {
+    const name = index[`session${number}`]?.[row];
+    const localStart = index[`session${number}_date`]?.[row];
+    if (!name || !localStart) return [];
+    const dateStart = utcDate(localStart, index.gmt_offset[row]);
+    const duration = name === "Race" ? 120 : name === "Sprint" ? 60 : name.includes("Sprint Qualifying") ? 44 : 60;
+    return [{
+      session_key: Math.floor(Date.parse(dateStart) / 1000),
+      meeting_key: 800000 + Number(row),
+      session_name: name,
+      session_type: ["Race", "Sprint"].includes(name) ? "Race" : name.includes("Qualifying") ? "Qualifying" : "Practice",
+      location: index.location[row],
+      country_name: index.country[row],
+      circuit_short_name: index.location[row],
+      date_start: dateStart,
+      date_end: new Date(Date.parse(dateStart) + duration * 60000).toISOString(),
+    }];
+  }));
   return { meetings, sessions };
 }
 
@@ -420,15 +427,26 @@ async function fetchBundle(sessionKey, token = "") {
   return data;
 }
 
-async function calendar() {
+async function calendar(token = "") {
   const year = new Date().getUTCFullYear();
-  if (scheduleCache.year === year && Date.now() < scheduleCache.expires) return scheduleCache;
-  const results = normalizeCalendar(await f1Timing(`${year}/Index.json`));
+  if (scheduleCache.year === year && Date.now() < scheduleCache.expires && (!token || !scheduleCache.synthetic)) return scheduleCache;
+  let results;
+  let synthetic = false;
+  try {
+    const sessions = await openF1(`/v1/sessions?year=${year}`, token);
+    const meetings = await openF1(`/v1/meetings?year=${year}`, token);
+    results = { sessions, meetings };
+  } catch (error) {
+    if (error.status !== 401) throw error;
+    results = normalizeCalendar(await fastF1Schedule(year));
+    synthetic = true;
+  }
   scheduleCache = {
     year,
     expires: Date.now() + 6 * 60 * 60 * 1000,
     sessions: results.sessions,
     meetings: results.meetings,
+    synthetic,
   };
   return scheduleCache;
 }
@@ -451,14 +469,13 @@ function unavailable(target, schedule, selection, message) {
 
 async function livePayload(env, requestedSession, pitLoss) {
   const configured = Boolean(env.OPENF1_USERNAME && env.OPENF1_PASSWORD);
-  const schedule = await calendar();
+  let token = configured ? await accessToken(env) : "";
+  const schedule = await calendar(token);
   const selection = selectSession(schedule.sessions, schedule.meetings);
   let target = requestedSession
     ? schedule.sessions.find((session) => String(session.session_key) === String(requestedSession))
     : selection.active || selection.latest;
-  let token = "";
   if (!target && requestedSession) {
-    token = configured ? await accessToken(env) : "";
     target = (await openF1(`/v1/sessions?${query({ session_key: requestedSession })}`, token)).at(-1);
   }
   if (!target) return { data: { status: "waiting", next_session: selection.next }, maxAge: 300 };
