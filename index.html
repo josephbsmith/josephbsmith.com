@@ -69,7 +69,7 @@
   html.creative-view body { padding: 6vh clamp(20px, 4vw, 56px) 12vh; }
   html.creative-view main { max-width: 1120px; }
   [data-room="creative"] { margin-top: 0; border-top: 0; padding-top: 0; }
-  .creative-header { max-width: 650px; border-top: 1px solid var(--rule); padding-top: 1.4rem; }
+  .creative-header { max-width: 760px; border-top: 1px solid var(--rule); padding-top: 1.4rem; }
   .creative-header h2 {
     margin: 2.8rem 0 1.2rem; font-size: clamp(3rem, 7vw, 5.4rem); line-height: .95;
     letter-spacing: -.04em; font-weight: 500;
@@ -78,7 +78,14 @@
     color: var(--muted); font: 600 11px var(--mono); letter-spacing: .18em;
     text-transform: uppercase;
   }
-  .creative-deck { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.25rem); }
+  .creative-deck { max-width: 38ch; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.25rem); }
+  .creative-process { max-width: 58ch; color: var(--muted); }
+  .portfolio-links {
+    display: flex; flex-wrap: wrap; gap: .8rem 1.8rem; margin-top: 2rem;
+    font: 600 11px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+  }
+  .portfolio-links a { color: var(--accent); text-decoration: none; }
+  .portfolio-links a:hover { text-decoration: underline; }
   .creative-group { margin-top: clamp(4rem, 9vw, 7rem); padding-top: 1.5rem; border-top: 1px solid var(--rule); }
   .creative-group h3 {
     margin: 0 0 .5rem; font: 600 13px var(--mono); letter-spacing: .16em;
@@ -201,14 +208,19 @@
   <section data-room="creative" class="room" hidden>
     <header class="creative-header">
       <a class="back" href="/" data-nav>← home</a>
-      <p class="creative-kicker">Photography</p>
-      <h2>Creative</h2>
-      <p class="creative-deck">Selected photographs.</p>
+      <p class="creative-kicker">Joseph B. Smith · Portfolio</p>
+      <h2>Photography</h2>
+      <p class="creative-deck">Selected travel and landscape photographs.</p>
+      <p class="creative-process">Photographed with a Sony camera body and vintage Canon
+      film lenses. No generative AI is used in the editing process.</p>
+      <nav class="portfolio-links" aria-label="Photography information">
+        <a href="/contact" data-nav>Contact / More information →</a>
+        <a href="https://stock.adobe.com/contributor/208819877/joseph?load_type=author&amp;prev_url=detail"
+          target="_blank" rel="noopener">Adobe Stock ↗</a>
+      </nav>
     </header>
     <section class="creative-group" aria-labelledby="photography-heading">
-      <h3 id="photography-heading">Photography</h3>
-      <p>I use a Sony camera body with vintage Canon film lenses. No generative AI is used
-      in the editing process.</p>
+      <h3 id="photography-heading">Selected work</h3>
       <div class="photo-gallery">
         <figure class="photo edge-crop">
           <img src="/img/creative/01-nyhavn.jpg" width="1280" height="588"
