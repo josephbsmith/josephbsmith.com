@@ -93,9 +93,9 @@
   .photo img { display: block; width: 100%; height: auto; background: #e7e1d8; }
   .photo:first-child { overflow: hidden; }
   .photo:first-child img { width: 122.14%; max-width: none; margin-left: -11.07%; }
-  .photo:nth-child(2), .photo:nth-child(5), .photo:nth-child(8) { grid-column: 1 / 10; }
-  .photo:nth-child(3), .photo:nth-child(6), .photo:nth-child(9) { grid-column: 4 / 13; }
-  .photo:nth-child(4), .photo:nth-child(10) { grid-column: 2 / 12; }
+  .photo:nth-child(3n+2) { grid-column: 1 / 10; }
+  .photo:nth-child(3n+3) { grid-column: 4 / 13; }
+  .photo:nth-child(3n+4) { grid-column: 2 / 12; }
   .photo figcaption {
     margin-top: .7rem; color: var(--muted); font: 500 11px var(--mono);
     letter-spacing: .14em; text-transform: uppercase;
@@ -219,55 +219,115 @@
           <img src="/img/creative/02-mountain-light.jpg" width="1280" height="720"
             alt="Sunlit mist drifting through evergreen trees beneath a granite cliff"
             loading="lazy" decoding="async">
-          <figcaption>02</figcaption>
+          <figcaption>02 · Mountain Mist</figcaption>
         </figure>
         <figure class="photo">
           <img src="/img/creative/03-color-study.jpg" width="1280" height="588"
             alt="Colorful modern chairs and pendant lights arranged against saturated walls"
             loading="lazy" decoding="async">
-          <figcaption>03</figcaption>
+          <figcaption>03 · Color Study</figcaption>
         </figure>
         <figure class="photo">
           <img src="/img/creative/04-open-water.jpg" width="1280" height="720"
             alt="Rows of weathered pilings receding across bright blue water"
             loading="lazy" decoding="async">
-          <figcaption>04</figcaption>
+          <figcaption>04 · Open Water</figcaption>
         </figure>
         <figure class="photo">
           <img src="/img/creative/05-red-rock.jpg" width="1280" height="720"
             alt="Red sandstone cliffs rising above green foothills"
             loading="lazy" decoding="async">
-          <figcaption>05</figcaption>
+          <figcaption>05 · Red Rock</figcaption>
         </figure>
         <figure class="photo">
           <img src="/img/creative/06-skatepark.jpg" width="1280" height="719"
             alt="A skateboarder carving a concrete bowl beside the beach"
             loading="lazy" decoding="async">
-          <figcaption>06</figcaption>
+          <figcaption>06 · Beach Bowl</figcaption>
         </figure>
         <figure class="photo">
           <img src="/img/creative/07-stone-and-sky.jpg" width="1280" height="720"
             alt="Layered rock formations beneath a sky filled with cumulus clouds"
             loading="lazy" decoding="async">
-          <figcaption>07</figcaption>
+          <figcaption>07 · Stone &amp; Sky</figcaption>
         </figure>
         <figure class="photo">
           <img src="/img/creative/08-neon-night.jpg" width="1280" height="720"
             alt="Neon signs illuminating a crowded city street at night"
             loading="lazy" decoding="async">
-          <figcaption>08</figcaption>
+          <figcaption>08 · Neon Night</figcaption>
         </figure>
         <figure class="photo">
           <img src="/img/creative/09-western-sign.jpg" width="1280" height="720"
             alt="A bucking horse welcome sign against green hills and blue sky"
             loading="lazy" decoding="async">
-          <figcaption>09</figcaption>
+          <figcaption>09 · Welcome West</figcaption>
         </figure>
         <figure class="photo">
           <img src="/img/creative/10-bison.jpg" width="1280" height="720"
             alt="Two bison locking horns in a grassy field"
             loading="lazy" decoding="async">
-          <figcaption>10</figcaption>
+          <figcaption>10 · Locked Horns</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/11-empire.jpg" width="1280" height="720"
+            alt="The Empire State Building above the Manhattan skyline"
+            loading="lazy" decoding="async">
+          <figcaption>11 · Empire</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/12-heron.jpg" width="1280" height="719"
+            alt="A great blue heron in profile against rippling blue water"
+            loading="lazy" decoding="async">
+          <figcaption>12 · Heron</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/13-open-road.jpg" width="1280" height="720"
+            alt="A straight highway running beneath a field of bright clouds"
+            loading="lazy" decoding="async">
+          <figcaption>13 · Open Road</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/14-reed.jpg" width="1280" height="1279"
+            alt="A single tall reed rising above a softly lit marsh"
+            loading="lazy" decoding="async">
+          <figcaption>14 · Reed</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/15-antler-arch.jpg" width="1280" height="1280"
+            alt="An arch made of antlers with a Jackson Hole sign"
+            loading="lazy" decoding="async">
+          <figcaption>15 · Antler Arch</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/16-eruption.jpg" width="1280" height="1280"
+            alt="A geyser erupting beneath dark clouds"
+            loading="lazy" decoding="async">
+          <figcaption>16 · Eruption</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/17-riverboat.jpg" width="1280" height="720"
+            alt="The red and white City of New Orleans riverboat"
+            loading="lazy" decoding="async">
+          <figcaption>17 · Riverboat</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/18-cypress.jpg" width="1280" height="720"
+            alt="Cypress trunks rising from a green forest floor"
+            loading="lazy" decoding="async">
+          <figcaption>18 · Cypress</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/19-switchback.jpg" width="1280" height="853"
+            alt="A winding two-lane road curving through dense greenery"
+            loading="lazy" decoding="async">
+          <figcaption>19 · Switchback</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/20-chicago.jpg" width="1280" height="720"
+            alt="Chicago towers and an American flag beneath an overcast sky"
+            loading="lazy" decoding="async">
+          <figcaption>20 · Chicago</figcaption>
         </figure>
       </div>
     </section>
