@@ -96,39 +96,12 @@
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
     row-gap: clamp(3.5rem, 10vw, 8rem); margin-top: 2rem;
   }
-  .photo {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-column: 1 / -1;
-    margin: 0;
-  }
-  .photo::before {
-    content: "JBS";
-    z-index: 1;
-    grid-area: 1 / 1;
-    align-self: end;
-    justify-self: end;
-    margin: 0 .8rem .7rem 0;
-    color: rgba(255, 255, 255, .62);
-    font: 600 .7rem/1 Arial, Helvetica, sans-serif;
-    letter-spacing: .12em;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, .45);
-    pointer-events: none;
-  }
-  .photo img {
-    grid-area: 1 / 1;
-    display: block;
-    width: 100%;
-    height: auto;
-    background: #e7e1d8;
-  }
-  .photo.edge-crop { overflow: hidden; }
-  .photo.edge-crop img { width: 122.14%; max-width: none; margin-left: -11.07%; }
+  .photo { grid-column: 1 / -1; margin: 0; }
+  .photo img { display: block; width: 100%; height: auto; background: #e7e1d8; }
   .photo:nth-child(3n+2) { grid-column: 1 / 10; }
   .photo:nth-child(3n+3) { grid-column: 4 / 13; }
   .photo:nth-child(3n+4) { grid-column: 2 / 12; }
   .photo figcaption {
-    grid-column: 1;
     margin-top: .7rem; color: var(--muted); font: 500 11px var(--mono);
     letter-spacing: .14em; text-transform: uppercase;
     display: flex; justify-content: space-between; gap: 1rem;
@@ -247,8 +220,8 @@
     <section class="creative-group" aria-labelledby="photography-heading">
       <h3 id="photography-heading">Selected work</h3>
       <div class="photo-gallery">
-        <figure class="photo edge-crop">
-          <img src="/img/creative/01-nyhavn.jpg" width="1280" height="588"
+        <figure class="photo">
+          <img src="/img/creative/01-nyhavn-jbs.jpg" width="1048" height="588"
             alt="Boats moored along Nyhavn's colorful waterfront in Copenhagen"
             fetchpriority="high" decoding="async">
           <figcaption>
@@ -256,8 +229,8 @@
             <span class="photo-meta">Copenhagen · 2026</span>
           </figcaption>
         </figure>
-        <figure class="photo edge-crop">
-          <img src="/img/creative/03-color-study.jpg" width="1280" height="588"
+        <figure class="photo">
+          <img src="/img/creative/03-color-study-jbs.jpg" width="1048" height="588"
             alt="Colorful modern chairs and pendant lights arranged against saturated walls"
             loading="lazy" decoding="async">
           <figcaption>
@@ -266,7 +239,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/38-harbor-shade.jpg" width="1280" height="720"
+          <img src="/img/creative/38-harbor-shade-jbs.jpg" width="1280" height="720"
             alt="A broad shade tree overlooking boats in Gustavia harbor"
             loading="lazy" decoding="async">
           <figcaption>
@@ -275,7 +248,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/06-skatepark.jpg" width="1280" height="719"
+          <img src="/img/creative/06-skatepark-jbs.jpg" width="1280" height="719"
             alt="A skateboarder carving a concrete bowl beside the beach"
             loading="lazy" decoding="async">
           <figcaption>
@@ -284,7 +257,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/15-antler-arch.jpg" width="1280" height="1280"
+          <img src="/img/creative/15-antler-arch-jbs.jpg" width="1280" height="1280"
             alt="An arch made of antlers with a Jackson Hole sign"
             loading="lazy" decoding="async">
           <figcaption>
@@ -293,7 +266,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/11-empire.jpg" width="1280" height="720"
+          <img src="/img/creative/11-empire-jbs.jpg" width="1280" height="720"
             alt="The Empire State Building above the Manhattan skyline"
             loading="lazy" decoding="async">
           <figcaption>
@@ -302,7 +275,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/29-granite-mist.jpg" width="1280" height="855"
+          <img src="/img/creative/29-granite-mist-jbs.jpg" width="1280" height="855"
             alt="Sea mist drifting along a forested granite shoreline"
             loading="lazy" decoding="async">
           <figcaption>
@@ -311,7 +284,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/05-red-rock.jpg" width="1280" height="720"
+          <img src="/img/creative/05-red-rock-jbs.jpg" width="1280" height="720"
             alt="Red sandstone cliffs rising above green foothills"
             loading="lazy" decoding="async">
           <figcaption>
@@ -320,7 +293,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/08-neon-night.jpg" width="1280" height="720"
+          <img src="/img/creative/08-neon-night-jbs.jpg" width="1280" height="720"
             alt="Neon signs illuminating a crowded city street at night"
             loading="lazy" decoding="async">
           <figcaption>
@@ -329,7 +302,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/12-heron.jpg" width="1280" height="719"
+          <img src="/img/creative/12-heron-jbs.jpg" width="1280" height="719"
             alt="A great blue heron in profile against rippling blue water"
             loading="lazy" decoding="async">
           <figcaption>
@@ -338,7 +311,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/22-alpine-tarn.jpg" width="1280" height="720"
+          <img src="/img/creative/22-alpine-tarn-jbs.jpg" width="1280" height="720"
             alt="Hikers overlooking a bright alpine lake beneath rocky peaks"
             loading="lazy" decoding="async">
           <figcaption>
@@ -347,7 +320,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/39-golden-swim.jpg" width="1280" height="720"
+          <img src="/img/creative/39-golden-swim-jbs.jpg" width="1280" height="720"
             alt="Swimmers silhouetted in golden evening light near a rocky point"
             loading="lazy" decoding="async">
           <figcaption>
@@ -356,7 +329,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/40-island-bloom.jpg" width="1280" height="853"
+          <img src="/img/creative/40-island-bloom-jbs.jpg" width="1280" height="853"
             alt="Purple flowers framing a high view of a turquoise island bay"
             loading="lazy" decoding="async">
           <figcaption>
@@ -365,7 +338,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/23-timberline.jpg" width="1280" height="720"
+          <img src="/img/creative/23-timberline-jbs.jpg" width="1280" height="720"
             alt="A mountain lake bordered by dense evergreens and snowy peaks"
             loading="lazy" decoding="async">
           <figcaption>
@@ -374,7 +347,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/32-last-light.jpg" width="1280" height="854"
+          <img src="/img/creative/32-last-light-jbs.jpg" width="1280" height="854"
             alt="Sunset light crossing the sea toward a distant sailboat"
             loading="lazy" decoding="async">
           <figcaption>
@@ -383,7 +356,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/30-open-sail.jpg" width="1280" height="855"
+          <img src="/img/creative/30-open-sail-jbs.jpg" width="1280" height="855"
             alt="A schooner under full sail across open water"
             loading="lazy" decoding="async">
           <figcaption>
@@ -392,7 +365,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/21-stellers-jay.jpg" width="1280" height="720"
+          <img src="/img/creative/21-stellers-jay-jbs.jpg" width="1280" height="720"
             alt="A Steller's jay perched among bare pine branches"
             loading="lazy" decoding="async">
           <figcaption>
@@ -401,7 +374,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/16-eruption.jpg" width="1280" height="1280"
+          <img src="/img/creative/16-eruption-jbs.jpg" width="1280" height="1280"
             alt="A geyser erupting beneath dark clouds"
             loading="lazy" decoding="async">
           <figcaption>
@@ -410,7 +383,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/33-quiet-cove.jpg" width="1280" height="720"
+          <img src="/img/creative/33-quiet-cove-jbs.jpg" width="1280" height="720"
             alt="A sailboat moored in a turquoise cove beneath rocky hills"
             loading="lazy" decoding="async">
           <figcaption>
@@ -419,7 +392,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/24-forest-keeper.jpg" width="1280" height="853"
+          <img src="/img/creative/24-forest-keeper-jbs.jpg" width="1280" height="853"
             alt="A wooden forest figure holding a small deer beneath maple leaves"
             loading="lazy" decoding="async">
           <figcaption>
@@ -428,7 +401,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/10-bison.jpg" width="1280" height="720"
+          <img src="/img/creative/10-bison-jbs.jpg" width="1280" height="720"
             alt="Two bison locking horns in a grassy field"
             loading="lazy" decoding="async">
           <figcaption>
@@ -437,7 +410,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/17-riverboat.jpg" width="1280" height="720"
+          <img src="/img/creative/17-riverboat-jbs.jpg" width="1280" height="720"
             alt="The red and white City of New Orleans riverboat"
             loading="lazy" decoding="async">
           <figcaption>
@@ -446,7 +419,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/02-mountain-light.jpg" width="1280" height="720"
+          <img src="/img/creative/02-mountain-light-jbs.jpg" width="1280" height="720"
             alt="Sunlit mist drifting through evergreen trees beneath a granite cliff"
             loading="lazy" decoding="async">
           <figcaption>
@@ -455,7 +428,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/28-harbor-fog.jpg" width="1280" height="855"
+          <img src="/img/creative/28-harbor-fog-jbs.jpg" width="1280" height="855"
             alt="Tall ships and small boats gathered in a misty harbor"
             loading="lazy" decoding="async">
           <figcaption>
@@ -464,7 +437,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/07-stone-and-sky.jpg" width="1280" height="720"
+          <img src="/img/creative/07-stone-and-sky-jbs.jpg" width="1280" height="720"
             alt="Layered rock formations beneath a sky filled with cumulus clouds"
             loading="lazy" decoding="async">
           <figcaption>
@@ -473,7 +446,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/27-coast-light.jpg" width="1280" height="855"
+          <img src="/img/creative/27-coast-light-jbs.jpg" width="1280" height="855"
             alt="A white lighthouse above a quiet rocky coast"
             loading="lazy" decoding="async">
           <figcaption>
@@ -482,7 +455,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/20-chicago.jpg" width="1280" height="720"
+          <img src="/img/creative/20-chicago-jbs.jpg" width="1280" height="720"
             alt="Chicago towers and an American flag beneath an overcast sky"
             loading="lazy" decoding="async">
           <figcaption>
@@ -491,7 +464,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/36-shore-walker.jpg" width="1280" height="720"
+          <img src="/img/creative/36-shore-walker-jbs.jpg" width="1280" height="720"
             alt="A lone person walking along a quiet tropical shore"
             loading="lazy" decoding="async">
           <figcaption>
@@ -500,7 +473,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/04-open-water.jpg" width="1280" height="720"
+          <img src="/img/creative/04-open-water-jbs.jpg" width="1280" height="720"
             alt="Rows of weathered pilings receding across bright blue water"
             loading="lazy" decoding="async">
           <figcaption>
@@ -509,7 +482,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/41-framed-sail.jpg" width="1280" height="720"
+          <img src="/img/creative/41-framed-sail-jbs.jpg" width="1280" height="720"
             alt="A sailboat on blue water framed by soft green leaves"
             loading="lazy" decoding="async">
           <figcaption>
@@ -518,7 +491,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/09-western-sign.jpg" width="1280" height="720"
+          <img src="/img/creative/09-western-sign-jbs.jpg" width="1280" height="720"
             alt="A bucking horse welcome sign against green hills and blue sky"
             loading="lazy" decoding="async">
           <figcaption>
@@ -527,7 +500,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/25-harbor-schooner.jpg" width="1280" height="855"
+          <img src="/img/creative/25-harbor-schooner-jbs.jpg" width="1280" height="855"
             alt="A four-masted schooner moored in a blue coastal harbor"
             loading="lazy" decoding="async">
           <figcaption>
@@ -536,7 +509,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/18-cypress.jpg" width="1280" height="720"
+          <img src="/img/creative/18-cypress-jbs.jpg" width="1280" height="720"
             alt="Cypress trunks rising from a green forest floor"
             loading="lazy" decoding="async">
           <figcaption>
@@ -545,7 +518,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/42-distant-isles.jpg" width="1280" height="720"
+          <img src="/img/creative/42-distant-isles-jbs.jpg" width="1280" height="720"
             alt="A catamaran in a blue bay with rugged islands on the horizon"
             loading="lazy" decoding="async">
           <figcaption>
@@ -554,7 +527,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/26-evening-sail.jpg" width="1280" height="855"
+          <img src="/img/creative/26-evening-sail-jbs.jpg" width="1280" height="855"
             alt="Sailors silhouetted beneath canvas on sunlit water"
             loading="lazy" decoding="async">
           <figcaption>
@@ -563,7 +536,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/14-reed.jpg" width="1280" height="1279"
+          <img src="/img/creative/14-reed-jbs.jpg" width="1280" height="1279"
             alt="A single tall reed rising above a softly lit marsh"
             loading="lazy" decoding="async">
           <figcaption>
@@ -572,7 +545,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/37-gustavia-harbor.jpg" width="1280" height="720"
+          <img src="/img/creative/37-gustavia-harbor-jbs.jpg" width="1280" height="720"
             alt="Sailboats resting off the red-roofed waterfront of Gustavia"
             loading="lazy" decoding="async">
           <figcaption>
@@ -581,7 +554,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/19-switchback.jpg" width="1280" height="853"
+          <img src="/img/creative/19-switchback-jbs.jpg" width="1280" height="853"
             alt="A winding two-lane road curving through dense greenery"
             loading="lazy" decoding="async">
           <figcaption>
@@ -590,7 +563,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/34-beach-path.jpg" width="1280" height="720"
+          <img src="/img/creative/34-beach-path-jbs.jpg" width="1280" height="720"
             alt="A sandy path bordered by stone and bright coastal greenery"
             loading="lazy" decoding="async">
           <figcaption>
@@ -599,7 +572,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/35-palm-pasture.jpg" width="1280" height="720"
+          <img src="/img/creative/35-palm-pasture-jbs.jpg" width="1280" height="720"
             alt="Cattle grazing beneath palms in a rocky green pasture"
             loading="lazy" decoding="async">
           <figcaption>
@@ -608,7 +581,7 @@
           </figcaption>
         </figure>
         <figure class="photo">
-          <img src="/img/creative/13-open-road.jpg" width="1280" height="720"
+          <img src="/img/creative/13-open-road-jbs.jpg" width="1280" height="720"
             alt="A straight highway running beneath a field of bright clouds"
             loading="lazy" decoding="async">
           <figcaption>
