@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="home-view">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,6 +24,11 @@
   }
   * { box-sizing: border-box; }
   html { background: var(--bg); color-scheme: dark; }
+  html.home-view {
+    --bg: #eee9df; --fg: #293128; --muted: #72766c; --rule: #cec6b8;
+    --accent: #9b6045;
+    color-scheme: light;
+  }
   html.creative-view {
     --bg: #f4f1eb; --fg: #24221f; --muted: #777168; --rule: #d9d3c9;
     --accent: #a35432;
@@ -42,22 +47,43 @@
   h2 { font-size: 1.5rem; margin: 0 0 1.4rem; }
   .tag { color: var(--muted); font: 500 13px var(--mono); letter-spacing: .05em; margin: 0; }
 
-  /* the index: hairline rows, nothing rounded, nothing floating */
-  .index { margin-top: 3rem; }
-  .index-group + .index-group { margin-top: 1.8rem; }
+  /* the home page: warm, editorial, and deliberately separate from the interior */
+  html.home-view body {
+    padding: clamp(56px, 10vh, 110px) 28px 9vh;
+    background: radial-gradient(circle at 82% 10%, rgba(102, 121, 94, .12), transparent 30rem), var(--bg);
+  }
+  html.home-view main { max-width: 940px; }
+  .home-header { max-width: 760px; }
+  .home-header h1 {
+    margin: 0; font-size: clamp(3.5rem, 9vw, 6.4rem); line-height: .92;
+    letter-spacing: -.045em; font-weight: 500;
+  }
+  html.home-view .tag {
+    max-width: 54ch; margin-top: 1.5rem; color: var(--muted);
+    font: 400 clamp(1.05rem, 2vw, 1.2rem)/1.55 Charter, 'Iowan Old Style', Georgia, serif;
+    letter-spacing: 0;
+  }
+  .index {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(3rem, 8vw, 7rem); margin-top: clamp(4.5rem, 9vw, 7rem);
+  }
   .index-heading {
-    margin: 0 2px .55rem; color: var(--muted);
-    font: 500 10px var(--mono); letter-spacing: .16em; text-transform: uppercase;
+    margin: 0; padding-bottom: .8rem; border-bottom: 1px solid var(--rule); color: var(--accent);
+    font: 600 10px var(--mono); letter-spacing: .17em; text-transform: uppercase;
   }
   .index a {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding: 16px 2px; border-bottom: 1px solid var(--rule);
+    display: grid; grid-template-columns: 1fr auto; align-items: center;
+    padding: 1.15rem 0; border-bottom: 1px solid var(--rule);
     color: inherit; text-decoration: none;
   }
-  .index-heading + a { border-top: 1px solid var(--rule); }
-  .index .label { font: 600 13px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
-  .index .arrow { color: var(--muted); font: 500 13px var(--mono); }
+  .index .label { font-size: clamp(1.35rem, 2.8vw, 1.7rem); line-height: 1.2; }
+  .index .description {
+    grid-column: 1; margin-top: .15rem; color: var(--muted);
+    font: 500 10px/1.5 var(--mono); letter-spacing: .04em;
+  }
+  .index .arrow { grid-column: 2; grid-row: 1 / span 2; color: var(--muted); font: 500 15px var(--mono); }
   .index a:hover .label, .index a:hover .arrow { color: var(--accent); }
+  html.home-view footer { margin-top: clamp(4rem, 8vw, 6rem); }
 
   footer { color: var(--muted); font: 12px var(--mono); letter-spacing: .04em; margin-top: 3.2rem; }
 
@@ -154,6 +180,10 @@
   }
   .back:hover { color: var(--accent); text-decoration: none; }
   @media (max-width: 640px) {
+    html.home-view body { padding: 8vh 20px 8vh; }
+    .home-header h1 { font-size: clamp(3.2rem, 15vw, 4.5rem); }
+    html.home-view .tag { margin-top: 1.15rem; }
+    .index { grid-template-columns: 1fr; gap: 2.7rem; margin-top: 3.8rem; }
     html.creative-view body { padding-top: 4vh; }
     .creative-header h2 { margin-top: 2.2rem; }
     .photo-filter-form { grid-template-columns: 1fr; }
@@ -169,28 +199,34 @@
 <main>
   <!-- FRONT DOOR -->
   <section data-room="home">
-    <h1>Joseph B. Smith</h1>
-    <p class="tag">Staff Practice Accountant, OneOncology · MAcc candidate, Belmont</p>
+    <header class="home-header">
+      <h1>Joseph B. Smith</h1>
+      <p class="tag">Staff Practice Accountant, OneOncology · MAcc candidate, Belmont</p>
+    </header>
     <nav class="index" aria-label="Site sections">
       <div class="index-group">
         <p class="index-heading">Professional</p>
         <a href="/work" data-nav>
           <span class="label">Work</span>
+          <span class="description">Experience &amp; accounting practice</span>
           <span class="arrow">→</span>
         </a>
         <a href="/contact" data-nav>
           <span class="label">Contact</span>
+          <span class="description">Correspondence &amp; inquiries</span>
           <span class="arrow">→</span>
         </a>
       </div>
       <div class="index-group">
-        <p class="index-heading">Projects</p>
+        <p class="index-heading">Independent work</p>
         <a href="/code" data-nav>
           <span class="label">Code</span>
+          <span class="description">Accounting tools &amp; experiments</span>
           <span class="arrow">→</span>
         </a>
         <a href="/creative" data-nav>
           <span class="label">Photography</span>
+          <span class="description">Travel &amp; landscape photographs</span>
           <span class="arrow">→</span>
         </a>
       </div>
@@ -883,7 +919,10 @@
     const known = [...rooms].some(s => s.dataset.room === name);
     const target = known ? name : 'home';
     rooms.forEach(s => { s.hidden = s.dataset.room !== target; });
+    document.documentElement.classList.toggle('home-view', target === 'home');
     document.documentElement.classList.toggle('creative-view', target === 'creative');
+    document.querySelector('meta[name="theme-color"]').content = target === 'home'
+      ? '#eee9df' : target === 'creative' ? '#f4f1eb' : '#0f0e10';
     const label = target.split('/').pop().replace(/-/g, ' ');
     document.title = target === 'home' ? 'Joseph B. Smith' : 'Joseph B. Smith - ' + label;
     document.getElementById('canon').href = 'https://josephbsmith.com' + (target === 'home' ? '/' : '/' + target);
