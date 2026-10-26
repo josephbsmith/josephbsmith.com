@@ -43,12 +43,18 @@
   .tag { color: var(--muted); font: 500 13px var(--mono); letter-spacing: .05em; margin: 0; }
 
   /* the index: hairline rows, nothing rounded, nothing floating */
-  .index { margin-top: 3rem; border-top: 1px solid var(--rule); }
+  .index { margin-top: 3rem; }
+  .index-group + .index-group { margin-top: 1.8rem; }
+  .index-heading {
+    margin: 0 2px .55rem; color: var(--muted);
+    font: 500 10px var(--mono); letter-spacing: .16em; text-transform: uppercase;
+  }
   .index a {
     display: flex; justify-content: space-between; align-items: baseline;
     padding: 16px 2px; border-bottom: 1px solid var(--rule);
     color: inherit; text-decoration: none;
   }
+  .index-heading + a { border-top: 1px solid var(--rule); }
   .index .label { font: 600 13px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
   .index .arrow { color: var(--muted); font: 500 13px var(--mono); }
   .index a:hover .label, .index a:hover .arrow { color: var(--accent); }
@@ -165,23 +171,29 @@
   <section data-room="home">
     <h1>Joseph B. Smith</h1>
     <p class="tag">Staff Practice Accountant, OneOncology · MAcc candidate, Belmont</p>
-    <nav class="index">
-      <a href="/work" data-nav>
-        <span class="label">Work</span>
-        <span class="arrow">→</span>
-      </a>
-      <a href="/code" data-nav>
-        <span class="label">Code</span>
-        <span class="arrow">→</span>
-      </a>
-      <a href="/creative" data-nav>
-        <span class="label">Creative</span>
-        <span class="arrow">→</span>
-      </a>
-      <a href="/contact" data-nav>
-        <span class="label">Contact</span>
-        <span class="arrow">→</span>
-      </a>
+    <nav class="index" aria-label="Site sections">
+      <div class="index-group">
+        <p class="index-heading">Professional</p>
+        <a href="/work" data-nav>
+          <span class="label">Work</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="/contact" data-nav>
+          <span class="label">Contact</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+      <div class="index-group">
+        <p class="index-heading">Projects</p>
+        <a href="/code" data-nav>
+          <span class="label">Code</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="/creative" data-nav>
+          <span class="label">Photography</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
     </nav>
     <footer>© <span id="y"></span> Joseph B. Smith</footer>
   </section>
@@ -197,7 +209,7 @@
       currently testing for the CPA.
     </p>
     <p>
-      Check out my coding projects <a href="/code" data-nav>here</a> and my creative work
+      Check out my coding projects <a href="/code" data-nav>here</a> and my photography
       <a href="/creative" data-nav>here</a>.
     </p>
   </section>
