@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Joseph B. Smith</title>
-<meta name="description" content="Staff practice accountant in oncology revenue. Accounting tools and projects.">
+<meta name="description" content="Staff practice accountant in oncology revenue. Code, photography, and writing projects.">
 <meta property="og:title" content="Joseph B. Smith">
-<meta property="og:description" content="Staff practice accountant in oncology revenue. Accounting tools and projects.">
+<meta property="og:description" content="Staff practice accountant in oncology revenue. Code, photography, and writing projects.">
 <meta property="og:image" content="https://josephbsmith.com/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -61,6 +61,12 @@
   .room li:last-child { margin-bottom: 0; }
   .works { list-style: none; padding: 0; }
   .works li { margin-bottom: .55rem; }
+  .creative-group { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+  .creative-group h3 {
+    margin: 0 0 .5rem; font: 600 13px var(--mono); letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .creative-group p { color: var(--muted); }
   .back {
     display: inline-block; font: 600 12px var(--mono); letter-spacing: .1em;
     text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem;
@@ -84,6 +90,10 @@
         <span class="label">Code</span>
         <span class="arrow">→</span>
       </a>
+      <a href="/creative" data-nav>
+        <span class="label">Creative</span>
+        <span class="arrow">→</span>
+      </a>
       <a href="/contact" data-nav>
         <span class="label">Contact</span>
         <span class="arrow">→</span>
@@ -103,7 +113,8 @@
       currently testing for the CPA.
     </p>
     <p>
-      Check out my coding projects <a href="/code" data-nav>here</a>.
+      Check out my coding projects <a href="/code" data-nav>here</a> and my creative work
+      <a href="/creative" data-nav>here</a>.
     </p>
   </section>
 
@@ -145,6 +156,21 @@
     </ul>
     <p>More small tools live at <a href="/tools">/tools</a>. Everything public is on
     <a href="https://github.com/josephbsmith" target="_blank" rel="noopener">GitHub</a>.</p>
+  </section>
+
+  <!-- CREATIVE -->
+  <section data-room="creative" class="room" hidden>
+    <a class="back" href="/" data-nav>← home</a>
+    <h2>Creative</h2>
+    <p>Photography and writing projects, collected in one place.</p>
+    <section class="creative-group" aria-labelledby="photography-heading">
+      <h3 id="photography-heading">Photography</h3>
+      <p>Selected photographs and ongoing series will appear here.</p>
+    </section>
+    <section class="creative-group" aria-labelledby="writing-heading">
+      <h3 id="writing-heading">Writing</h3>
+      <p>Essays, histories, and longer projects will appear here.</p>
+    </section>
   </section>
 
   <!-- CONTACT -->

@@ -10,5 +10,6 @@
 # rooms live in one document; serve the app shell for their URLs
 /work / 200
 /code / 200
+/creative / 200
 /colophon / 200
 /contact / 200
