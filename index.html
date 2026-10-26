@@ -24,6 +24,11 @@
   }
   * { box-sizing: border-box; }
   html { background: var(--bg); color-scheme: dark; }
+  html.creative-view {
+    --bg: #f4f1eb; --fg: #24221f; --muted: #777168; --rule: #d9d3c9;
+    --accent: #a35432;
+    color-scheme: light;
+  }
   body {
     margin: 0; background: var(--bg); color: var(--fg);
     font: 17px/1.65 Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
@@ -61,18 +66,53 @@
   .room li:last-child { margin-bottom: 0; }
   .works { list-style: none; padding: 0; }
   .works li { margin-bottom: .55rem; }
-  .creative-group { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+  html.creative-view body { padding: 6vh clamp(20px, 4vw, 56px) 12vh; }
+  html.creative-view main { max-width: 1120px; }
+  [data-room="creative"] { margin-top: 0; border-top: 0; padding-top: 0; }
+  .creative-header { max-width: 650px; border-top: 1px solid var(--rule); padding-top: 1.4rem; }
+  .creative-header h2 {
+    margin: 2.8rem 0 1.2rem; font-size: clamp(3rem, 7vw, 5.4rem); line-height: .95;
+    letter-spacing: -.04em; font-weight: 500;
+  }
+  .creative-kicker {
+    color: var(--muted); font: 600 11px var(--mono); letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+  .creative-deck { color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.25rem); }
+  .creative-group { margin-top: clamp(4rem, 9vw, 7rem); padding-top: 1.5rem; border-top: 1px solid var(--rule); }
   .creative-group h3 {
     margin: 0 0 .5rem; font: 600 13px var(--mono); letter-spacing: .16em;
     text-transform: uppercase;
   }
   .creative-group p { color: var(--muted); }
+  .photo-gallery {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+    row-gap: clamp(3.5rem, 10vw, 8rem); margin-top: 2rem;
+  }
+  .photo { grid-column: 1 / -1; margin: 0; }
+  .photo img { display: block; width: 100%; height: auto; background: #e7e1d8; }
+  .photo:first-child { overflow: hidden; }
+  .photo:first-child img { width: 122.14%; max-width: none; margin-left: -11.07%; }
+  .photo:nth-child(2), .photo:nth-child(5), .photo:nth-child(8) { grid-column: 1 / 10; }
+  .photo:nth-child(3), .photo:nth-child(6), .photo:nth-child(9) { grid-column: 4 / 13; }
+  .photo:nth-child(4), .photo:nth-child(10) { grid-column: 2 / 12; }
+  .photo figcaption {
+    margin-top: .7rem; color: var(--muted); font: 500 11px var(--mono);
+    letter-spacing: .14em; text-transform: uppercase;
+  }
+  .writing-shelf { max-width: 650px; }
   .back {
     display: inline-block; font: 600 12px var(--mono); letter-spacing: .1em;
     text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem;
     text-decoration: none;
   }
   .back:hover { color: var(--accent); text-decoration: none; }
+  @media (max-width: 640px) {
+    html.creative-view body { padding-top: 4vh; }
+    .creative-header h2 { margin-top: 2.2rem; }
+    .photo-gallery { row-gap: 3rem; }
+    .photo:nth-child(n) { grid-column: 1 / -1; }
+  }
 </style>
 </head>
 <body>
@@ -160,14 +200,78 @@
 
   <!-- CREATIVE -->
   <section data-room="creative" class="room" hidden>
-    <a class="back" href="/" data-nav>← home</a>
-    <h2>Creative</h2>
-    <p>Photography and writing projects, collected in one place.</p>
+    <header class="creative-header">
+      <a class="back" href="/" data-nav>← home</a>
+      <p class="creative-kicker">Photography · Writing</p>
+      <h2>Creative</h2>
+      <p class="creative-deck">Selected photographs and longer-form work.</p>
+    </header>
     <section class="creative-group" aria-labelledby="photography-heading">
       <h3 id="photography-heading">Photography</h3>
-      <p>Selected photographs and ongoing series will appear here.</p>
+      <div class="photo-gallery">
+        <figure class="photo">
+          <img src="/img/creative/01-nyhavn.jpg" width="1280" height="588"
+            alt="Boats moored along Nyhavn's colorful waterfront in Copenhagen"
+            fetchpriority="high" decoding="async">
+          <figcaption>01 · Nyhavn</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/02-mountain-light.jpg" width="1280" height="720"
+            alt="Sunlit mist drifting through evergreen trees beneath a granite cliff"
+            loading="lazy" decoding="async">
+          <figcaption>02</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/03-color-study.jpg" width="1280" height="588"
+            alt="Colorful modern chairs and pendant lights arranged against saturated walls"
+            loading="lazy" decoding="async">
+          <figcaption>03</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/04-open-water.jpg" width="1280" height="720"
+            alt="Rows of weathered pilings receding across bright blue water"
+            loading="lazy" decoding="async">
+          <figcaption>04</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/05-red-rock.jpg" width="1280" height="720"
+            alt="Red sandstone cliffs rising above green foothills"
+            loading="lazy" decoding="async">
+          <figcaption>05</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/06-skatepark.jpg" width="1280" height="719"
+            alt="A skateboarder carving a concrete bowl beside the beach"
+            loading="lazy" decoding="async">
+          <figcaption>06</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/07-stone-and-sky.jpg" width="1280" height="720"
+            alt="Layered rock formations beneath a sky filled with cumulus clouds"
+            loading="lazy" decoding="async">
+          <figcaption>07</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/08-neon-night.jpg" width="1280" height="720"
+            alt="Neon signs illuminating a crowded city street at night"
+            loading="lazy" decoding="async">
+          <figcaption>08</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/09-western-sign.jpg" width="1280" height="720"
+            alt="A bucking horse welcome sign against green hills and blue sky"
+            loading="lazy" decoding="async">
+          <figcaption>09</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="/img/creative/10-bison.jpg" width="1280" height="720"
+            alt="Two bison locking horns in a grassy field"
+            loading="lazy" decoding="async">
+          <figcaption>10</figcaption>
+        </figure>
+      </div>
     </section>
-    <section class="creative-group" aria-labelledby="writing-heading">
+    <section class="creative-group writing-shelf" aria-labelledby="writing-heading">
       <h3 id="writing-heading">Writing</h3>
       <p>Essays, histories, and longer projects will appear here.</p>
     </section>
@@ -213,6 +317,7 @@
     const known = [...rooms].some(s => s.dataset.room === name);
     const target = known ? name : 'home';
     rooms.forEach(s => { s.hidden = s.dataset.room !== target; });
+    document.documentElement.classList.toggle('creative-view', target === 'creative');
     const label = target.split('/').pop().replace(/-/g, ' ');
     document.title = target === 'home' ? 'Joseph B. Smith' : 'Joseph B. Smith - ' + label;
     document.getElementById('canon').href = 'https://josephbsmith.com' + (target === 'home' ? '/' : '/' + target);
