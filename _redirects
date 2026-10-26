@@ -3,6 +3,8 @@
 /writing/* / 301
 /pdfs/* / 301
 /the-economist-and-the-artist / 301
+/tools /code 301
+/tools/* /code 301
 
 # unlisted family-history landing page
 /ancestry /ancestry/index.html 200

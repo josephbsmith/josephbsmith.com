@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Joseph B. Smith</title>
-<meta name="description" content="Staff practice accountant in oncology revenue. Code, photography, and writing projects.">
+<meta name="description" content="Staff practice accountant in oncology revenue. Code and photography projects.">
 <meta property="og:title" content="Joseph B. Smith">
-<meta property="og:description" content="Staff practice accountant in oncology revenue. Code, photography, and writing projects.">
+<meta property="og:description" content="Staff practice accountant in oncology revenue. Code and photography projects.">
 <meta property="og:image" content="https://josephbsmith.com/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -102,7 +102,6 @@
     display: flex; justify-content: space-between; gap: 1rem;
   }
   .photo-meta { opacity: .72; text-align: right; }
-  .writing-shelf { max-width: 650px; }
   .back {
     display: inline-block; font: 600 12px var(--mono); letter-spacing: .1em;
     text-transform: uppercase; color: var(--muted); margin-bottom: 1.4rem;
@@ -166,37 +165,35 @@
     <h2>Code</h2>
     <ul>
       <li>
-        <strong>ClearRate</strong> - turns hospital price-transparency files into queryable
-        data. Private for now. The public
-        <a href="https://github.com/josephbsmith/mrf-reader" target="_blank" rel="noopener">mrf-reader</a>
-        reports what is inside a hospital's file without loading the whole thing.
-      </li>
-      <li>
-        <strong><a href="/plusfive">PlusFive</a></strong> - an offline, phone-first logbook
-        for the Starting Strength novice progression. It installs from this site and keeps
-        your data on your device.
-        <a href="https://github.com/josephbsmith/plusfive" target="_blank" rel="noopener">Source</a>.
-      </li>
-      <li>
-        <strong><a href="/erp">Personal ERP</a></strong> - local-first household accounting
-        with a double-entry ledger, reconciliation, budgets, and forecasts.
-        <a href="/erp">Download it</a> or
-        <a href="https://github.com/josephbsmith/personal-erp" target="_blank" rel="noopener">view the source</a>.
-      </li>
-      <li>
         <strong><a href="/workpaperdiff">WorkpaperDiff</a></strong> - compares two Excel
         workpapers for accounting logic changes: formulas replaced by values, sign flips,
         stale dates, and broken prior-period links.
-        <a href="https://github.com/josephbsmith/workpaperdiff" target="_blank" rel="noopener">Source</a>.
       </li>
       <li>
-        <strong><a href="/pit-wall">F1 Pit Wall</a></strong> - a local second screen for
-        gaps, tyre age, pace, stint history, and pit-rejoin estimates. Try the
-        <a href="/pit-wall">race replay</a> or
-        <a href="https://github.com/josephbsmith/f1-pit-wall" target="_blank" rel="noopener">view the source</a>.
+        <strong><a href="/claimbench">ClaimBench</a></strong> - provides synthetic
+        claim-to-cash scenarios with authoritative expected journal entries and subledger
+        states for testing revenue-cycle accounting without patient data.
+      </li>
+      <li>
+        <strong><a href="/ratetest">RateTest</a></strong> - runs executable tests for
+        payer-contract math, with expected amounts shown step by step from case rates to
+        stop-loss scenarios.
+      </li>
+      <li>
+        <strong>TieOut</strong> - expresses reconciliations and rollforwards as executable
+        JSON specifications with decimal arithmetic, CSV selectors, and a nonzero exit on
+        failed checks.
+      </li>
+      <li>
+        <strong>HCRIS Kit</strong> - loads CMS hospital cost-report extracts into SQLite
+        without losing worksheet coordinates, preserving each value's source row.
+      </li>
+      <li>
+        <strong><a href="/drive">Go for a Drive</a></strong> - a real-time pixel coastline
+        with a wandering road, setting sun, dashboard clock, and streaming radio.
       </li>
     </ul>
-    <p>More small tools live at <a href="/tools">/tools</a>. Everything public is on
+    <p>More projects are on
     <a href="https://github.com/josephbsmith" target="_blank" rel="noopener">GitHub</a>.</p>
   </section>
 
@@ -204,12 +201,14 @@
   <section data-room="creative" class="room" hidden>
     <header class="creative-header">
       <a class="back" href="/" data-nav>← home</a>
-      <p class="creative-kicker">Photography · Writing</p>
+      <p class="creative-kicker">Photography</p>
       <h2>Creative</h2>
-      <p class="creative-deck">Selected photographs and longer-form work.</p>
+      <p class="creative-deck">Selected photographs.</p>
     </header>
     <section class="creative-group" aria-labelledby="photography-heading">
       <h3 id="photography-heading">Photography</h3>
+      <p>I use a Sony camera body with vintage Canon film lenses. No generative AI is used
+      in the editing process.</p>
       <div class="photo-gallery">
         <figure class="photo edge-crop">
           <img src="/img/creative/01-nyhavn.jpg" width="1280" height="588"
@@ -581,10 +580,6 @@
           </figcaption>
         </figure>
       </div>
-    </section>
-    <section class="creative-group writing-shelf" aria-labelledby="writing-heading">
-      <h3 id="writing-heading">Writing</h3>
-      <p>Essays, histories, and longer projects will appear here.</p>
     </section>
   </section>
 
