@@ -96,14 +96,39 @@
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
     row-gap: clamp(3.5rem, 10vw, 8rem); margin-top: 2rem;
   }
-  .photo { grid-column: 1 / -1; margin: 0; }
-  .photo img { display: block; width: 100%; height: auto; background: #e7e1d8; }
+  .photo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .photo::before {
+    content: "JBS";
+    z-index: 1;
+    grid-area: 1 / 1;
+    align-self: end;
+    justify-self: end;
+    margin: 0 .8rem .7rem 0;
+    color: rgba(255, 255, 255, .62);
+    font: 600 .7rem/1 Arial, Helvetica, sans-serif;
+    letter-spacing: .12em;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .45);
+    pointer-events: none;
+  }
+  .photo img {
+    grid-area: 1 / 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #e7e1d8;
+  }
   .photo.edge-crop { overflow: hidden; }
   .photo.edge-crop img { width: 122.14%; max-width: none; margin-left: -11.07%; }
   .photo:nth-child(3n+2) { grid-column: 1 / 10; }
   .photo:nth-child(3n+3) { grid-column: 4 / 13; }
   .photo:nth-child(3n+4) { grid-column: 2 / 12; }
   .photo figcaption {
+    grid-column: 1;
     margin-top: .7rem; color: var(--muted); font: 500 11px var(--mono);
     letter-spacing: .14em; text-transform: uppercase;
     display: flex; justify-content: space-between; gap: 1rem;
