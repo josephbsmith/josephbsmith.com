@@ -92,6 +92,37 @@
     text-transform: uppercase;
   }
   .creative-group p { color: var(--muted); }
+  .photo-filter { margin-top: 1.5rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .photo-filter summary {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem;
+    padding: .9rem 0; cursor: pointer; color: var(--fg);
+    font: 600 11px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+    list-style: none;
+  }
+  .photo-filter summary::-webkit-details-marker { display: none; }
+  .photo-filter summary::after { content: '+'; color: var(--accent); font-size: 15px; }
+  .photo-filter[open] summary::after { content: '−'; }
+  .photo-filter output { color: var(--muted); text-align: right; }
+  .photo-filter-form {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+    gap: 1rem; align-items: end; padding: .8rem 0 1.2rem;
+  }
+  .photo-filter-form label span {
+    display: block; margin-bottom: .35rem; color: var(--muted);
+    font: 500 10px var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  }
+  .photo-filter-form select {
+    width: 100%; padding: .5rem 1.8rem .5rem 0; border: 0; border-bottom: 1px solid var(--rule);
+    border-radius: 0; background-color: transparent; color: var(--fg);
+    font: 500 12px var(--mono);
+  }
+  .photo-filter-form button {
+    padding: .5rem 0; border: 0; border-bottom: 1px solid var(--accent);
+    background: transparent; color: var(--accent); cursor: pointer;
+    font: 600 10px var(--mono); letter-spacing: .1em; text-transform: uppercase;
+  }
+  .photo-filter-form button:disabled { opacity: .35; cursor: default; border-color: var(--rule); color: var(--muted); }
+  .filter-empty { margin-top: 2rem; font-style: italic; }
   .photo-gallery {
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
     row-gap: clamp(3.5rem, 10vw, 8rem); margin-top: 2rem;
@@ -101,6 +132,10 @@
   .photo:nth-child(3n+2) { grid-column: 1 / 10; }
   .photo:nth-child(3n+3) { grid-column: 4 / 13; }
   .photo:nth-child(3n+4) { grid-column: 2 / 12; }
+  .photo-gallery.is-filtered .photo { grid-column: 1 / -1; }
+  .photo-gallery.is-filtered .photo.layout-left { grid-column: 1 / 10; }
+  .photo-gallery.is-filtered .photo.layout-right { grid-column: 4 / 13; }
+  .photo-gallery.is-filtered .photo.layout-inset { grid-column: 2 / 12; }
   .photo figcaption {
     margin-top: .7rem; color: var(--muted); font: 500 11px var(--mono);
     letter-spacing: .14em; text-transform: uppercase;
@@ -116,8 +151,12 @@
   @media (max-width: 640px) {
     html.creative-view body { padding-top: 4vh; }
     .creative-header h2 { margin-top: 2.2rem; }
+    .photo-filter-form { grid-template-columns: 1fr; }
     .photo-gallery { row-gap: 3rem; }
     .photo:nth-child(n) { grid-column: 1 / -1; }
+    .photo-gallery.is-filtered .photo.layout-left,
+    .photo-gallery.is-filtered .photo.layout-right,
+    .photo-gallery.is-filtered .photo.layout-inset { grid-column: 1 / -1; }
   }
 </style>
 </head>
@@ -219,7 +258,46 @@
     </header>
     <section class="creative-group" aria-labelledby="photography-heading">
       <h3 id="photography-heading">Selected work</h3>
-      <div class="photo-gallery">
+      <details class="photo-filter">
+        <summary><span>Filter</span><output id="filter-count" aria-live="polite">59 photographs</output></summary>
+        <form id="photo-filter-form" class="photo-filter-form">
+          <label>
+            <span>Year</span>
+            <select name="year" aria-label="Filter photographs by year">
+              <option value="">All years</option>
+              <option>2026</option><option>2025</option><option>2024</option><option>2023</option>
+              <option>2022</option><option>2020</option><option>2019</option><option>2018</option>
+            </select>
+          </label>
+          <label>
+            <span>Style</span>
+            <select name="style" aria-label="Filter photographs by style">
+              <option value="">All styles</option>
+              <option value="landscape">Landscape</option>
+              <option value="coast">Coast</option>
+              <option value="wildlife">Wildlife</option>
+              <option value="street">Street</option>
+              <option value="architecture">Architecture &amp; design</option>
+            </select>
+          </label>
+          <label>
+            <span>Region</span>
+            <select name="region" aria-label="Filter photographs by region">
+              <option value="">All regions</option>
+              <option value="west">American West</option>
+              <option value="pacific">Pacific Coast</option>
+              <option value="northeast">Northeast</option>
+              <option value="midwest">Midwest &amp; Plains</option>
+              <option value="south">South</option>
+              <option value="caribbean">Caribbean</option>
+              <option value="europe">Europe</option>
+            </select>
+          </label>
+          <button id="filter-clear" type="button" disabled>Clear</button>
+        </form>
+      </details>
+      <p id="filter-empty" class="filter-empty" hidden>No photographs match those filters.</p>
+      <div id="photo-gallery" class="photo-gallery">
         <figure class="photo">
           <img src="/img/creative/01-nyhavn-jbs.jpg" width="1048" height="588"
             alt="Boats moored along Nyhavn's colorful waterfront in Copenhagen"
@@ -676,7 +754,7 @@
             loading="lazy" decoding="async">
           <figcaption>
             <span>51 · Undertow</span>
-            <span class="photo-meta">Atlantic Ocean · 2024</span>
+            <span class="photo-meta">Pacific Ocean · 2024</span>
           </figcaption>
         </figure>
         <figure class="photo">
@@ -810,6 +888,72 @@
   });
   addEventListener('popstate', () => show(location.pathname, false));
   show(location.pathname, false);
+
+  const photoGallery = document.getElementById('photo-gallery');
+  const photos = [...photoGallery.querySelectorAll('.photo')];
+  const filterForm = document.getElementById('photo-filter-form');
+  const filterCount = document.getElementById('filter-count');
+  const filterClear = document.getElementById('filter-clear');
+  const filterEmpty = document.getElementById('filter-empty');
+  const styleGroups = {
+    architecture: ['Color Study', 'Antler Arch', 'Empire', 'Forest Keeper', 'Riverboat', 'Chicago',
+      'Welcome West', 'October Lanterns', 'Tivoli Pagoda', 'Ancient Figures', 'Lemon Tree'],
+    street: ['Beach Bowl', 'Neon Night', 'Coffee Break', 'Second Line'],
+    wildlife: ['Heron', "Steller's Jay", 'Locked Horns', 'Palm Pasture'],
+    coast: ['Nyhavn', 'Harbor Shade', 'Granite Mist', 'Golden Swim', 'Island Bloom', 'Last Light',
+      'Open Sail', 'Quiet Cove', 'Harbor Fog', 'Coast Light', 'Shore Walker', 'Open Water',
+      'Framed Sail', 'Harbor Schooner', 'Distant Isles', 'Evening Sail', 'Gustavia Harbor',
+      'Beach Path', 'Undertow']
+  };
+  const regionByPlace = {
+    'Copenhagen': 'europe', 'St Barths': 'caribbean',
+    'Venice Beach': 'pacific', 'Seattle': 'pacific', 'Pacific Ocean': 'pacific',
+    'New York City': 'northeast', 'Acadia': 'northeast', 'Camden, ME': 'northeast',
+    'Camden': 'northeast', 'Atlantic Ocean': 'northeast', 'Bar Harbor': 'northeast',
+    'Chicago': 'midwest', 'Great Plains': 'midwest',
+    'Nashville': 'south', 'New Orleans': 'south', 'Appalachia': 'south',
+    'Jackson Hole': 'west', 'Zion': 'west', 'Colorado': 'west', 'Yellowstone': 'west',
+    'Yosemite': 'west', 'Route 66': 'west', 'Salt Lake City': 'west', 'American West': 'west',
+    'Bryce Canyon': 'west', 'Joshua Tree': 'west', 'Mojave Desert': 'west', 'Capitol Reef': 'west'
+  };
+
+  photos.forEach(photo => {
+    const title = photo.querySelector('figcaption span').textContent.replace(/^\d+\s*·\s*/, '');
+    const meta = photo.querySelector('.photo-meta').textContent.trim();
+    const year = meta.match(/\d{4}$/)?.[0] || '';
+    const place = meta.replace(/\s*·\s*\d{4}$/, '');
+    photo.dataset.year = year;
+    photo.dataset.region = regionByPlace[place] || '';
+    photo.dataset.style = Object.entries(styleGroups).find(([, titles]) => titles.includes(title))?.[0] || 'landscape';
+  });
+
+  function applyPhotoFilters() {
+    const values = Object.fromEntries(new FormData(filterForm));
+    const active = Boolean(values.year || values.style || values.region);
+    const visible = photos.filter(photo => {
+      const matches = (!values.year || photo.dataset.year === values.year)
+        && (!values.style || photo.dataset.style === values.style)
+        && (!values.region || photo.dataset.region === values.region);
+      photo.hidden = !matches;
+      photo.classList.remove('layout-left', 'layout-right', 'layout-inset');
+      return matches;
+    });
+    if (active) {
+      const layouts = ['layout-left', 'layout-right', 'layout-inset'];
+      visible.slice(1).forEach((photo, index) => photo.classList.add(layouts[index % layouts.length]));
+    }
+    photoGallery.classList.toggle('is-filtered', active);
+    filterCount.textContent = `${visible.length} photograph${visible.length === 1 ? '' : 's'}`;
+    filterClear.disabled = !active;
+    filterEmpty.hidden = visible.length !== 0;
+  }
+
+  filterForm.addEventListener('change', applyPhotoFilters);
+  filterClear.addEventListener('click', () => {
+    filterForm.reset();
+    applyPhotoFilters();
+  });
+  applyPhotoFilters();
 </script>
 </body>
 </html>
