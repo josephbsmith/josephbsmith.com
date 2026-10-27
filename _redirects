@@ -3,15 +3,16 @@
 /writing/* / 301
 /pdfs/* / 301
 /the-economist-and-the-artist / 301
-/tools /code 301
-/tools/* /code 301
+/tools /code/ 301
+/tools/* /code/ 301
+/tools.html /code/ 301
+/code.html /code/ 301
 
 # unlisted family-history landing page
 /ancestry /ancestry/index.html 200
 
 # rooms live in one document; serve the app shell for their URLs
 /work / 200
-/code / 200
 /creative / 200
 /colophon / 200
 /contact / 200
