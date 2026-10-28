@@ -12,15 +12,8 @@
     <rect width="1200" height="630" fill="#0f0e10"/>
     <image href="../img/creative/01-nyhavn-jbs.jpg" x="485" width="715" height="630" preserveAspectRatio="xMidYMid slice"/>
     <rect width="1200" height="630" fill="url(#shade)"/>
-    <g transform="translate(74 75)">
-      <rect width="54" height="54" rx="12" fill="#1f2447"/>
-      <circle cx="27" cy="30" r="14" fill="#ffc163"/>
-      <rect y="32" width="54" height="22" fill="#27345f"/>
-      <path d="M22 36h10M24 42h6M26 48h2" stroke="#ffc163" stroke-width="3" stroke-linecap="round"/>
-    </g>
-    <text x="74" y="252" fill="#f2efeb" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700" letter-spacing="-2">Joseph B. Smith</text>
-    <text x="78" y="310" fill="#bbb4ad" font-family="Menlo, Consolas, monospace" font-size="22" letter-spacing="1">ACCOUNTING · CODE · PHOTOGRAPHY</text>
-    <line x1="78" y1="355" x2="464" y2="355" stroke="#fb923c" stroke-width="3"/>
+    <text x="74" y="282" fill="#f2efeb" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700" letter-spacing="-2">Joseph B. Smith</text>
+    <line x1="78" y1="334" x2="464" y2="334" stroke="#fb923c" stroke-width="3"/>
     <text x="78" y="500" fill="#f2efeb" font-family="Menlo, Consolas, monospace" font-size="22" letter-spacing="1">josephbsmith.com</text>
   </g>
 </svg>
