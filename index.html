@@ -100,7 +100,6 @@
   }
   .portfolio-links a { color: var(--accent); text-decoration: none; }
   .portfolio-links a:hover { text-decoration: underline; }
-  .photo.featured-photo { margin: clamp(2rem, 5vw, 4rem) 0 0; }
   .creative-group { margin-top: clamp(2.5rem, 6vw, 5rem); }
   .creative-group p { color: var(--muted); }
   .photo-filter { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
@@ -237,15 +236,6 @@
         </nav>
       </div>
     </header>
-    <figure class="photo featured-photo">
-      <img src="/img/creative/01-nyhavn-jbs.jpg" width="1048" height="588"
-        alt="Boats moored along Nyhavn's colorful waterfront in Copenhagen"
-        fetchpriority="high" decoding="async">
-      <figcaption>
-        <span>01 · Nyhavn</span>
-        <span class="photo-meta">Copenhagen · 2026</span>
-      </figcaption>
-    </figure>
     <section class="creative-group" aria-label="Browse photographs">
       <details class="photo-filter">
         <summary><span>Filter</span><output id="filter-count" aria-live="polite">59 photographs</output></summary>
@@ -287,6 +277,15 @@
       </details>
       <p id="filter-empty" class="filter-empty" hidden>No photographs match those filters.</p>
       <div id="photo-gallery" class="photo-gallery">
+        <figure class="photo">
+          <img src="/img/creative/01-nyhavn-jbs.jpg" width="1048" height="588"
+            alt="Boats moored along Nyhavn's colorful waterfront in Copenhagen"
+            fetchpriority="high" decoding="async">
+          <figcaption>
+            <span>01 · Nyhavn</span>
+            <span class="photo-meta">Copenhagen · 2026</span>
+          </figcaption>
+        </figure>
         <figure class="photo">
           <img src="/img/creative/03-color-study-jbs.jpg" width="1048" height="588"
             alt="Colorful modern chairs and pendant lights arranged against saturated walls"
