@@ -82,29 +82,28 @@
   html.creative-view body { padding: 6vh clamp(20px, 4vw, 56px) 12vh; }
   html.creative-view main { max-width: 1120px; }
   [data-room="photography"] { margin-top: 0; border-top: 0; padding-top: 0; }
-  .creative-header { max-width: 760px; border-top: 1px solid var(--rule); padding-top: 1.4rem; }
-  .creative-header h2 {
-    margin: 2.8rem 0 1.2rem; font-size: clamp(3rem, 7vw, 5.4rem); line-height: .95;
-    letter-spacing: -.04em; font-weight: 500;
+  .creative-header {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 460px);
+    gap: 0 clamp(2rem, 7vw, 7rem); border-top: 1px solid var(--rule); padding-top: 1rem;
   }
+  .creative-header .back { grid-column: 1 / -1; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
   .creative-kicker {
+    margin: 0;
     color: var(--muted); font: 600 11px var(--mono); letter-spacing: .18em;
     text-transform: uppercase;
   }
-  .creative-process { max-width: 58ch; color: var(--muted); }
+  .creative-context { grid-column: 2; }
+  .creative-process { max-width: 44ch; color: var(--muted); }
   .portfolio-links {
-    display: flex; flex-wrap: wrap; gap: .8rem 1.8rem; margin-top: 2rem;
+    display: flex; flex-wrap: wrap; gap: .8rem 1.8rem; margin-top: 1.4rem;
     font: 600 11px var(--mono); letter-spacing: .14em; text-transform: uppercase;
   }
   .portfolio-links a { color: var(--accent); text-decoration: none; }
   .portfolio-links a:hover { text-decoration: underline; }
-  .creative-group { margin-top: clamp(4rem, 9vw, 7rem); padding-top: 1.5rem; border-top: 1px solid var(--rule); }
-  .creative-group h3 {
-    margin: 0 0 .5rem; font: 600 13px var(--mono); letter-spacing: .16em;
-    text-transform: uppercase;
-  }
+  .photo.featured-photo { margin: clamp(2rem, 5vw, 4rem) 0 0; }
+  .creative-group { margin-top: clamp(2.5rem, 6vw, 5rem); }
   .creative-group p { color: var(--muted); }
-  .photo-filter { margin-top: 1.5rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .photo-filter { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
   .photo-filter summary {
     display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem;
     padding: .9rem 0; cursor: pointer; color: var(--fg);
@@ -137,13 +136,13 @@
   .filter-empty { margin-top: 2rem; font-style: italic; }
   .photo-gallery {
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
-    row-gap: clamp(3.5rem, 10vw, 8rem); margin-top: 2rem;
+    row-gap: clamp(3.5rem, 10vw, 8rem); margin-top: clamp(3rem, 7vw, 5rem);
   }
   .photo { grid-column: 1 / -1; margin: 0; }
   .photo img { display: block; width: 100%; height: auto; background: #e7e1d8; }
-  .photo:nth-child(3n+2) { grid-column: 1 / 10; }
-  .photo:nth-child(3n+3) { grid-column: 4 / 13; }
-  .photo:nth-child(3n+4) { grid-column: 2 / 12; }
+  .photo-gallery .photo:nth-child(3n+1) { grid-column: 1 / 10; }
+  .photo-gallery .photo:nth-child(3n+2) { grid-column: 4 / 13; }
+  .photo-gallery .photo:nth-child(3n+3) { grid-column: 2 / 12; }
   .photo-gallery.is-filtered .photo { grid-column: 1 / -1; }
   .photo-gallery.is-filtered .photo.layout-left { grid-column: 1 / 10; }
   .photo-gallery.is-filtered .photo.layout-right { grid-column: 4 / 13; }
@@ -162,10 +161,12 @@
   .back:hover { color: var(--accent); text-decoration: none; }
   @media (max-width: 640px) {
     html.creative-view body { padding-top: 4vh; }
-    .creative-header h2 { margin-top: 2.2rem; }
+    .creative-header { grid-template-columns: 1fr; }
+    .creative-header .back { grid-column: 1; margin-bottom: 1.8rem; }
+    .creative-context { grid-column: 1; margin-top: 1rem; }
     .photo-filter-form { grid-template-columns: 1fr; }
     .photo-gallery { row-gap: 3rem; }
-    .photo:nth-child(n) { grid-column: 1 / -1; }
+    .photo-gallery .photo:nth-child(n) { grid-column: 1 / -1; }
     .photo-gallery.is-filtered .photo.layout-left,
     .photo-gallery.is-filtered .photo.layout-right,
     .photo-gallery.is-filtered .photo.layout-inset { grid-column: 1 / -1; }
@@ -225,18 +226,27 @@
   <section data-room="photography" class="room" hidden>
     <header class="creative-header">
       <a class="back" href="/" data-nav>← home</a>
-      <p class="creative-kicker">Joseph B. Smith · Portfolio</p>
-      <h2>Photography</h2>
-      <p class="creative-process">Photographed with a Sony camera body and vintage Canon
-      film lenses. No generative AI is used in the editing process.</p>
-      <nav class="portfolio-links" aria-label="Photography information">
-        <a href="/contact" data-nav>Contact / More information →</a>
-        <a href="https://stock.adobe.com/contributor/208819877/joseph?load_type=author&amp;prev_url=detail"
-          target="_blank" rel="noopener">Adobe Stock ↗</a>
-      </nav>
+      <p class="creative-kicker">Joseph B. Smith · 2018—2026</p>
+      <div class="creative-context">
+        <p class="creative-process">Photographed with a Sony camera body and vintage Canon
+        film lenses. No generative AI is used in the editing process.</p>
+        <nav class="portfolio-links" aria-label="Photography information">
+          <a href="/contact" data-nav>Contact / More information →</a>
+          <a href="https://stock.adobe.com/contributor/208819877/joseph?load_type=author&amp;prev_url=detail"
+            target="_blank" rel="noopener">Adobe Stock ↗</a>
+        </nav>
+      </div>
     </header>
-    <section class="creative-group" aria-labelledby="photography-heading">
-      <h3 id="photography-heading">Selected work</h3>
+    <figure class="photo featured-photo">
+      <img src="/img/creative/01-nyhavn-jbs.jpg" width="1048" height="588"
+        alt="Boats moored along Nyhavn's colorful waterfront in Copenhagen"
+        fetchpriority="high" decoding="async">
+      <figcaption>
+        <span>01 · Nyhavn</span>
+        <span class="photo-meta">Copenhagen · 2026</span>
+      </figcaption>
+    </figure>
+    <section class="creative-group" aria-label="Browse photographs">
       <details class="photo-filter">
         <summary><span>Filter</span><output id="filter-count" aria-live="polite">59 photographs</output></summary>
         <form id="photo-filter-form" class="photo-filter-form">
@@ -277,15 +287,6 @@
       </details>
       <p id="filter-empty" class="filter-empty" hidden>No photographs match those filters.</p>
       <div id="photo-gallery" class="photo-gallery">
-        <figure class="photo">
-          <img src="/img/creative/01-nyhavn-jbs.jpg" width="1048" height="588"
-            alt="Boats moored along Nyhavn's colorful waterfront in Copenhagen"
-            fetchpriority="high" decoding="async">
-          <figcaption>
-            <span>01 · Nyhavn</span>
-            <span class="photo-meta">Copenhagen · 2026</span>
-          </figcaption>
-        </figure>
         <figure class="photo">
           <img src="/img/creative/03-color-study-jbs.jpg" width="1048" height="588"
             alt="Colorful modern chairs and pendant lights arranged against saturated walls"
@@ -870,7 +871,7 @@
   show(location.pathname, false);
 
   const photoGallery = document.getElementById('photo-gallery');
-  const photos = [...photoGallery.querySelectorAll('.photo')];
+  const photos = [...document.querySelector('[data-room="photography"]').querySelectorAll('.photo')];
   const filterForm = document.getElementById('photo-filter-form');
   const filterCount = document.getElementById('filter-count');
   const filterClear = document.getElementById('filter-clear');
