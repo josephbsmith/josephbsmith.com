@@ -7,15 +7,22 @@
 <meta name="description" content="Staff practice accountant in oncology revenue. Code and photography projects.">
 <meta property="og:title" content="Joseph B. Smith">
 <meta property="og:description" content="Staff practice accountant in oncology revenue. Code and photography projects.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://josephbsmith.com/">
 <meta property="og:image" content="https://josephbsmith.com/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Joseph B. Smith — accounting, code, and photography">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Joseph B. Smith">
+<meta name="twitter:description" content="Staff practice accountant in oncology revenue. Code and photography projects.">
 <meta name="twitter:image" content="https://josephbsmith.com/og-card.png">
-<link rel="apple-touch-icon" href="/icon.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="canonical" id="canon" href="https://josephbsmith.com/">
 <meta name="theme-color" content="#0f0e10">
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%230a0a24"/><rect x="5" y="4" width="6" height="1" fill="%23ffd27a"/><rect x="4" y="5" width="8" height="2" fill="%23ffd27a"/><rect x="4" y="7" width="8" height="1" fill="%23ff9a3c"/><rect x="5" y="9" width="6" height="1" fill="%23ff9a3c"/><rect x="4" y="11" width="8" height="1" fill="%23fb923c"/><rect x="2" y="13" width="12" height="1" fill="%23452158"/></svg>'>
 <style>
   :root {
     --bg: #0f0e10; --fg: #e9e7e4; --muted: #98938c; --rule: #2a272b;
@@ -74,7 +81,7 @@
   .works li { margin-bottom: .55rem; }
   html.creative-view body { padding: 6vh clamp(20px, 4vw, 56px) 12vh; }
   html.creative-view main { max-width: 1120px; }
-  [data-room="creative"] { margin-top: 0; border-top: 0; padding-top: 0; }
+  [data-room="photography"] { margin-top: 0; border-top: 0; padding-top: 0; }
   .creative-header { max-width: 760px; border-top: 1px solid var(--rule); padding-top: 1.4rem; }
   .creative-header h2 {
     margin: 2.8rem 0 1.2rem; font-size: clamp(3rem, 7vw, 5.4rem); line-height: .95;
@@ -189,7 +196,7 @@
           <span class="label">Code</span>
           <span class="arrow">→</span>
         </a>
-        <a href="/creative" data-nav>
+        <a href="/photography" data-nav>
           <span class="label">Photography</span>
           <span class="arrow">→</span>
         </a>
@@ -210,12 +217,12 @@
     </p>
     <p>
       Check out my coding projects <a href="/code/">here</a> and my photography
-      <a href="/creative" data-nav>here</a>.
+      <a href="/photography" data-nav>here</a>.
     </p>
   </section>
 
-  <!-- CREATIVE -->
-  <section data-room="creative" class="room" hidden>
+  <!-- PHOTOGRAPHY -->
+  <section data-room="photography" class="room" hidden>
     <header class="creative-header">
       <a class="back" href="/" data-nav>← home</a>
       <p class="creative-kicker">Joseph B. Smith · Portfolio</p>
@@ -845,9 +852,10 @@
     const known = [...rooms].some(s => s.dataset.room === name);
     const target = known ? name : 'home';
     rooms.forEach(s => { s.hidden = s.dataset.room !== target; });
-    document.documentElement.classList.toggle('creative-view', target === 'creative');
+    document.documentElement.classList.toggle('creative-view', target === 'photography');
     const label = target.split('/').pop().replace(/-/g, ' ');
-    document.title = target === 'home' ? 'Joseph B. Smith' : 'Joseph B. Smith - ' + label;
+    const roomTitle = label.charAt(0).toUpperCase() + label.slice(1);
+    document.title = target === 'home' ? 'Joseph B. Smith' : roomTitle + ' — Joseph B. Smith';
     document.getElementById('canon').href = 'https://josephbsmith.com' + (target === 'home' ? '/' : '/' + target);
     if (push) history.pushState(null, '', target === 'home' ? '/' : '/' + target);
     scrollTo(0, 0);

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Sunset over water">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12152f"/>
+      <stop offset="1" stop-color="#362047"/>
+    </linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe08a"/>
+      <stop offset="1" stop-color="#fb923c"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#31416c"/>
+      <stop offset="1" stop-color="#151a3d"/>
+    </linearGradient>
+    <clipPath id="frame"><rect width="512" height="512" rx="104"/></clipPath>
+    <clipPath id="skyline"><rect width="512" height="314"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="512" height="512" fill="url(#sky)"/>
+    <circle cx="103" cy="94" r="5" fill="#fff7df"/>
+    <circle cx="381" cy="66" r="7" fill="#fff7df"/>
+    <circle cx="422" cy="139" r="4" fill="#fff7df" opacity=".85"/>
+    <circle cx="256" cy="290" r="118" fill="url(#sun)" clip-path="url(#skyline)"/>
+    <rect y="310" width="512" height="202" fill="url(#water)"/>
+    <rect y="306" width="512" height="9" fill="#fb923c"/>
+    <path d="M0 346h512M0 384h512M0 428h512M0 472h512" stroke="#53628c" stroke-width="7" opacity=".58"/>
+    <path d="M232 326h48M239 354h34M244 382h24M248 412h16M251 444h10M253 478h6" stroke="#ffc061" stroke-width="12" stroke-linecap="round"/>
+  </g>
+</svg>
