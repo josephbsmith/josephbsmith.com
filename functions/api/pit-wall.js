@@ -189,6 +189,25 @@ function median(values) {
   return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
 }
 
+function deviation(values) {
+  if (values.length < 2) return null;
+  const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+  return Math.sqrt(values.reduce((sum, value) => sum + (value - average) ** 2, 0) / values.length);
+}
+
+function slope(points) {
+  if (points.length < 2) return null;
+  const xMean = points.reduce((sum, point) => sum + point.x, 0) / points.length;
+  const yMean = points.reduce((sum, point) => sum + point.y, 0) / points.length;
+  const denominator = points.reduce((sum, point) => sum + (point.x - xMean) ** 2, 0);
+  if (!denominator) return null;
+  return points.reduce((sum, point) => sum + (point.x - xMean) * (point.y - yMean), 0) / denominator;
+}
+
+function metric(value, places = 3) {
+  return Number.isFinite(value) ? Number(value.toFixed(places)) : null;
+}
+
 function sparkline(values, width = 96, height = 28) {
   if (!values.length) return "";
   const low = Math.min(...values);
@@ -223,6 +242,190 @@ function pointScale(locationGroups) {
     x: Math.round((5 + 90 * (row.x - minX) / Math.max(1, maxX - minX)) * 100) / 100,
     y: Math.round((95 - 90 * (row.y - minY) / Math.max(1, maxY - minY)) * 100) / 100,
   });
+}
+
+export function buildAnalytics(data) {
+  const profiles = new Map(data.drivers.map((driver) => [driver.driver_number, driver]));
+  const lapsByDriver = group(data.laps, "driver_number");
+  const stintsByDriver = group(data.stints, "driver_number");
+  const telemetryByDriver = group(data.car_data, "driver_number");
+  const pitsByDriver = group(data.pit, "driver_number");
+  const driverNumbers = [...new Set([...profiles.keys(), ...lapsByDriver.keys()])];
+
+  const drivers = driverNumbers.map((driverNumber) => {
+    const profile = profiles.get(driverNumber) || {};
+    const rawLaps = [...(lapsByDriver.get(driverNumber) || [])]
+      .sort((a, b) => (a.lap_number || 0) - (b.lap_number || 0));
+    const rawStints = [...(stintsByDriver.get(driverNumber) || [])]
+      .sort((a, b) => (a.stint_number || 0) - (b.stint_number || 0));
+    const lastLap = Math.max(0, ...rawLaps.map((lap) => Number(lap.lap_number) || 0));
+    let laps = rawLaps.map((lap) => {
+      const lapNumber = Number(lap.lap_number) || 0;
+      const stint = rawStints.find((row) => lapNumber >= Number(row.lap_start || 1)
+        && lapNumber <= Number(row.lap_end || lastLap || lapNumber));
+      const lapTime = number(lap.lap_duration);
+      return {
+        lap: lapNumber,
+        time: lapTime && lapTime > 0 ? lapTime : null,
+        s1: number(lap.duration_sector_1),
+        s2: number(lap.duration_sector_2),
+        s3: number(lap.duration_sector_3),
+        i1: number(lap.i1_speed),
+        i2: number(lap.i2_speed),
+        trap: number(lap.st_speed),
+        compound: stint?.compound || null,
+        stint: stint?.stint_number ?? null,
+        tyre_age: stint ? Math.max(0, lapNumber - Number(stint.lap_start || lapNumber)
+          + Number(stint.tyre_age_at_start || 0)) : null,
+        pit_out: Boolean(lap.is_pit_out_lap),
+        date: lap.date_start || lap.date || null,
+      };
+    });
+    const valid = laps.filter((lap) => lap.time !== null && !lap.pit_out);
+    const bestLap = best(valid.map((lap) => lap.time));
+    laps = laps.map((lap) => ({
+      ...lap,
+      representative: lap.time !== null && !lap.pit_out && bestLap !== null && lap.time <= bestLap * 1.15,
+    }));
+    const representative = laps.filter((lap) => lap.representative);
+    const sectorBest = ["s1", "s2", "s3"].map((key) => best(valid.map((lap) => lap[key])));
+    const theoretical = sectorBest.every((value) => value !== null)
+      ? sectorBest.reduce((sum, value) => sum + value, 0) : null;
+    const speeds = laps.flatMap((lap) => [lap.i1, lap.i2, lap.trap]).filter((value) => value !== null);
+    const stints = rawStints.map((stint) => {
+      const start = Number(stint.lap_start || 1);
+      const end = Number(stint.lap_end || lastLap || start);
+      const stintLaps = laps.filter((lap) => lap.lap >= start && lap.lap <= end
+        && lap.time !== null && !lap.pit_out);
+      const centre = median(stintLaps.map((lap) => lap.time));
+      const clean = centre === null ? [] : stintLaps.filter((lap) => lap.time <= centre + 3);
+      return {
+        number: stint.stint_number ?? null,
+        compound: stint.compound || null,
+        lap_start: start,
+        lap_end: end,
+        tyre_age_at_start: Number(stint.tyre_age_at_start || 0),
+        laps: Math.max(0, end - start + 1),
+        samples: clean.length,
+        best: metric(best(clean.map((lap) => lap.time))),
+        median: metric(median(clean.map((lap) => lap.time))),
+        degradation: metric(slope(clean.map((lap) => ({ x: lap.tyre_age ?? lap.lap - start, y: lap.time })))),
+        consistency: metric(deviation(clean.map((lap) => lap.time))),
+      };
+    });
+    const telemetry = [...(telemetryByDriver.get(driverNumber) || [])]
+      .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))
+      .slice(-180)
+      .map((row) => ({
+        date: row.date || null,
+        speed: number(row.speed),
+        throttle: number(row.throttle),
+        brake: number(row.brake),
+        gear: number(row.n_gear),
+        rpm: number(row.rpm),
+        drs: number(row.drs),
+      }));
+    const pits = [...(pitsByDriver.get(driverNumber) || [])]
+      .sort((a, b) => (a.lap_number || 0) - (b.lap_number || 0))
+      .map((row) => ({
+        lap: row.lap_number ?? null,
+        stop: number(row.stop_duration),
+        lane: number(row.lane_duration ?? row.pit_duration),
+        date: row.date || null,
+      }));
+    return {
+      driver_number: driverNumber,
+      name: profile.name_acronym || profile.broadcast_name || profile.full_name || String(driverNumber),
+      full_name: profile.full_name || profile.broadcast_name || String(driverNumber),
+      team: profile.team_name || null,
+      colour: profile.team_colour || "747d89",
+      laps,
+      stints,
+      pits,
+      telemetry,
+      best_lap: metric(bestLap),
+      theoretical_best: metric(theoretical),
+      sector_best: sectorBest.map((value) => metric(value)),
+      median_pace: metric(median(representative.map((lap) => lap.time))),
+      consistency: metric(deviation(representative.map((lap) => lap.time))),
+      max_speed: speeds.length ? metric(Math.max(...speeds), 1) : null,
+      representative_laps: representative.length,
+    };
+  }).sort((a, b) => (a.best_lap ?? Infinity) - (b.best_lap ?? Infinity));
+
+  const field = new Map();
+  for (const driver of drivers) {
+    for (const lap of driver.laps.filter((row) => row.representative)) {
+      if (!field.has(lap.lap)) field.set(lap.lap, []);
+      field.get(lap.lap).push({ time: lap.time, date: lap.date });
+    }
+  }
+  const fieldLaps = [...field].sort((a, b) => a[0] - b[0]).map(([lap, rows]) => {
+    const times = rows.map((row) => row.time);
+    return {
+      lap,
+      date: rows.find((row) => row.date)?.date || null,
+      best: metric(Math.min(...times)),
+      median: metric(median(times)),
+      spread: metric(Math.max(...times) - Math.min(...times)),
+      samples: times.length,
+    };
+  });
+
+  const compoundRows = new Map();
+  for (const driver of drivers) {
+    for (const lap of driver.laps.filter((row) => row.representative && row.compound)) {
+      if (!compoundRows.has(lap.compound)) compoundRows.set(lap.compound, []);
+      compoundRows.get(lap.compound).push({ ...lap, driver: driver.driver_number });
+    }
+  }
+  const compounds = [...compoundRows].map(([compound, rows]) => ({
+    compound,
+    laps: rows.length,
+    drivers: new Set(rows.map((row) => row.driver)).size,
+    best: metric(Math.min(...rows.map((row) => row.time))),
+    median: metric(median(rows.map((row) => row.time))),
+    degradation: metric(median(drivers.flatMap((driver) => driver.stints)
+      .filter((stint) => stint.compound === compound && stint.degradation !== null)
+      .map((stint) => stint.degradation))),
+  }));
+
+  const fastest = drivers.find((driver) => driver.best_lap !== null);
+  const theoretical = [...drivers].filter((driver) => driver.theoretical_best !== null)
+    .sort((a, b) => a.theoretical_best - b.theoretical_best)[0];
+  const topSpeed = [...drivers].filter((driver) => driver.max_speed !== null)
+    .sort((a, b) => b.max_speed - a.max_speed)[0];
+  const early = fieldLaps.slice(0, 3).map((lap) => lap.median).filter((value) => value !== null);
+  const late = fieldLaps.slice(-3).map((lap) => lap.median).filter((value) => value !== null);
+  return {
+    drivers,
+    field_laps: fieldLaps,
+    compounds,
+    weather: [...data.weather]
+      .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))
+      .slice(-180)
+      .map((row) => ({
+        date: row.date || null,
+        air: number(row.air_temperature),
+        track: number(row.track_temperature),
+        humidity: number(row.humidity),
+        pressure: number(row.pressure),
+        rainfall: number(row.rainfall),
+        wind_speed: number(row.wind_speed),
+        wind_direction: number(row.wind_direction),
+      })),
+    summary: {
+      total_laps: drivers.reduce((sum, driver) => sum + driver.laps.length, 0),
+      representative_laps: drivers.reduce((sum, driver) => sum + driver.representative_laps, 0),
+      fastest_driver: fastest?.name || null,
+      fastest_lap: fastest?.best_lap ?? null,
+      theoretical_driver: theoretical?.name || null,
+      theoretical_best: theoretical?.theoretical_best ?? null,
+      top_speed_driver: topSpeed?.name || null,
+      top_speed: topSpeed?.max_speed ?? null,
+      track_evolution: early.length && late.length ? metric(median(early) - median(late)) : null,
+    },
+  };
 }
 
 export function buildState(input, pitLoss = PIT_LOSS_SECONDS) {
@@ -376,6 +579,7 @@ export function buildState(input, pitLoss = PIT_LOSS_SECONDS) {
     race_control: messages,
     events,
     track: { outline, cars },
+    analytics: buildAnalytics(data),
     championship_drivers: [...data.championship_drivers].sort((a, b) => (a.position_current || 999) - (b.position_current || 999)),
     championship_teams: [...data.championship_teams].sort((a, b) => (a.position_current || 999) - (b.position_current || 999)),
   };
@@ -424,10 +628,10 @@ async function fetchBundle(sessionKey, token = "", context = null, active = fals
     ...(race ? ["intervals", "overtakes", "starting_grid"] : []),
   ]);
   const archiveEndpoints = new Set(race
-    ? ["drivers", "laps", "stints", "race_control", "pit", "session_result", "starting_grid"]
+    ? ["drivers", "laps", "stints", "race_control", "weather", "pit", "overtakes", "session_result", "starting_grid"]
     : qualifying
-      ? ["drivers", "laps", "race_control", "session_result"]
-      : ["drivers", "laps", "stints", "race_control"]);
+      ? ["drivers", "laps", "stints", "race_control", "weather", "session_result"]
+      : ["drivers", "laps", "stints", "race_control", "weather"]);
   const endpoints = DATA_ENDPOINTS.filter((endpoint) => (active ? liveEndpoints : archiveEndpoints).has(endpoint)
     && (!raceOnly.has(endpoint) || race));
   const records = [];
@@ -440,7 +644,7 @@ async function fetchBundle(sessionKey, token = "", context = null, active = fals
   const dates = ["position", "laps"].flatMap((endpoint) => data[endpoint].map(recordDate).filter(Boolean));
   data.location = [];
   data.car_data = [];
-  if (dates.length && (active || race)) {
+  if (dates.length) {
     const anchor = new Date(Math.max(...dates.map(Number)));
     const lapCounts = new Map();
     for (const lap of data.laps) lapCounts.set(lap.driver_number, (lapCounts.get(lap.driver_number) || 0) + 1);

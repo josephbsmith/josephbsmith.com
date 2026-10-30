@@ -90,5 +90,14 @@ assert.equal(state.weather.air_temperature, 26);
 assert.equal(state.events.length, 4);
 assert.equal(state.track.cars.length, 2);
 assert.match(state.board[0].pace_sparkline_path, /^M/);
+assert.equal(state.analytics.drivers.length, 2);
+assert.equal(state.analytics.drivers[0].laps.length, 3);
+assert.equal(state.analytics.drivers[0].theoretical_best, 90);
+assert.equal(state.analytics.drivers[0].stints[0].degradation, 1);
+assert.equal(state.analytics.drivers[0].telemetry[0].speed, 315);
+assert.equal(state.analytics.field_laps.length, 3);
+assert.equal(state.analytics.compounds.find((row) => row.compound === "MEDIUM").laps, 3);
+assert.equal(state.analytics.summary.fastest_driver, "AAA");
+assert.equal(state.analytics.summary.total_laps, 4);
 
 console.log("pit wall session state: ok");
