@@ -2,6 +2,8 @@ const OPENF1 = "https://api.openf1.org/v1";
 const JOLPICA = "https://api.jolpi.ca/ergast/f1";
 const PAGE_SIZE = 100;
 const FIRST_DETAILED_YEAR = 2023;
+let jolpicaGate = Promise.resolve();
+let nextJolpicaRequest = 0;
 
 function json(data, maxAge = 3600, status = 200) {
   return Response.json(data, { status, headers: {
@@ -13,7 +15,7 @@ function json(data, maxAge = 3600, status = 200) {
 async function fetchJson(url) {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const response = await fetch(url, {
-      headers: { Accept: "application/json", "User-Agent": "F1-Pit-Wall/3.0" },
+      headers: { Accept: "application/json", "User-Agent": "F1-Pit-Wall/3.1" },
       signal: AbortSignal.timeout(20000),
     });
     if (response.ok) return response.json();
@@ -33,7 +35,17 @@ async function openF1(endpoint, values) {
 }
 
 async function jolpica(path, values = {}) {
-  return fetchJson(`${JOLPICA}/${path}${path.endsWith(".json") ? "" : ".json"}?${params(values)}`);
+  let release;
+  const previous = jolpicaGate;
+  jolpicaGate = new Promise((resolve) => { release = resolve; });
+  await previous;
+  await new Promise((resolve) => setTimeout(resolve, Math.max(0, nextJolpicaRequest - Date.now())));
+  try {
+    return await fetchJson(`${JOLPICA}/${path}${path.endsWith(".json") ? "" : ".json"}?${params(values)}`);
+  } finally {
+    nextJolpicaRequest = Date.now() + 280;
+    release();
+  }
 }
 
 async function jolpicaPages(path, maxPages = 30) {
@@ -47,7 +59,6 @@ async function jolpicaPages(path, maxPages = 30) {
       batch.push(jolpica(path, { limit: PAGE_SIZE, offset: index * PAGE_SIZE }));
     }
     pages.push(...await Promise.all(batch));
-    if (page + 3 < pageCount) await new Promise((resolve) => setTimeout(resolve, 260));
   }
   return pages;
 }
